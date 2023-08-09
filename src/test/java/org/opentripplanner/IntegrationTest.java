@@ -18,15 +18,15 @@ public class IntegrationTest {
 
   public static final Logger LOG = LoggerFactory.getLogger(IntegrationTest.class);
 
-  public static final Coordinate KARLSRUD = new Coordinate(59.8901, 10.7819);
-  public static final Coordinate ULLERN = new Coordinate(59.9256, 10.6569);
+  public static final Coordinate BAYRISCHER_PLATZ = new Coordinate(52.4885, 13.3398);
+  public static final Coordinate ALEXANDERPLATZ = new Coordinate(52.5211, 13.4106);
   public static OtpApiClient client =
-      new OtpApiClient(ZoneId.of("Europe/Berlin"), "https://otp2debug.entur.org");
+      new OtpApiClient(ZoneId.of("Europe/Berlin"), "https://api.bbnavi.de");
 
   @Test
   public void route() throws IOException, InterruptedException {
 
-    var result = client.plan(KARLSRUD, ULLERN, LocalDateTime.now(), Set.of(RequestMode.TRANSIT));
+    var result = client.plan(ALEXANDERPLATZ, BAYRISCHER_PLATZ, LocalDateTime.now(), Set.of(RequestMode.TRANSIT));
 
     LOG.info("Received {} itineraries", result.itineraries().size());
 
