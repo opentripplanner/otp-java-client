@@ -30,6 +30,6 @@ public class IntegrationTest {
 
     LOG.info("Received {}", result);
 
-    assertNotNull(result.get(0).legs().get(0).startTime());
+    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
   }
 }

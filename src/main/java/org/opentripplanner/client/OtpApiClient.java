@@ -10,13 +10,11 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.model.TripPlan;
-import org.opentripplanner.client.model.TripPlan.Itinerary;
 import org.opentripplanner.client.serialization.ObjectMappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,8 +77,7 @@ public class OtpApiClient {
   }
 """;
 
-  public List<Itinerary> plan(
-      Coordinate from, Coordinate to, LocalDateTime time, Set<RequestMode> modes)
+  public TripPlan plan(Coordinate from, Coordinate to, LocalDateTime time, Set<RequestMode> modes)
       throws IOException, InterruptedException {
 
     var formattedModes =
@@ -113,8 +110,6 @@ public class OtpApiClient {
 
     var plan = jsonNode.at("/data/plan");
 
-    var tripPlan = mapper.treeToValue(plan, TripPlan.class);
-
-    return tripPlan.itineraries();
+    return mapper.treeToValue(plan, TripPlan.class);
   }
 }
