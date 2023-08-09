@@ -6,5 +6,8 @@ public enum Mode {
   RAIL,
   BUS,
   SUBWAY,
-  FERRY
+  FERRY,
+  BICYCLE,
+  SCOOTER,
+  CAR
 }
