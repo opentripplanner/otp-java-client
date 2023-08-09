@@ -123,7 +123,7 @@ public class OtpApiClient {
         TypeFactory.defaultInstance()
             .constructCollectionType(List.class, VehicleRentalStation.class);
 
-    return mapper.treeToValue(json.path("/data/vehicleRentalStations"), type);
+    return mapper.treeToValue(json.at("/data/vehicleRentalStations"), type);
   }
 
   private JsonNode sendRequest(String formattedQuery) throws IOException, InterruptedException {
