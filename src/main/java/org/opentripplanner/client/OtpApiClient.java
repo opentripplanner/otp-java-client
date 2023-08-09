@@ -1,6 +1,8 @@
 package org.opentripplanner.client;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -10,11 +12,13 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.model.TripPlan;
+import org.opentripplanner.client.model.VehicleRentalStation;
 import org.opentripplanner.client.serialization.ObjectMappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,8 +98,36 @@ public class OtpApiClient {
             time.toLocalDate().toString(),
             time.toLocalTime().toString());
 
-    LOG.debug("Sending GraphQL query to {}: {}", graphQlUri, formattedQuery);
+    final var jsonNode = sendRequest(formattedQuery);
+    var plan = jsonNode.at("/data/plan");
+    return mapper.treeToValue(plan, TripPlan.class);
+  }
 
+  public List<VehicleRentalStation> vehicleRentalStations()
+      throws IOException, InterruptedException {
+    var json =
+        sendRequest(
+            """
+              query {
+                vehicleRentalStations{
+                  name
+                  lat
+                  lon
+                  realtime
+                  vehiclesAvailable
+                }
+              }
+                """);
+
+    var type =
+        TypeFactory.defaultInstance()
+            .constructCollectionType(List.class, VehicleRentalStation.class);
+
+    return mapper.treeToValue(json.path("/data/vehicleRentalStations"), type);
+  }
+
+  private JsonNode sendRequest(String formattedQuery) throws IOException, InterruptedException {
+    LOG.debug("Sending GraphQL query to {}: {}", graphQlUri, formattedQuery);
     var req =
         HttpRequest.newBuilder(graphQlUri)
             .POST(BodyPublishers.ofString(formattedQuery))
@@ -106,10 +138,7 @@ public class OtpApiClient {
 
     var jsonString = resp.body();
     var jsonNode = mapper.readTree(jsonString);
-    LOG.debug("Received the following JSON: {}", jsonNode.toPrettyString());
-
-    var plan = jsonNode.at("/data/plan");
-
-    return mapper.treeToValue(plan, TripPlan.class);
+    LOG.info("Received the following JSON: {}", jsonNode.toPrettyString());
+    return jsonNode;
   }
 }

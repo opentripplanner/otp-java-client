@@ -1,5 +1,6 @@
 package org.opentripplanner;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
@@ -19,11 +20,11 @@ public class IntegrationTest {
 
   public static final Coordinate BAYRISCHER_PLATZ = new Coordinate(52.4885, 13.3398);
   public static final Coordinate ALEXANDERPLATZ = new Coordinate(52.5211, 13.4106);
+  public static OtpApiClient client = new OtpApiClient(ZoneId.of("Europe/Berlin"), "api.bbnavi.de");
 
   @Test
-  public void test() throws IOException, InterruptedException {
+  public void route() throws IOException, InterruptedException {
 
-    var client = new OtpApiClient(ZoneId.of("Europe/Berlin"), "api.bbnavi.de");
     var result =
         client.plan(
             BAYRISCHER_PLATZ, ALEXANDERPLATZ, LocalDateTime.now(), Set.of(RequestMode.TRANSIT));
@@ -31,5 +32,15 @@ public class IntegrationTest {
     LOG.info("Received {}", result);
 
     assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+  }
+
+  @Test
+  public void rentalStations() throws IOException, InterruptedException {
+
+    var result = client.vehicleRentalStations();
+
+    LOG.info("Received {}", result);
+
+    assertFalse(result.isEmpty());
   }
 }
