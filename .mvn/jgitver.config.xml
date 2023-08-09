@@ -10,5 +10,4 @@
   <nonQualifierBranches>main</nonQualifierBranches>
   <useSnapshot>false</useSnapshot> <!-- use -SNAPSHOT in CONFIGURABLE strategy -->
   <gitCommitIdLength>8</gitCommitIdLength>  <!-- between [8,40] -->
-  <maxSearchDepth>8</maxSearchDepth>  <!-- upper or equal to 1, ommited otherwise, default to infinite -->
 </configuration>
