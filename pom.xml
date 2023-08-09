@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.opentripplanner</groupId>
-  <artifactId>otp-client</artifactId>
+  <artifactId>otp-java-client</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>otp-client</name>
@@ -36,7 +36,6 @@
     </dependency>
 
 
-
     <!-- Test -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -53,33 +52,64 @@
   </dependencies>
   <build>
 
-  <plugins>
-    <plugin>
-      <groupId>com.diffplug.spotless</groupId>
-      <artifactId>spotless-maven-plugin</artifactId>
-      <version>2.27.2</version>
-      <configuration>
-        <!-- define a language-specific format -->
-        <java>
-          <!-- apply a specific flavor of google-java-format and reflow long strings -->
-          <googleJavaFormat/>
-        </java>
-      </configuration>
-      <executions>
-        <execution>
-          <goals>
-            <goal>apply</goal>
-          </goals>
-          <phase>compile</phase>
-        </execution>
-      </executions>
-    </plugin>
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-surefire-plugin</artifactId>
-      <version>3.1.2</version>
-    </plugin>
-  </plugins>
+    <plugins>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>2.27.2</version>
+        <configuration>
+          <!-- define a language-specific format -->
+          <java>
+            <!-- apply a specific flavor of google-java-format and reflow long strings -->
+            <googleJavaFormat/>
+          </java>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>apply</goal>
+            </goals>
+            <phase>compile</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.1.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <!-- We sign in the verify phase, which means it will happen before install and deploy (the last two phases)
+                 but not before earlier phases like test or package. -->
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+            <configuration>
+              <keyname>74ED86891C2BCCD1352D928460B7785172A9FE89</keyname>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <!-- Recommended way to deploy to OSSRH, which allows deferred manual release to Central. -->
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.13</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
+    </plugins>
 
   </build>
 
