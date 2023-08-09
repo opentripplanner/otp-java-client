@@ -1,4 +1,4 @@
-package org.opentripplanner.otp.serialization;
+package org.opentripplanner.client.serialization;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

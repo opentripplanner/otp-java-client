@@ -1,4 +1,4 @@
-package org.opentripplanner.otp.serialization;
+package org.opentripplanner.client.serialization;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

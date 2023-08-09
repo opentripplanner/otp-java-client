@@ -1,4 +1,4 @@
-package org.opentripplanner.otp;
+package org.opentripplanner.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -13,11 +13,11 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.opentripplanner.otp.model.Coordinate;
-import org.opentripplanner.otp.model.ModeInput;
-import org.opentripplanner.otp.model.TripPlan;
-import org.opentripplanner.otp.model.TripPlan.Itinerary;
-import org.opentripplanner.otp.serialization.ObjectMappers;
+import org.opentripplanner.client.model.Coordinate;
+import org.opentripplanner.client.model.ModeInput;
+import org.opentripplanner.client.model.TripPlan;
+import org.opentripplanner.client.model.TripPlan.Itinerary;
+import org.opentripplanner.client.serialization.ObjectMappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

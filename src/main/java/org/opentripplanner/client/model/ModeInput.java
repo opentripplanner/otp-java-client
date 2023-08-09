@@ -1,4 +1,4 @@
-package org.opentripplanner.otp.model;
+package org.opentripplanner.client.model;
 
 public enum ModeInput {
   TRANSIT("TRANSIT"),

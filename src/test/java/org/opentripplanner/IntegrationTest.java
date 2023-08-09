@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
-import org.opentripplanner.otp.OtpApiClient;
-import org.opentripplanner.otp.model.Coordinate;
-import org.opentripplanner.otp.model.ModeInput;
+import org.opentripplanner.client.OtpApiClient;
+import org.opentripplanner.client.model.Coordinate;
+import org.opentripplanner.client.model.ModeInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
