@@ -1,0 +1,6 @@
+target
+*gtfs.zip
+*.pbf
+graph.obj
+*.jar
+zHV_aktuell*
