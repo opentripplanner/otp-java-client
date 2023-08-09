@@ -78,7 +78,7 @@ public class OtpApiClient {
     return mapper.treeToValue(json.at("/data/vehicleRentalStations"), type);
   }
 
-  public List<VehicleRentalStation> patterns() throws IOException, InterruptedException {
+  public List<Pattern> patterns() throws IOException, InterruptedException {
     var json = sendRequest(GraphQLQueries.patterns());
     var type = listType(Pattern.class);
     return mapper.treeToValue(json.at("/data/patterns"), type);

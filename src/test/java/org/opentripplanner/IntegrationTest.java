@@ -63,5 +63,10 @@ public class IntegrationTest {
     LOG.info("Received {} patterns", result.size());
 
     assertFalse(result.isEmpty());
+
+    result.forEach(pattern -> {
+      assertNotNull(pattern.name());
+      assertNotNull(pattern.vehiclePositions());
+    });
   }
 }
