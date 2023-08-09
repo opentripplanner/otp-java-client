@@ -64,9 +64,10 @@ public class IntegrationTest {
 
     assertFalse(result.isEmpty());
 
-    result.forEach(pattern -> {
-      assertNotNull(pattern.name());
-      assertNotNull(pattern.vehiclePositions());
-    });
+    result.forEach(
+        pattern -> {
+          assertNotNull(pattern.name());
+          assertNotNull(pattern.vehiclePositions());
+        });
   }
 }
