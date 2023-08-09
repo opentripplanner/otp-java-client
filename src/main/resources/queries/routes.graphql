@@ -1,0 +1,6 @@
+query {
+    routes {
+        shortName
+        mode
+    }
+}

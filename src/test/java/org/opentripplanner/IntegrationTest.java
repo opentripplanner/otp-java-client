@@ -18,18 +18,17 @@ public class IntegrationTest {
 
   public static final Logger LOG = LoggerFactory.getLogger(IntegrationTest.class);
 
-  public static final Coordinate BAYRISCHER_PLATZ = new Coordinate(52.4885, 13.3398);
-  public static final Coordinate ALEXANDERPLATZ = new Coordinate(52.5211, 13.4106);
-  public static OtpApiClient client = new OtpApiClient(ZoneId.of("Europe/Berlin"), "api.bbnavi.de");
+  public static final Coordinate KARLSRUD = new Coordinate(59.8901, 10.7819);
+  public static final Coordinate ULLERN = new Coordinate(59.9256, 10.6569);
+  public static OtpApiClient client =
+      new OtpApiClient(ZoneId.of("Europe/Berlin"), "https://otp2debug.entur.org");
 
   @Test
   public void route() throws IOException, InterruptedException {
 
-    var result =
-        client.plan(
-            BAYRISCHER_PLATZ, ALEXANDERPLATZ, LocalDateTime.now(), Set.of(RequestMode.TRANSIT));
+    var result = client.plan(KARLSRUD, ULLERN, LocalDateTime.now(), Set.of(RequestMode.TRANSIT));
 
-    LOG.info("Received {}", result);
+    LOG.info("Received {} itineraries", result.itineraries().size());
 
     assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
   }
@@ -39,7 +38,27 @@ public class IntegrationTest {
 
     var result = client.vehicleRentalStations();
 
-    LOG.info("Received {}", result);
+    LOG.info("Received {} rental stations", result.size());
+
+    assertFalse(result.isEmpty());
+  }
+
+  @Test
+  public void routes() throws IOException, InterruptedException {
+
+    var result = client.routes();
+
+    LOG.info("Received {} routes", result.size());
+
+    assertFalse(result.isEmpty());
+  }
+
+  @Test
+  public void patterns() throws IOException, InterruptedException {
+
+    var result = client.patterns();
+
+    LOG.info("Received {} patterns", result.size());
 
     assertFalse(result.isEmpty());
   }

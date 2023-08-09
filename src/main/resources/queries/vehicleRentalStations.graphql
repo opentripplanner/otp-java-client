@@ -1,0 +1,9 @@
+query {
+    vehicleRentalStations{
+        name
+        lat
+        lon
+        realtime
+        vehiclesAvailable
+    }
+}

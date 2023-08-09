@@ -1,0 +1,40 @@
+query {
+    plan(
+        from: {lat: %s, lon: %s}
+        to: {lat: %s, lon: %s}
+        transportModes: [ %s ]
+        numItineraries: 5
+        date: "%s"
+        time: "%s"
+    ) {
+        itineraries {
+            startTime
+            endTime
+            legs {
+                startTime
+                endTime
+                from {
+                    name
+                }
+                to {
+                    name
+                }
+                mode
+                route {
+                    shortName
+                    longName
+                    agency {
+                        name
+                    }
+                }
+                duration
+                distance
+                intermediatePlaces {
+                    name
+                    departureTime
+                    arrivalTime
+                }
+            }
+        }
+    }
+}

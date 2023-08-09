@@ -1,0 +1,19 @@
+query {
+    patterns {
+        name
+        vehiclePositions {
+            vehicleId
+            lastUpdated
+            trip {
+                id
+                gtfsId
+            }
+            stopRelationship {
+                status
+                stop {
+                    name
+                }
+            }
+        }
+    }
+}

@@ -7,6 +7,7 @@ public enum LegMode {
   BUS,
   SUBWAY,
   FERRY,
+  TRAM,
   BICYCLE,
   SCOOTER,
   CAR
