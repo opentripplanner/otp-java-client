@@ -4,3 +4,4 @@ target
 graph.obj
 *.jar
 zHV_aktuell*
+.git-versioned-pom.xml
