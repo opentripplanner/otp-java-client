@@ -96,7 +96,7 @@ public class OtpApiClient {
             .header("Content-Type", "application/graphql")
             .build();
 
-    var resp = httpClient.send(req, BodyHandlers.ofString(StandardCharsets.UTF_8));
+    var resp = httpClient.send(req, BodyHandlers.ofInputStream());
 
     var jsonString = resp.body();
     var jsonNode = mapper.readTree(jsonString);
