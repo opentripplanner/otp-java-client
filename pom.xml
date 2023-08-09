@@ -6,7 +6,8 @@
 
   <groupId>org.opentripplanner</groupId>
   <artifactId>otp-client</artifactId>
-  <version>0.0.1</version>
+  <!-- Don't change this, it's override by an extension !-->
+  <version>0.0.0</version>
   <description>Java client for the OpenTripPlanner GraphQL API</description>
 
 
