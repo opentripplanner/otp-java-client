@@ -1,6 +1,6 @@
 package org.opentripplanner.client.model;
 
-public enum ModeInput {
+public enum RequestMode {
   TRANSIT("TRANSIT"),
   WALK("WALK"),
   RAIL("RAIL"),
@@ -16,11 +16,11 @@ public enum ModeInput {
   public final String mode;
   public final String qualifier;
 
-  ModeInput(String mode) {
+  RequestMode(String mode) {
     this(mode, null);
   }
 
-  ModeInput(String mode, String qualifier) {
+  RequestMode(String mode, String qualifier) {
     this.mode = mode;
     this.qualifier = qualifier;
   }

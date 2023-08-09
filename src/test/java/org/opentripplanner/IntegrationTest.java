@@ -9,7 +9,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.opentripplanner.client.OtpApiClient;
 import org.opentripplanner.client.model.Coordinate;
-import org.opentripplanner.client.model.ModeInput;
+import org.opentripplanner.client.model.RequestMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +26,7 @@ public class IntegrationTest {
     var client = new OtpApiClient(ZoneId.of("Europe/Berlin"), "api.bbnavi.de");
     var result =
         client.plan(
-            BAYRISCHER_PLATZ, ALEXANDERPLATZ, LocalDateTime.now(), Set.of(ModeInput.TRANSIT));
+            BAYRISCHER_PLATZ, ALEXANDERPLATZ, LocalDateTime.now(), Set.of(RequestMode.TRANSIT));
 
     LOG.info("Received {}", result);
 

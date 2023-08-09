@@ -1,6 +1,6 @@
 package org.opentripplanner.client.model;
 
-public enum Mode {
+public enum LegMode {
   TRANSIT,
   WALK,
   RAIL,

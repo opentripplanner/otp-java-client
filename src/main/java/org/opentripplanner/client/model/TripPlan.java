@@ -20,7 +20,7 @@ public record TripPlan(List<Itinerary> itineraries) {
       Place to,
       OffsetDateTime startTime,
       OffsetDateTime endTime,
-      Mode mode,
+      LegMode mode,
       Duration duration,
       double distance,
       Route route) {}

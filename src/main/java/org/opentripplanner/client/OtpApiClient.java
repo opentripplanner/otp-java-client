@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.opentripplanner.client.model.Coordinate;
-import org.opentripplanner.client.model.ModeInput;
+import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.model.TripPlan;
 import org.opentripplanner.client.model.TripPlan.Itinerary;
 import org.opentripplanner.client.serialization.ObjectMappers;
@@ -80,7 +80,7 @@ public class OtpApiClient {
 """;
 
   public List<Itinerary> plan(
-      Coordinate from, Coordinate to, LocalDateTime time, Set<ModeInput> modes)
+      Coordinate from, Coordinate to, LocalDateTime time, Set<RequestMode> modes)
       throws IOException, InterruptedException {
 
     var formattedModes =
