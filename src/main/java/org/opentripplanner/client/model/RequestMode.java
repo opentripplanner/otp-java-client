@@ -6,6 +6,7 @@ public enum RequestMode {
   RAIL("RAIL"),
   BUS("BUS"),
   SUBWAY("SUBWAY"),
+  TRAM("TRAM"),
   FERRY("FERRY"),
   SCOOTER_RENT("SCOOTER", "RENT"),
   BICYCLE_RENT("BICYCLE", "RENT"),
