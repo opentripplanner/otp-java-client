@@ -6,7 +6,7 @@
   <autoIncrementPatch>false</autoIncrementPatch>
   <useCommitDistance>true</useCommitDistance>
   <useDirty>false</useDirty>
-  <useGitCommitId>true</useGitCommitId>
+  <useGitCommitId>false</useGitCommitId>
   <nonQualifierBranches>main</nonQualifierBranches>
   <useSnapshot>false</useSnapshot> <!-- use -SNAPSHOT in CONFIGURABLE strategy -->
   <gitCommitIdLength>8</gitCommitIdLength>  <!-- between [8,40] -->
