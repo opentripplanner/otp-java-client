@@ -25,7 +25,8 @@ public class IntegrationTest {
 
     var client = new OtpApiClient(ZoneId.of("Europe/Berlin"), "api.bbnavi.de");
     var result =
-        client.plan(BAYRISCHER_PLATZ, ALEXANDERPLATZ, LocalDateTime.now(), Set.of(ModeInput.TRANSIT));
+        client.plan(
+            BAYRISCHER_PLATZ, ALEXANDERPLATZ, LocalDateTime.now(), Set.of(ModeInput.TRANSIT));
 
     LOG.info("Received {}", result);
 

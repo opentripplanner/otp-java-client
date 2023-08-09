@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.opentripplanner.otp.model.Coordinate;
-import org.opentripplanner.otp.model.Mode;
 import org.opentripplanner.otp.model.ModeInput;
 import org.opentripplanner.otp.model.TripPlan;
 import org.opentripplanner.otp.model.TripPlan.Itinerary;
@@ -80,11 +79,14 @@ public class OtpApiClient {
   }
 """;
 
-  public List<Itinerary> plan(Coordinate from, Coordinate to, LocalDateTime time, Set<ModeInput> modes)
+  public List<Itinerary> plan(
+      Coordinate from, Coordinate to, LocalDateTime time, Set<ModeInput> modes)
       throws IOException, InterruptedException {
 
     var formattedModes =
-        modes.stream().map("{mode: %s}"::formatted).collect(Collectors.joining(", "));
+        modes.stream()
+            .map(m -> "{mode: %s, qualifier: %s}".formatted(m.mode, m.qualifier))
+            .collect(Collectors.joining(", "));
     var formattedQuery =
         planQuery.formatted(
             from.lat(),
