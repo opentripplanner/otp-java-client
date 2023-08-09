@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.opentripplanner.client.model.Coordinate;
+import org.opentripplanner.client.model.Pattern;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.model.Route;
 import org.opentripplanner.client.model.TripPlan;
@@ -29,7 +30,6 @@ import org.slf4j.LoggerFactory;
 public class OtpApiClient {
 
   private static final Logger LOG = LoggerFactory.getLogger(OtpApiClient.class);
-  private static final TypeFactory TYPE_FACTORY = TypeFactory.defaultInstance();
   private static final String DEFAULT_GRAPHQL_PATH = "/otp/routers/default/index/graphql";
 
   private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -80,12 +80,12 @@ public class OtpApiClient {
 
   public List<VehicleRentalStation> patterns() throws IOException, InterruptedException {
     var json = sendRequest(GraphQLQueries.patterns());
-    var type = listType(VehicleRentalStation.class);
+    var type = listType(Pattern.class);
     return mapper.treeToValue(json.at("/data/patterns"), type);
   }
 
   private static CollectionType listType(Class<?> clazz) {
-    return TYPE_FACTORY.constructCollectionType(List.class, clazz);
+    return TypeFactory.defaultInstance().constructCollectionType(List.class, clazz);
   }
 
   private JsonNode sendRequest(String formattedQuery) throws IOException, InterruptedException {

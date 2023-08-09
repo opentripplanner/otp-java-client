@@ -26,7 +26,9 @@ public class IntegrationTest {
   @Test
   public void route() throws IOException, InterruptedException {
 
-    var result = client.plan(ALEXANDERPLATZ, BAYRISCHER_PLATZ, LocalDateTime.now(), Set.of(RequestMode.TRANSIT));
+    var result =
+        client.plan(
+            ALEXANDERPLATZ, BAYRISCHER_PLATZ, LocalDateTime.now(), Set.of(RequestMode.TRANSIT));
 
     LOG.info("Received {} itineraries", result.itineraries().size());
 
