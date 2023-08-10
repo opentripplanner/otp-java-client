@@ -29,6 +29,8 @@ var result = client.plan(
         );
 ```
 
+For more examples take a look at [`IntegrationTest.java`](https://github.com/opentripplanner/otp-java-client/blob/main/src/test/java/org/opentripplanner/IntegrationTest.java).
+
 ### Releasing
 
 ```sh
