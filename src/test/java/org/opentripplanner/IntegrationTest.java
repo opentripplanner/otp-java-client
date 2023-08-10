@@ -12,6 +12,7 @@ import org.opentripplanner.client.OtpApiClient;
 import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.parameters.TripPlanParameters;
+import org.opentripplanner.client.parameters.TripPlanParameters.SearchDirection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,24 @@ public class IntegrationTest {
                 .withTo(BAYRISCHER_PLATZ)
                 .withTime(LocalDateTime.now())
                 .withModes(Set.of(RequestMode.TRANSIT))
+                .build());
+
+    LOG.info("Received {} itineraries", result.itineraries().size());
+
+    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+  }
+
+  @Test
+  public void arriveBy() throws IOException, InterruptedException {
+
+    var result =
+        client.plan(
+            TripPlanParameters.builder()
+                .withFrom(ALEXANDERPLATZ)
+                .withTo(BAYRISCHER_PLATZ)
+                .withTime(LocalDateTime.now())
+                .withModes(Set.of(RequestMode.TRANSIT))
+                .withSearchDirection(SearchDirection.ARRIVE_BY)
                 .build());
 
     LOG.info("Received {} itineraries", result.itineraries().size());
