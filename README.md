@@ -21,12 +21,14 @@ Coordinate ORIGIN = new Coordinate(52.4885, 13.3398);
 Coordinate DEST = new Coordinate(52.5211, 13.4106);
 OtpApiClient client = new OtpApiClient(ZoneId.of("Europe/Berlin"), "https://example.com");
 
-var result = client.plan(
-            ORIGIN, 
-            DEST, 
-            LocalDateTime.now(), 
-            Set.of(RequestMode.TRANSIT)
-        );
+var result =client.plan(
+      TripPlanParameters.builder()
+        .withFrom(ORIGIN)
+        .withTo(DEST)
+        .withTime(LocalDateTime.now())
+        .withModes(Set.of(RequestMode.TRANSIT))
+        .build()
+    );
 ```
 
 For more examples take a look at [`IntegrationTest.java`](https://github.com/opentripplanner/otp-java-client/blob/main/src/test/java/org/opentripplanner/IntegrationTest.java).
