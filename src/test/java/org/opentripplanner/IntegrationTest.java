@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.opentripplanner.client.OtpApiClient;
 import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.RequestMode;
+import org.opentripplanner.client.parameters.TripPlanParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,12 @@ public class IntegrationTest {
 
     var result =
         client.plan(
-            ALEXANDERPLATZ, BAYRISCHER_PLATZ, LocalDateTime.now(), Set.of(RequestMode.TRANSIT));
+            TripPlanParameters.builder()
+                .withFrom(ALEXANDERPLATZ)
+                .withTo(BAYRISCHER_PLATZ)
+                .withTime(LocalDateTime.now())
+                .withModes(Set.of(RequestMode.TRANSIT))
+                .build());
 
     LOG.info("Received {} itineraries", result.itineraries().size());
 
@@ -40,7 +46,12 @@ public class IntegrationTest {
 
     var result =
         client.plan(
-            ALEXANDERPLATZ, BAYRISCHER_PLATZ, LocalDateTime.now(), Set.of(RequestMode.BICYCLE));
+            TripPlanParameters.builder()
+                .withFrom(ALEXANDERPLATZ)
+                .withTo(BAYRISCHER_PLATZ)
+                .withTime(LocalDateTime.now())
+                .withModes(Set.of(RequestMode.BICYCLE))
+                .build());
 
     LOG.info("Received {} itineraries", result.itineraries().size());
 

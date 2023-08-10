@@ -6,22 +6,19 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import java.io.IOException;
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
-import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.Pattern;
-import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.model.Route;
 import org.opentripplanner.client.model.TripPlan;
 import org.opentripplanner.client.model.VehicleRentalStation;
+import org.opentripplanner.client.parameters.TripPlanParameters;
 import org.opentripplanner.client.query.GraphQLQueries;
 import org.opentripplanner.client.serialization.ObjectMappers;
 import org.slf4j.Logger;
@@ -41,24 +38,25 @@ public class OtpApiClient {
     this.mapper = ObjectMappers.withTimezone(timezone);
     this.graphQlUri = URI.create(baseUrl + DEFAULT_GRAPHQL_PATH);
   }
+  ;
 
-  public TripPlan plan(Coordinate from, Coordinate to, LocalDateTime time, Set<RequestMode> modes)
-      throws IOException, InterruptedException {
+  public TripPlan plan(TripPlanParameters req) throws IOException, InterruptedException {
 
     var planQuery = GraphQLQueries.plan();
     var formattedModes =
-        modes.stream()
+        req.modes().stream()
             .map(m -> "{mode: %s, qualifier: %s}".formatted(m.mode, m.qualifier))
             .collect(Collectors.joining(", "));
     var formattedQuery =
         planQuery.formatted(
-            from.lat(),
-            from.lon(),
-            to.lat(),
-            to.lon(),
+            req.from().lat(),
+            req.from().lon(),
+            req.to().lat(),
+            req.to().lon(),
             formattedModes,
-            time.toLocalDate().toString(),
-            time.toLocalTime().toString());
+            req.time().toLocalDate().toString(),
+            req.time().toLocalTime().toString(),
+            req.searchDirection().isArriveBy());
 
     final var jsonNode = sendRequest(formattedQuery);
     var plan = jsonNode.at("/data/plan");

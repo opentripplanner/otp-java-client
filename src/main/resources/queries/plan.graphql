@@ -6,6 +6,7 @@ query {
         numItineraries: 5
         date: "%s"
         time: "%s"
+        arriveBy: %s
     ) {
         itineraries {
             startTime
