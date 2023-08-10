@@ -36,6 +36,18 @@ public class IntegrationTest {
   }
 
   @Test
+  public void bikeRoute() throws IOException, InterruptedException {
+
+    var result =
+        client.plan(
+            ALEXANDERPLATZ, BAYRISCHER_PLATZ, LocalDateTime.now(), Set.of(RequestMode.BICYCLE));
+
+    LOG.info("Received {} itineraries", result.itineraries().size());
+
+    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+  }
+
+  @Test
   public void rentalStations() throws IOException, InterruptedException {
 
     var result = client.vehicleRentalStations();

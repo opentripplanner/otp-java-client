@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpRequest.BodyPublishers;
-import java.net.http.HttpResponse.BodyHandlers;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -89,16 +88,21 @@ public class OtpApiClient {
 
   private JsonNode sendRequest(String formattedQuery) throws IOException, InterruptedException {
     LOG.debug("Sending GraphQL query to {}: {}", graphQlUri, formattedQuery);
-    var req =
-        HttpRequest.newBuilder(graphQlUri)
-            .POST(BodyPublishers.ofString(formattedQuery))
-            .header("Content-Type", "application/graphql")
+    var body = mapper.createObjectNode();
+    body.put("query", formattedQuery);
+
+    var bodyString = mapper.writeValueAsString(body);
+
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(graphQlUri)
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(bodyString))
             .build();
+    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-    var resp = httpClient.send(req, BodyHandlers.ofInputStream());
+    var jsonNode = mapper.readTree(response.body());
 
-    var jsonString = resp.body();
-    var jsonNode = mapper.readTree(jsonString);
     LOG.debug("Received the following JSON: {}", jsonNode.toPrettyString());
     return jsonNode;
   }
