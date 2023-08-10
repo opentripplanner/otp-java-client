@@ -1,3 +1,34 @@
+## OTP GraphQL API Java Client
+
+This library provides an easy way to access OTP's GTFS GraphQL API with Java.
+
+### Installation
+
+It's deployed to Maven Central so add it to your project like this:
+
+```xml
+<dependency>
+   <groupId>org.opentripplanner</groupId>
+   <artifactId>otp-client</artifactId>
+   <version>${LATEST_VERSION}</version>
+</dependency>
+```
+
+### Usage
+
+```java
+Coordinate ORIGIN = new Coordinate(52.4885, 13.3398);
+Coordinate DEST = new Coordinate(52.5211, 13.4106);
+OtpApiClient client = new OtpApiClient(ZoneId.of("Europe/Berlin"), "https://example.com");
+
+var result = client.plan(
+            ORIGIN, 
+            DEST, 
+            LocalDateTime.now(), 
+            Set.of(RequestMode.TRANSIT)
+        );
+```
+
 ### Releasing
 
 ```sh
