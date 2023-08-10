@@ -4,6 +4,8 @@ This library provides an easy way to access OTP's GTFS GraphQL API with Java.
 
 ### Installation
 
+[![Maven Central](https://img.shields.io/maven-central/v/org.opentripplanner/otp-client.svg)](https://mvnrepository.com/artifact/org.opentripplanner/otp-client)
+
 It's deployed to Maven Central so add it to your project like this:
 
 ```xml
