@@ -23,7 +23,7 @@ Coordinate ORIGIN = new Coordinate(52.4885, 13.3398);
 Coordinate DEST = new Coordinate(52.5211, 13.4106);
 OtpApiClient client = new OtpApiClient(ZoneId.of("Europe/Berlin"), "https://example.com");
 
-var result =client.plan(
+var result = client.plan(
       TripPlanParameters.builder()
         .withFrom(ORIGIN)
         .withTo(DEST)

@@ -34,7 +34,7 @@ public class IntegrationTest {
                 .withFrom(ALEXANDERPLATZ)
                 .withTo(BAYRISCHER_PLATZ)
                 .withTime(LocalDateTime.now())
-                .withModes(Set.of(RequestMode.TRANSIT))
+                .withModes(RequestMode.TRANSIT)
                 .build());
 
     LOG.info("Received {} itineraries", result.itineraries().size());
@@ -51,7 +51,7 @@ public class IntegrationTest {
                 .withFrom(ALEXANDERPLATZ)
                 .withTo(BAYRISCHER_PLATZ)
                 .withTime(LocalDateTime.now())
-                .withModes(Set.of(RequestMode.TRANSIT))
+                .withModes(RequestMode.TRANSIT)
                 .withSearchDirection(SearchDirection.ARRIVE_BY)
                 .build());
 

@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.RequestMode;
+import org.opentripplanner.client.validation.CollectionUtils;
 
 public record TripPlanParameters(
     Coordinate from,
@@ -18,6 +19,7 @@ public record TripPlanParameters(
     Objects.requireNonNull(to);
     Objects.requireNonNull(time);
     Objects.requireNonNull(modes);
+    CollectionUtils.assertHasValue(modes);
     Objects.requireNonNull(searchDirection);
   }
 
