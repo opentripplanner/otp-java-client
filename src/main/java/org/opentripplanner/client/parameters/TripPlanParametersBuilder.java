@@ -15,6 +15,7 @@ public class TripPlanParametersBuilder {
   private LocalDateTime time;
   private Set<RequestMode> modes;
   private SearchDirection searchDirection = SearchDirection.DEPART_AT;
+  private float walkReluctance = 1.4f;
 
   public TripPlanParametersBuilder withFrom(Coordinate from) {
     this.from = from;
@@ -46,7 +47,12 @@ public class TripPlanParametersBuilder {
     return this;
   }
 
+  public TripPlanParametersBuilder withWalkReluctance(float wr) {
+    this.walkReluctance = wr;
+    return this;
+  }
+
   public TripPlanParameters build() {
-    return new TripPlanParameters(from, coordinate, time, modes, searchDirection);
+    return new TripPlanParameters(from, coordinate, time, modes, searchDirection, walkReluctance);
   }
 }

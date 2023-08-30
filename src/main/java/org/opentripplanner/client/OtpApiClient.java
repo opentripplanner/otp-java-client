@@ -56,7 +56,8 @@ public class OtpApiClient {
             formattedModes,
             req.time().toLocalDate().toString(),
             req.time().toLocalTime().toString(),
-            req.searchDirection().isArriveBy());
+            req.searchDirection().isArriveBy(),
+            req.walkReluctance());
 
     final var jsonNode = sendRequest(formattedQuery);
     var plan = jsonNode.at("/data/plan");

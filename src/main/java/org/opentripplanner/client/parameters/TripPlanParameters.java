@@ -12,7 +12,8 @@ public record TripPlanParameters(
     Coordinate to,
     LocalDateTime time,
     Set<RequestMode> modes,
-    SearchDirection searchDirection) {
+    SearchDirection searchDirection,
+    float walkReluctance) {
 
   public TripPlanParameters {
     Objects.requireNonNull(from);
