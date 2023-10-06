@@ -5,11 +5,11 @@ import jakarta.annotation.Nullable;
 public record FareProductUse(String id, FareProduct product) {
 
   public record FareProduct(
-          String id,
-          String name,
-          Money price,
-          @Nullable FareProduct.RiderCategory riderCategory,
-          @Nullable FareProduct.FareMedium medium) {
+      String id,
+      String name,
+      Money price,
+      @Nullable FareProduct.RiderCategory riderCategory,
+      @Nullable FareProduct.FareMedium medium) {
 
     public record RiderCategory(String id, String name) {}
 
