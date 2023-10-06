@@ -12,7 +12,14 @@ public record TripPlan(List<Itinerary> itineraries) {
 
     /** Does this itinerary contain any legs that contain public transport? */
     public boolean hasTransit() {
-      return legs.stream().anyMatch(leg -> leg.mode().isTransit());
+      return legs.stream().anyMatch(Leg::isTransit);
+    }
+
+    /**
+     * @return All legs that are using public transport.
+     */
+    public List<Leg> transitLegs() {
+      return legs.stream().filter(Leg::isTransit).toList();
     }
   }
 
@@ -48,7 +55,13 @@ public record TripPlan(List<Itinerary> itineraries) {
       Duration duration,
       double distance,
       Route route,
-      List<FareProductUse> fareProducts) {}
+      List<FareProductUse> fareProducts) {
+
+    /** Is this leg using public transport? */
+    public boolean isTransit() {
+      return mode.isTransit();
+    }
+  }
 
   /** Returns a list of all itineraries that contain public transport. */
   public List<Itinerary> transitItineraries() {
