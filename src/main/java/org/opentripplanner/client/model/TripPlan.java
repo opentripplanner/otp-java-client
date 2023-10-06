@@ -67,11 +67,4 @@ public record TripPlan(List<Itinerary> itineraries) {
   public List<Itinerary> transitItineraries() {
     return itineraries.stream().filter(Itinerary::hasTransit).toList();
   }
-
-  /**
-   * @return Return all legs of this {@link TripPlan} that use public transport.
-   */
-  public List<Leg> transitLegs() {
-    return transitItineraries().stream().flatMap(l -> l.transitLegs().stream()).toList();
-  }
 }
