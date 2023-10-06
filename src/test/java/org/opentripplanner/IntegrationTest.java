@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.opentripplanner.client.OtpApiClient;
 import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.RequestMode;
-import org.opentripplanner.client.model.TripPlan.FareProductUse;
+import org.opentripplanner.client.model.FareProductUse;
 import org.opentripplanner.client.parameters.TripPlanParameters;
 import org.opentripplanner.client.parameters.TripPlanParameters.SearchDirection;
 import org.slf4j.Logger;

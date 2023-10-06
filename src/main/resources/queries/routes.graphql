@@ -2,5 +2,8 @@ query {
     routes {
         shortName
         mode
+        agency {
+            name
+        }
     }
 }
