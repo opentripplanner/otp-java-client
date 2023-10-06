@@ -1,5 +1,6 @@
 package org.opentripplanner.client.model;
 
+import jakarta.annotation.Nullable;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -23,7 +24,11 @@ public record TripPlan(List<Itinerary> itineraries) {
   public record FareMedium(String id, String name) {}
 
   public record FareProduct(
-      String id, String name, Money price, RiderCategory riderCategory, FareMedium medium) {}
+      String id,
+      String name,
+      Money price,
+      @Nullable RiderCategory riderCategory,
+      @Nullable FareMedium medium) {}
 
   public record FareProductUse(String id, FareProduct product) {}
 
