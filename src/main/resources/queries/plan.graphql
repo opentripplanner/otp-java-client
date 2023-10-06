@@ -36,6 +36,30 @@ query {
                     departureTime
                     arrivalTime
                 }
+                fareProducts {
+                    id
+                    product {
+                        id
+                        name
+                        ... on DefaultFareProduct {
+                            price {
+                                currency {
+                                    digits
+                                    code
+                                }
+                                amount
+                            }
+                        }
+                        riderCategory {
+                            id
+                            name
+                        }
+                        medium {
+                            id
+                            name
+                        }
+                    }
+                }
             }
         }
     }
