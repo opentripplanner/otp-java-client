@@ -7,7 +7,14 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public record TripPlan(List<Itinerary> itineraries) {
-  public record Itinerary(List<Leg> legs) {}
+
+  public record Itinerary(List<Leg> legs) {
+
+    /** Does this itinerary contain any legs that contain public transport? */
+    public boolean hasTransit() {
+      return legs.stream().anyMatch(leg -> leg.mode().isTransit());
+    }
+  }
 
   public record Place(String name) {}
 
@@ -42,4 +49,9 @@ public record TripPlan(List<Itinerary> itineraries) {
       double distance,
       Route route,
       List<FareProductUse> fareProducts) {}
+
+  /** Returns a list of all itineraries that contain public transport. */
+  public List<Itinerary> transitItineraries() {
+    return itineraries.stream().filter(Itinerary::hasTransit).toList();
+  }
 }

@@ -1,7 +1,9 @@
 package org.opentripplanner.client.model;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum LegMode {
-  TRANSIT,
   WALK,
   RAIL,
   BUS,
@@ -10,5 +12,11 @@ public enum LegMode {
   TRAM,
   BICYCLE,
   SCOOTER,
-  CAR
+  CAR;
+
+  private static final Set<LegMode> NON_TRANSIT_MODES = EnumSet.of(CAR, SCOOTER, BICYCLE, WALK);
+
+  public boolean isTransit() {
+    return !NON_TRANSIT_MODES.contains(this);
+  }
 }
