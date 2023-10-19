@@ -43,7 +43,8 @@ public class OtpApiClient {
   /**
    * Returns a TripPlan, also known as a routing result.
    *
-   * @link https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/plan
+   * @link <a href="https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/plan">OTP API
+   *     docs</a>
    */
   public TripPlan plan(TripPlanParameters req) throws IOException {
 
@@ -77,7 +78,8 @@ public class OtpApiClient {
   /**
    * Return the list of routes.
    *
-   * @link https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/routes
+   * @link <a href="https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/routes">OTP
+   *     API docs</a>
    */
   public List<Route> routes() throws IOException {
     var json = sendRequest(GraphQLQueries.routes());
@@ -88,7 +90,9 @@ public class OtpApiClient {
   /**
    * Return the list of vehicle rental stations.
    *
-   * @link https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/vehicleRentalStations
+   * @link <a
+   *     href="https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/vehicleRentalStations">OTP
+   *     API docs</a>
    */
   public List<VehicleRentalStation> vehicleRentalStations() throws IOException {
     var json = sendRequest(GraphQLQueries.vehicleRentalStations());
@@ -99,7 +103,8 @@ public class OtpApiClient {
   /**
    * Return the list of trip patterns.
    *
-   * @link https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/patterns
+   * @link <a href="https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/patterns">OTP
+   *     API docs</a>
    */
   public List<Pattern> patterns() throws IOException {
     var json = sendRequest(GraphQLQueries.patterns());
