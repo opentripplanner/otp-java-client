@@ -38,9 +38,8 @@ public class OtpApiClient {
     this.mapper = ObjectMappers.withTimezone(timezone);
     this.graphQlUri = URI.create(baseUrl + DEFAULT_GRAPHQL_PATH);
   }
-  ;
 
-  public TripPlan plan(TripPlanParameters req) throws IOException, InterruptedException {
+  public TripPlan plan(TripPlanParameters req) throws IOException {
 
     var planQuery = GraphQLQueries.plan();
     var formattedModes =
@@ -60,11 +59,16 @@ public class OtpApiClient {
             req.walkReluctance());
 
     final var jsonNode = sendRequest(formattedQuery);
-    var plan = jsonNode.at("/data/plan");
-    return mapper.treeToValue(plan, TripPlan.class);
+    try {
+      var plan = jsonNode.at("/data/plan");
+      return mapper.treeToValue(plan, TripPlan.class);
+    } catch (IOException e) {
+      LOG.error("Could not deserialize response: {}", jsonNode.toPrettyString());
+      throw e;
+    }
   }
 
-  public List<Route> routes() throws IOException, InterruptedException {
+  public List<Route> routes() throws IOException {
     var json = sendRequest(GraphQLQueries.routes());
     var type = listType(Route.class);
     return mapper.treeToValue(json.at("/data/routes"), type);
@@ -77,7 +81,7 @@ public class OtpApiClient {
     return mapper.treeToValue(json.at("/data/vehicleRentalStations"), type);
   }
 
-  public List<Pattern> patterns() throws IOException, InterruptedException {
+  public List<Pattern> patterns() throws IOException {
     var json = sendRequest(GraphQLQueries.patterns());
     var type = listType(Pattern.class);
     return mapper.treeToValue(json.at("/data/patterns"), type);
@@ -87,7 +91,7 @@ public class OtpApiClient {
     return TypeFactory.defaultInstance().constructCollectionType(List.class, clazz);
   }
 
-  private JsonNode sendRequest(String formattedQuery) throws IOException, InterruptedException {
+  private JsonNode sendRequest(String formattedQuery) throws IOException {
     LOG.debug("Sending GraphQL query to {}: {}", graphQlUri, formattedQuery);
 
     var body = mapper.createObjectNode();
@@ -99,6 +103,10 @@ public class OtpApiClient {
     var stringEntity = new StringEntity(bodyString, ContentType.APPLICATION_JSON);
     httpPost.setEntity(stringEntity);
     var response = httpClient.execute(httpPost);
+    if (response.getCode() != 200) {
+      throw new IOException(
+          "HTTP request to '%s' returned status code %s".formatted(graphQlUri, response.getCode()));
+    }
     var jsonNode = mapper.readTree(response.getEntity().getContent());
 
     LOG.debug("Received the following JSON: {}", jsonNode.toPrettyString());

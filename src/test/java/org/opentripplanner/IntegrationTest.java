@@ -30,7 +30,7 @@ public class IntegrationTest {
       new OtpApiClient(ZoneId.of("Europe/Oslo"), "https://otp2debug.entur.org");
 
   @Test
-  public void route() throws IOException, InterruptedException {
+  public void route() throws IOException {
 
     var result =
         client.plan(
@@ -51,7 +51,7 @@ public class IntegrationTest {
   }
 
   @Test
-  public void arriveBy() throws IOException, InterruptedException {
+  public void arriveBy() throws IOException {
 
     var result =
         client.plan(
@@ -69,7 +69,7 @@ public class IntegrationTest {
   }
 
   @Test
-  public void bikeRoute() throws IOException, InterruptedException {
+  public void bikeRoute() throws IOException {
 
     var result =
         client.plan(
@@ -96,7 +96,7 @@ public class IntegrationTest {
   }
 
   @Test
-  public void routes() throws IOException, InterruptedException {
+  public void routes() throws IOException {
 
     var result = client.routes();
 
@@ -106,7 +106,7 @@ public class IntegrationTest {
   }
 
   @Test
-  public void patterns() throws IOException, InterruptedException {
+  public void patterns() throws IOException {
 
     var result = client.patterns();
 
@@ -123,7 +123,7 @@ public class IntegrationTest {
 
   @Disabled
   @Test
-  public void seattleFares() throws IOException, InterruptedException {
+  public void seattleFares() throws IOException {
 
     var southSeattle = new Coordinate(47.5634, -122.3155);
     var northSeattle = new Coordinate(47.6225, -122.3312);
