@@ -1,5 +1,6 @@
 package org.opentripplanner.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -39,6 +40,11 @@ public class OtpApiClient {
     this.graphQlUri = URI.create(baseUrl + DEFAULT_GRAPHQL_PATH);
   }
 
+  /**
+   * Returns a TripPlan, also known as a routing result.
+   *
+   * @link https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/plan
+   */
   public TripPlan plan(TripPlanParameters req) throws IOException {
 
     var planQuery = GraphQLQueries.plan();
@@ -68,23 +74,42 @@ public class OtpApiClient {
     }
   }
 
+  /**
+   * Return the list of routes.
+   *
+   * @link https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/routes
+   */
   public List<Route> routes() throws IOException {
     var json = sendRequest(GraphQLQueries.routes());
     var type = listType(Route.class);
-    return mapper.treeToValue(json.at("/data/routes"), type);
+    return deserializeList(json, type, "/data/routes");
   }
 
-  public List<VehicleRentalStation> vehicleRentalStations()
-      throws IOException, InterruptedException {
+  /**
+   * Return the list of vehicle rental stations.
+   *
+   * @link https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/vehicleRentalStations
+   */
+  public List<VehicleRentalStation> vehicleRentalStations() throws IOException {
     var json = sendRequest(GraphQLQueries.vehicleRentalStations());
     var type = listType(VehicleRentalStation.class);
-    return mapper.treeToValue(json.at("/data/vehicleRentalStations"), type);
+    return deserializeList(json, type, "/data/vehicleRentalStations");
   }
 
+  /**
+   * Return the list of trip patterns.
+   *
+   * @link https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/patterns
+   */
   public List<Pattern> patterns() throws IOException {
     var json = sendRequest(GraphQLQueries.patterns());
     var type = listType(Pattern.class);
-    return mapper.treeToValue(json.at("/data/patterns"), type);
+    return deserializeList(json, type, "/data/patterns");
+  }
+
+  private <T> List<T> deserializeList(JsonNode json, CollectionType type, String path)
+      throws JsonProcessingException {
+    return mapper.treeToValue(json.at(path), type);
   }
 
   private static CollectionType listType(Class<?> clazz) {
