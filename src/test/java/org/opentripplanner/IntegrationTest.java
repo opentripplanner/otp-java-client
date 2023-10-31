@@ -86,7 +86,7 @@ public class IntegrationTest {
   }
 
   @Test
-  public void rentalStations() throws IOException, InterruptedException {
+  public void rentalStations() throws IOException {
 
     var result = client.vehicleRentalStations();
 
@@ -97,12 +97,11 @@ public class IntegrationTest {
 
   @Test
   public void routes() throws IOException {
-
-    var result = client.routes();
-
-    LOG.info("Received {} routes", result.size());
-
-    assertFalse(result.isEmpty());
+    var routes = client.routes();
+    LOG.info("Received {} routes", routes.size());
+    
+    assertFalse(routes.isEmpty());
+    routes.forEach(r -> assertFalse(r.name().isEmpty(), "Route %s has no name.".formatted(r)));
   }
 
   @Test
