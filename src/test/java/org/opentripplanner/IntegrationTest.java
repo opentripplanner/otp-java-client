@@ -99,7 +99,7 @@ public class IntegrationTest {
   public void routes() throws IOException {
     var routes = client.routes();
     LOG.info("Received {} routes", routes.size());
-    
+
     assertFalse(routes.isEmpty());
     routes.forEach(r -> assertFalse(r.name().isEmpty(), "Route %s has no name.".formatted(r)));
   }
