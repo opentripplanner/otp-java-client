@@ -101,7 +101,11 @@ public class IntegrationTest {
     LOG.info("Received {} routes", routes.size());
 
     assertFalse(routes.isEmpty());
-    routes.forEach(r -> assertFalse(r.name().isEmpty(), "Route %s has no name.".formatted(r)));
+    routes.forEach(
+        r -> {
+          assertFalse(r.name().isEmpty(), "Route %s has no name.".formatted(r));
+          assertFalse(r.agency().name().isEmpty());
+        });
   }
 
   @Test
