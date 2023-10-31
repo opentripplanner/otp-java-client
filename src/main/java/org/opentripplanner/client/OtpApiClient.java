@@ -60,6 +60,7 @@ public class OtpApiClient {
             req.to().lat(),
             req.to().lon(),
             formattedModes,
+            req.numItineraries(),
             req.time().toLocalDate().toString(),
             req.time().toLocalTime().toString(),
             req.searchDirection().isArriveBy(),

@@ -11,6 +11,7 @@ public record TripPlanParameters(
     Coordinate from,
     Coordinate to,
     LocalDateTime time,
+    int numItineraries,
     Set<RequestMode> modes,
     SearchDirection searchDirection,
     float walkReluctance) {

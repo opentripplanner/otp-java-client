@@ -3,7 +3,7 @@ query {
         from: {lat: %s, lon: %s}
         to: {lat: %s, lon: %s}
         transportModes: [ %s ]
-        numItineraries: 5
+        numItineraries: %s
         date: "%s"
         time: "%s"
         arriveBy: %s

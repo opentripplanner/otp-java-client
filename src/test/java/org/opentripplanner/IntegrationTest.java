@@ -30,7 +30,7 @@ public class IntegrationTest {
       new OtpApiClient(ZoneId.of("Europe/Oslo"), "https://otp2debug.entur.org");
 
   @Test
-  public void route() throws IOException {
+  public void plan() throws IOException {
 
     var result =
         client.plan(
@@ -39,6 +39,7 @@ public class IntegrationTest {
                 .withTo(OSLO_EAST)
                 .withTime(LocalDateTime.now())
                 .withModes(RequestMode.TRANSIT)
+                .withNumberOfItineraries(3)
                 .build());
 
     LOG.info("Received {} itineraries", result.itineraries().size());
@@ -51,7 +52,7 @@ public class IntegrationTest {
   }
 
   @Test
-  public void arriveBy() throws IOException {
+  public void arriveByPlan() throws IOException {
 
     var result =
         client.plan(
@@ -69,7 +70,7 @@ public class IntegrationTest {
   }
 
   @Test
-  public void bikeRoute() throws IOException {
+  public void bikePlan() throws IOException {
 
     var result =
         client.plan(
