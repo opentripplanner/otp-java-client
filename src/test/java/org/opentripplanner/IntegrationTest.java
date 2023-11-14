@@ -156,9 +156,9 @@ public class IntegrationTest {
     assertNotNull(product.price());
     assertNotNull(product.price().currency());
     assertNotNull(product.price().amount());
-    assertNotNull(product.medium().id());
-    assertNotNull(product.medium().name());
-    assertNotNull(product.riderCategory().id());
-    assertNotNull(product.riderCategory().name());
+    assertNotNull(product.medium().get().id());
+    assertNotNull(product.medium().get().name());
+    assertNotNull(product.riderCategory().get().id());
+    assertNotNull(product.riderCategory().get().name());
   }
 }

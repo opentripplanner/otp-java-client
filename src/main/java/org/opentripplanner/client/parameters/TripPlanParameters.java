@@ -14,7 +14,8 @@ public record TripPlanParameters(
     int numItineraries,
     Set<RequestMode> modes,
     SearchDirection searchDirection,
-    float walkReluctance) {
+    float walkReluctance,
+    boolean wheelchair) {
 
   public TripPlanParameters {
     Objects.requireNonNull(from);

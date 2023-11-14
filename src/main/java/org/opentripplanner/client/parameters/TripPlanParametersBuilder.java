@@ -17,6 +17,7 @@ public class TripPlanParametersBuilder {
   private SearchDirection searchDirection = SearchDirection.DEPART_AT;
   private float walkReluctance = 1.4f;
   private int numItineraries = 5;
+  private boolean wheelchair = false;
 
   public TripPlanParametersBuilder withFrom(Coordinate from) {
     this.from = from;
@@ -58,8 +59,13 @@ public class TripPlanParametersBuilder {
     return this;
   }
 
+  public TripPlanParametersBuilder withWheelchair(boolean wheelchair) {
+    this.wheelchair = wheelchair;
+    return this;
+  }
+
   public TripPlanParameters build() {
     return new TripPlanParameters(
-        from, coordinate, time, numItineraries, modes, searchDirection, walkReluctance);
+        from, coordinate, time, numItineraries, modes, searchDirection, walkReluctance, wheelchair);
   }
 }

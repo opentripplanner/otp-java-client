@@ -8,6 +8,7 @@ query {
         time: "%s"
         arriveBy: %s
         walkReluctance: %s
+        wheelchair: %s
     ) {
         itineraries {
             startTime

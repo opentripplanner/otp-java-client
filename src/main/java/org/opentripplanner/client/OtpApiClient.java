@@ -64,7 +64,8 @@ public class OtpApiClient {
             req.time().toLocalDate().toString(),
             req.time().toLocalTime().toString(),
             req.searchDirection().isArriveBy(),
-            req.walkReluctance());
+            req.walkReluctance(),
+            req.wheelchair());
 
     final var jsonNode = sendRequest(formattedQuery);
     try {

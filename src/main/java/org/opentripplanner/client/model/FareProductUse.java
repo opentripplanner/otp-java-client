@@ -1,6 +1,6 @@
 package org.opentripplanner.client.model;
 
-import jakarta.annotation.Nullable;
+import java.util.Optional;
 
 public record FareProductUse(String id, FareProduct product) {
 
@@ -8,8 +8,8 @@ public record FareProductUse(String id, FareProduct product) {
       String id,
       String name,
       Money price,
-      @Nullable FareProduct.RiderCategory riderCategory,
-      @Nullable FareProduct.FareMedium medium) {
+      Optional<RiderCategory> riderCategory,
+      Optional<FareProduct.FareMedium> medium) {
 
     public record RiderCategory(String id, String name) {}
 
