@@ -11,7 +11,7 @@ import org.opentripplanner.client.parameters.TripPlanParameters.SearchDirection;
 public class TripPlanParametersBuilder {
 
   private Coordinate from;
-  private Coordinate coordinate;
+  private Coordinate to;
   private LocalDateTime time;
   private Set<RequestMode> modes;
   private SearchDirection searchDirection = SearchDirection.DEPART_AT;
@@ -25,7 +25,7 @@ public class TripPlanParametersBuilder {
   }
 
   public TripPlanParametersBuilder withTo(Coordinate coordinate) {
-    this.coordinate = coordinate;
+    this.to = coordinate;
     return this;
   }
 
@@ -64,8 +64,20 @@ public class TripPlanParametersBuilder {
     return this;
   }
 
+  public TripPlanParametersBuilder copy() {
+    return TripPlanParameters.builder()
+        .withFrom(from)
+        .withTo(to)
+        .withTime(time)
+        .withModes(modes)
+        .withSearchDirection(searchDirection)
+        .withWalkReluctance(walkReluctance)
+        .withNumberOfItineraries(numItineraries)
+        .withWheelchair(wheelchair);
+  }
+
   public TripPlanParameters build() {
     return new TripPlanParameters(
-        from, coordinate, time, numItineraries, modes, searchDirection, walkReluctance, wheelchair);
+        from, to, time, numItineraries, modes, searchDirection, walkReluctance, wheelchair);
   }
 }
