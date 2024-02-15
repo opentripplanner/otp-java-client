@@ -19,9 +19,19 @@ query {
                 endTime
                 from {
                     name
+                    stop {
+                        gtfsId
+                        name
+                        code
+                    }
                 }
                 to {
                     name
+                    stop {
+                        gtfsId
+                        name
+                        code
+                    }
                 }
                 mode
                 route {

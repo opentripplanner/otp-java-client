@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.OptionalDouble;
-import org.opentripplanner.client.model.TripPlan.Place;
 
 public record Leg(
     Place from,
