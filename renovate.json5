@@ -14,10 +14,11 @@
       "matchPackageNames": [
         "org.mockito:mockito-core",
         "com.tngtech.archunit:archunit",
-        "org.apache.maven.plugins:maven-surefire-plugin",
+        "org.apache.httpcomponents.client5:httpclient5",
         "ch.qos.logback:logback-classic",
-        "com.diffplug.spotless:spotless-maven-plugin",
         // maven plugins
+        "com.diffplug.spotless:spotless-maven-plugin",
+        "org.apache.maven.plugins:maven-surefire-plugin",
         "org.codehaus.mojo:build-helper-maven-plugin",
         "org.apache.maven.plugins:maven-gpg-plugin",
         "org.apache.maven.plugins:maven-source-plugin",
