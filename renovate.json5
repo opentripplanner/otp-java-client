@@ -12,8 +12,6 @@
     {
       "description": "automatically merge test, logging and build dependencies",
       "matchPackageNames": [
-        "org.mockito:mockito-core",
-        "com.tngtech.archunit:archunit",
         "org.apache.httpcomponents.client5:httpclient5",
         "ch.qos.logback:logback-classic",
         // maven plugins
@@ -23,6 +21,7 @@
         "org.apache.maven.plugins:maven-gpg-plugin",
         "org.apache.maven.plugins:maven-source-plugin",
         "org.apache.maven.plugins:maven-compiler-plugin",
+        "org.apache.maven.plugins:maven-source-plugin"
       ],
       "matchPackagePrefixes": [
         "org.junit.jupiter:",
