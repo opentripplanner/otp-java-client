@@ -51,6 +51,7 @@ public class IntegrationTest {
     var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
     assertFalse(transitLeg.from().stop().isEmpty());
     assertFalse(transitLeg.to().stop().isEmpty());
+    assertNotNull(transitLeg.from().stop().get().id());
 
     assertEquals(List.of(), leg.fareProducts());
   }
