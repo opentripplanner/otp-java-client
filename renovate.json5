@@ -21,7 +21,8 @@
         "org.apache.maven.plugins:maven-gpg-plugin",
         "org.apache.maven.plugins:maven-source-plugin",
         "org.apache.maven.plugins:maven-compiler-plugin",
-        "org.apache.maven.plugins:maven-source-plugin"
+        "org.apache.maven.plugins:maven-source-plugin",
+        "org.apache.maven.plugins:maven-javadoc-plugin"
       ],
       "matchPackagePrefixes": [
         "org.junit.jupiter:",
