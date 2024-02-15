@@ -16,11 +16,12 @@
         "com.tngtech.archunit:archunit",
         "org.apache.maven.plugins:maven-surefire-plugin",
         "ch.qos.logback:logback-classic",
+        "com.diffplug.spotless:spotless-maven-plugin",
         // maven plugins
         "org.codehaus.mojo:build-helper-maven-plugin",
         "org.apache.maven.plugins:maven-gpg-plugin",
         "org.apache.maven.plugins:maven-source-plugin",
-        "org.apache.maven.plugins:maven-compiler-plugin"
+        "org.apache.maven.plugins:maven-compiler-plugin",
       ],
       "matchPackagePrefixes": [
         "org.junit.jupiter:",
