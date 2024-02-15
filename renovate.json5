@@ -4,9 +4,6 @@
     "config:base"
   ],
   "prConcurrentLimit": 3,
-  "labels": [
-    "skip changelog"
-  ],
   "rebaseWhen": "conflicted",
   "packageRules": [
     {
