@@ -4,15 +4,13 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.opentripplanner.client.model.Coordinate;
+import org.opentripplanner.client.model.PlaceParameter;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.parameters.TripPlanParameters.SearchDirection;
 
 public class TripPlanParametersBuilder {
-  private Coordinate from;
-  private String fromPlace;
-  private Coordinate to;
-  private String toPlace;
+  private PlaceParameter from;
+  private PlaceParameter to;
   private LocalDateTime time;
   private Set<RequestMode> modes;
   private SearchDirection searchDirection = SearchDirection.DEPART_AT;
@@ -20,23 +18,13 @@ public class TripPlanParametersBuilder {
   private int numItineraries = 5;
   private boolean wheelchair = false;
 
-  public TripPlanParametersBuilder withFrom(Coordinate from) {
+  public TripPlanParametersBuilder withFrom(PlaceParameter from) {
     this.from = from;
     return this;
   }
 
-  public TripPlanParametersBuilder withFromPlace(String fromPlace) {
-    this.fromPlace = fromPlace;
-    return this;
-  }
-
-  public TripPlanParametersBuilder withTo(Coordinate coordinate) {
+  public TripPlanParametersBuilder withTo(PlaceParameter coordinate) {
     this.to = coordinate;
-    return this;
-  }
-
-  public TripPlanParametersBuilder withToPlace(String toPlace) {
-    this.toPlace = toPlace;
     return this;
   }
 
@@ -78,9 +66,7 @@ public class TripPlanParametersBuilder {
   public TripPlanParametersBuilder copy() {
     return TripPlanParameters.builder()
         .withFrom(from)
-        .withFromPlace(fromPlace)
         .withTo(to)
-        .withToPlace(toPlace)
         .withTime(time)
         .withModes(modes)
         .withSearchDirection(searchDirection)
@@ -92,9 +78,7 @@ public class TripPlanParametersBuilder {
   public TripPlanParameters build() {
     return new TripPlanParameters(
         from,
-        fromPlace,
         to,
-        toPlace,
         time,
         numItineraries,
         modes,

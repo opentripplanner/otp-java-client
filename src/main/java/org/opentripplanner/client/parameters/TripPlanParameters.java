@@ -3,15 +3,13 @@ package org.opentripplanner.client.parameters;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
-import org.opentripplanner.client.model.Coordinate;
+import org.opentripplanner.client.model.PlaceParameter;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.validation.CollectionUtils;
 
 public record TripPlanParameters(
-    Coordinate from,
-    String fromPlace,
-    Coordinate to,
-    String toPlace,
+    PlaceParameter from,
+    PlaceParameter to,
     LocalDateTime time,
     int numItineraries,
     Set<RequestMode> modes,
@@ -20,12 +18,8 @@ public record TripPlanParameters(
     boolean wheelchair) {
 
   public TripPlanParameters {
-    if (from == null && fromPlace == null || from != null && fromPlace != null) {
-      throw new IllegalArgumentException("One of from and fromPlace must be provided");
-    }
-    if (to == null && toPlace == null || to != null && toPlace != null) {
-      throw new IllegalArgumentException("One of to or toPlace must be provided");
-    }
+    Objects.requireNonNull(from);
+    Objects.requireNonNull(to);
     Objects.requireNonNull(time);
     Objects.requireNonNull(modes);
     CollectionUtils.assertHasValue(modes);

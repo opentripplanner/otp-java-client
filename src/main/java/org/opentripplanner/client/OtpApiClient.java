@@ -15,7 +15,6 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
-import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.Pattern;
 import org.opentripplanner.client.model.Route;
 import org.opentripplanner.client.model.TripPlan;
@@ -56,8 +55,8 @@ public class OtpApiClient {
             .collect(Collectors.joining(", "));
     var formattedQuery =
         planQuery.formatted(
-            planGpsOrPlaceParameter("from", req.fromPlace(), req.from()),
-            planGpsOrPlaceParameter("to", req.toPlace(), req.to()),
+            req.from().toPlanParameter("from"),
+            req.to().toPlanParameter("to"),
             formattedModes,
             req.numItineraries(),
             req.time().toLocalDate().toString(),
@@ -142,15 +141,5 @@ public class OtpApiClient {
 
     LOG.trace("Received the following JSON: {}", jsonNode.toPrettyString());
     return jsonNode;
-  }
-
-  private String planGpsOrPlaceParameter(String key, String valuePlaceId, Coordinate valueGps) {
-    if (valueGps != null) {
-      return String.format("%s: {lat: %s, lon: %s}", key, valueGps.lat(), valueGps.lon());
-    } else if (valuePlaceId != null) {
-      return String.format("%sPlace: \"%s\"", key, valuePlaceId);
-    } else {
-      throw new IllegalArgumentException("Either placeId or place GPS must be set");
-    }
   }
 }

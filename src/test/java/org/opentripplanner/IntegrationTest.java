@@ -63,8 +63,8 @@ public class IntegrationTest {
     var result =
         client.plan(
             TripPlanParameters.builder()
-                .withFromPlace(OSLO_LUFTHAVN_ID)
-                .withToPlace(OSLO_S_ID)
+                .withFrom(OSLO_LUFTHAVN_ID)
+                .withTo(OSLO_S_ID)
                 .withTime(LocalDateTime.now())
                 .withModes(RequestMode.TRANSIT)
                 .withNumberOfItineraries(3)
