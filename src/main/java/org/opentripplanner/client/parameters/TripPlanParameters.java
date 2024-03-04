@@ -9,7 +9,9 @@ import org.opentripplanner.client.validation.CollectionUtils;
 
 public record TripPlanParameters(
     Coordinate from,
+    String fromPlace,
     Coordinate to,
+    String toPlace,
     LocalDateTime time,
     int numItineraries,
     Set<RequestMode> modes,
@@ -18,8 +20,12 @@ public record TripPlanParameters(
     boolean wheelchair) {
 
   public TripPlanParameters {
-    Objects.requireNonNull(from);
-    Objects.requireNonNull(to);
+    if (from == null && fromPlace == null || from != null && fromPlace != null) {
+      throw new IllegalArgumentException("One of from and fromPlace must be provided");
+    }
+    if (to == null && toPlace == null || to != null && toPlace != null) {
+      throw new IllegalArgumentException("One of to or toPlace must be provided");
+    }
     Objects.requireNonNull(time);
     Objects.requireNonNull(modes);
     CollectionUtils.assertHasValue(modes);

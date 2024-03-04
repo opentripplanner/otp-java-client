@@ -3,6 +3,10 @@ package org.opentripplanner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.opentripplanner.StationParameters.OSLO_EAST;
+import static org.opentripplanner.StationParameters.OSLO_LUFTHAVN_ID;
+import static org.opentripplanner.StationParameters.OSLO_S_ID;
+import static org.opentripplanner.StationParameters.OSLO_WEST;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -21,11 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class IntegrationTest {
-
   public static final Logger LOG = LoggerFactory.getLogger(IntegrationTest.class);
 
-  public static final Coordinate OSLO_EAST = new Coordinate(59.9132, 10.7692);
-  public static final Coordinate OSLO_WEST = new Coordinate(59.9203, 10.6823);
   public static OtpApiClient client =
       new OtpApiClient(ZoneId.of("Europe/Oslo"), "https://otp2debug.entur.org");
 
@@ -37,6 +38,33 @@ public class IntegrationTest {
             TripPlanParameters.builder()
                 .withFrom(OSLO_WEST)
                 .withTo(OSLO_EAST)
+                .withTime(LocalDateTime.now())
+                .withModes(RequestMode.TRANSIT)
+                .withNumberOfItineraries(3)
+                .build());
+
+    LOG.info("Received {} itineraries", result.itineraries().size());
+
+    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+
+    var leg = result.itineraries().get(0).legs().get(0);
+
+    var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
+    assertFalse(transitLeg.from().stop().isEmpty());
+    assertFalse(transitLeg.to().stop().isEmpty());
+    assertNotNull(transitLeg.from().stop().get().id());
+
+    assertEquals(List.of(), leg.fareProducts());
+  }
+
+  @Test
+  public void planPlaceToPlace() throws IOException {
+
+    var result =
+        client.plan(
+            TripPlanParameters.builder()
+                .withFromPlace(OSLO_LUFTHAVN_ID)
+                .withToPlace(OSLO_S_ID)
                 .withTime(LocalDateTime.now())
                 .withModes(RequestMode.TRANSIT)
                 .withNumberOfItineraries(3)

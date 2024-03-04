@@ -1,7 +1,7 @@
 query {
     plan(
-        from: {lat: %s, lon: %s}
-        to: {lat: %s, lon: %s}
+        %s
+        %s
         transportModes: [ %s ]
         numItineraries: %s
         date: "%s"
