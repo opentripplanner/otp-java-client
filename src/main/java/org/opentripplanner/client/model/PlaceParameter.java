@@ -1,5 +1,5 @@
 package org.opentripplanner.client.model;
 
-public interface PlaceParameter {
-    String toPlanParameter(String direction);
+public sealed interface PlaceParameter permits Coordinate, StopId {
+  String toPlaceString();
 }

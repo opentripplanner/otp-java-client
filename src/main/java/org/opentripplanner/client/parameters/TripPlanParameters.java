@@ -8,8 +8,8 @@ import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.validation.CollectionUtils;
 
 public record TripPlanParameters(
-    PlaceParameter from,
-    PlaceParameter to,
+    PlaceParameter fromPlace,
+    PlaceParameter toPlace,
     LocalDateTime time,
     int numItineraries,
     Set<RequestMode> modes,
@@ -18,8 +18,8 @@ public record TripPlanParameters(
     boolean wheelchair) {
 
   public TripPlanParameters {
-    Objects.requireNonNull(from);
-    Objects.requireNonNull(to);
+    Objects.requireNonNull(fromPlace);
+    Objects.requireNonNull(toPlace);
     Objects.requireNonNull(time);
     Objects.requireNonNull(modes);
     CollectionUtils.assertHasValue(modes);

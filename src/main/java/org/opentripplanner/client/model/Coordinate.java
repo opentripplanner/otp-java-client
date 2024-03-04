@@ -8,7 +8,7 @@ public record Coordinate(double lat, double lon) implements PlaceParameter {
   }
 
   @Override
-  public String toPlanParameter(String direction) {
-    return String.format("%s: {lat: %s, lon: %s}", direction, lat(), lon());
+  public String toPlaceString() {
+    return String.format("%s,%s::%s,%s", lat, lon, lat, lon);
   }
 }

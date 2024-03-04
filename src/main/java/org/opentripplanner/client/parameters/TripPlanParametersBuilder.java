@@ -9,8 +9,8 @@ import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.parameters.TripPlanParameters.SearchDirection;
 
 public class TripPlanParametersBuilder {
-  private PlaceParameter from;
-  private PlaceParameter to;
+  private PlaceParameter fromPlace;
+  private PlaceParameter toPlace;
   private LocalDateTime time;
   private Set<RequestMode> modes;
   private SearchDirection searchDirection = SearchDirection.DEPART_AT;
@@ -19,12 +19,12 @@ public class TripPlanParametersBuilder {
   private boolean wheelchair = false;
 
   public TripPlanParametersBuilder withFrom(PlaceParameter from) {
-    this.from = from;
+    this.fromPlace = from;
     return this;
   }
 
   public TripPlanParametersBuilder withTo(PlaceParameter coordinate) {
-    this.to = coordinate;
+    this.toPlace = coordinate;
     return this;
   }
 
@@ -65,8 +65,8 @@ public class TripPlanParametersBuilder {
 
   public TripPlanParametersBuilder copy() {
     return TripPlanParameters.builder()
-        .withFrom(from)
-        .withTo(to)
+        .withFrom(fromPlace)
+        .withTo(toPlace)
         .withTime(time)
         .withModes(modes)
         .withSearchDirection(searchDirection)
@@ -77,8 +77,8 @@ public class TripPlanParametersBuilder {
 
   public TripPlanParameters build() {
     return new TripPlanParameters(
-        from,
-        to,
+        fromPlace,
+        toPlace,
         time,
         numItineraries,
         modes,

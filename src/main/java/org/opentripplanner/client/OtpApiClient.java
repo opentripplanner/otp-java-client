@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import java.io.IOException;
 import java.net.URI;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -55,12 +56,12 @@ public class OtpApiClient {
             .collect(Collectors.joining(", "));
     var formattedQuery =
         planQuery.formatted(
-            req.from().toPlanParameter("from"),
-            req.to().toPlanParameter("to"),
+            req.fromPlace().toPlaceString(),
+            req.toPlace().toPlaceString(),
             formattedModes,
             req.numItineraries(),
             req.time().toLocalDate().toString(),
-            req.time().toLocalTime().toString(),
+            req.time().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString(),
             req.searchDirection().isArriveBy(),
             req.walkReluctance(),
             req.wheelchair());
