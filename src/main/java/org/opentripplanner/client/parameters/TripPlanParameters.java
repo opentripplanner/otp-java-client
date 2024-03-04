@@ -3,13 +3,13 @@ package org.opentripplanner.client.parameters;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
-import org.opentripplanner.client.model.Coordinate;
+import org.opentripplanner.client.model.PlaceParameter;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.validation.CollectionUtils;
 
 public record TripPlanParameters(
-    Coordinate from,
-    Coordinate to,
+    PlaceParameter from,
+    PlaceParameter to,
     LocalDateTime time,
     int numItineraries,
     Set<RequestMode> modes,

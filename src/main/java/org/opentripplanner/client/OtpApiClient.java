@@ -55,10 +55,8 @@ public class OtpApiClient {
             .collect(Collectors.joining(", "));
     var formattedQuery =
         planQuery.formatted(
-            req.from().lat(),
-            req.from().lon(),
-            req.to().lat(),
-            req.to().lon(),
+            req.from().toPlanParameter("from"),
+            req.to().toPlanParameter("to"),
             formattedModes,
             req.numItineraries(),
             req.time().toLocalDate().toString(),
@@ -141,7 +139,7 @@ public class OtpApiClient {
     }
     var jsonNode = mapper.readTree(response.getEntity().getContent());
 
-    LOG.debug("Received the following JSON: {}", jsonNode.toPrettyString());
+    LOG.trace("Received the following JSON: {}", jsonNode.toPrettyString());
     return jsonNode;
   }
 }

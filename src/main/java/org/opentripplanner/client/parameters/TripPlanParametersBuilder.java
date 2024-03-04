@@ -4,14 +4,13 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.opentripplanner.client.model.Coordinate;
+import org.opentripplanner.client.model.PlaceParameter;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.parameters.TripPlanParameters.SearchDirection;
 
 public class TripPlanParametersBuilder {
-
-  private Coordinate from;
-  private Coordinate to;
+  private PlaceParameter from;
+  private PlaceParameter to;
   private LocalDateTime time;
   private Set<RequestMode> modes;
   private SearchDirection searchDirection = SearchDirection.DEPART_AT;
@@ -19,12 +18,12 @@ public class TripPlanParametersBuilder {
   private int numItineraries = 5;
   private boolean wheelchair = false;
 
-  public TripPlanParametersBuilder withFrom(Coordinate from) {
+  public TripPlanParametersBuilder withFrom(PlaceParameter from) {
     this.from = from;
     return this;
   }
 
-  public TripPlanParametersBuilder withTo(Coordinate coordinate) {
+  public TripPlanParametersBuilder withTo(PlaceParameter coordinate) {
     this.to = coordinate;
     return this;
   }
@@ -78,6 +77,13 @@ public class TripPlanParametersBuilder {
 
   public TripPlanParameters build() {
     return new TripPlanParameters(
-        from, to, time, numItineraries, modes, searchDirection, walkReluctance, wheelchair);
+        from,
+        to,
+        time,
+        numItineraries,
+        modes,
+        searchDirection,
+        walkReluctance,
+        wheelchair);
   }
 }
