@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.opentripplanner.StationParameters.OSLO_EAST;
 import static org.opentripplanner.StationParameters.OSLO_LUFTHAVN_ID;
+import static org.opentripplanner.StationParameters.OSLO_LUFTHAVN_QUAY;
 import static org.opentripplanner.StationParameters.OSLO_S_ID;
 import static org.opentripplanner.StationParameters.OSLO_WEST;
 
@@ -156,6 +157,18 @@ public class IntegrationTest {
           assertNotNull(pattern.name());
           assertNotNull(pattern.vehiclePositions());
         });
+  }
+
+  @Test
+  public void stop() throws IOException {
+
+    var result = client.stop(OSLO_LUFTHAVN_QUAY);
+
+    LOG.info("Received stop");
+
+    assertNotNull(result);
+    assertNotNull(result.name());
+    assertNotNull(result.id());
   }
 
   @Disabled

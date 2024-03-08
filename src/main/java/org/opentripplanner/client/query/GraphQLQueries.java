@@ -21,6 +21,10 @@ public class GraphQLQueries {
     return loadQuery("patterns");
   }
 
+  public static String stop() {
+    return loadQuery("stop");
+  }
+
   private static String loadQuery(String name) {
     var is =
         GraphQLQueries.class
