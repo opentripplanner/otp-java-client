@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+
+import jakarta.annotation.Nullable;
 import org.opentripplanner.client.model.PlaceParameter;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.validation.CollectionUtils;
@@ -16,6 +18,7 @@ public final class TripPlanParameters {
   private final int numItineraries;
   private final Set<RequestMode> modes;
   private final SearchDirection searchDirection;
+  @Nullable
   private final Duration searchWindow;
   private final float walkReluctance;
   private final boolean wheelchair;
@@ -29,20 +32,16 @@ public final class TripPlanParameters {
       SearchDirection searchDirection,
       Duration searchWindow,
       float walkReluctance,
-      boolean wheelchair) {
-    Objects.requireNonNull(fromPlace);
-    Objects.requireNonNull(toPlace);
-    Objects.requireNonNull(time);
-    Objects.requireNonNull(modes);
+      boolean wheelchair
+  ) {
     CollectionUtils.assertHasValue(modes);
-    Objects.requireNonNull(searchDirection);
 
-    this.fromPlace = fromPlace;
-    this.toPlace = toPlace;
-    this.time = time;
+    this.fromPlace = Objects.requireNonNull(fromPlace);
+    this.toPlace = Objects.requireNonNull(toPlace);
+    this.time = Objects.requireNonNull(time);
     this.numItineraries = numItineraries;
-    this.modes = modes;
-    this.searchDirection = searchDirection;
+    this.modes = Objects.requireNonNull(modes);
+    this.searchDirection = Objects.requireNonNull(searchDirection);
     this.searchWindow = searchWindow;
     this.walkReluctance = walkReluctance;
     this.wheelchair = wheelchair;
