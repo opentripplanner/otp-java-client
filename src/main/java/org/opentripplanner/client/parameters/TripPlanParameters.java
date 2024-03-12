@@ -14,6 +14,7 @@ public record TripPlanParameters(
     int numItineraries,
     Set<RequestMode> modes,
     SearchDirection searchDirection,
+    Long searchWindow,
     float walkReluctance,
     boolean wheelchair) {
 
