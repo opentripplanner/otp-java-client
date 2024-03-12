@@ -63,8 +63,8 @@ public class OtpApiClient {
             req.time().toLocalDate().toString(),
             req.time().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString(),
             req.searchDirection().isArriveBy(),
-            req.getSearchWindow().isPresent()
-                ? String.format("searchWindow : %d", req.getSearchWindow().get().toMinutes())
+            req.searchWindow().isPresent()
+                ? String.format("searchWindow : %d", req.searchWindow().get().toMinutes())
                 : "",
             req.walkReluctance(),
             req.wheelchair());
