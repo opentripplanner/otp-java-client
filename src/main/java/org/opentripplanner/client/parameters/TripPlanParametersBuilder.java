@@ -1,5 +1,6 @@
 package org.opentripplanner.client.parameters;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
@@ -14,6 +15,7 @@ public class TripPlanParametersBuilder {
   private LocalDateTime time;
   private Set<RequestMode> modes;
   private SearchDirection searchDirection = SearchDirection.DEPART_AT;
+  private Duration searchWindow;
   private float walkReluctance = 1.4f;
   private int numItineraries = 5;
   private boolean wheelchair = false;
@@ -48,6 +50,11 @@ public class TripPlanParametersBuilder {
     return this;
   }
 
+  public TripPlanParametersBuilder withSearchWindow(Duration searchWindow) {
+    this.searchWindow = searchWindow;
+    return this;
+  }
+
   public TripPlanParametersBuilder withWalkReluctance(float wr) {
     this.walkReluctance = wr;
     return this;
@@ -70,6 +77,7 @@ public class TripPlanParametersBuilder {
         .withTime(time)
         .withModes(modes)
         .withSearchDirection(searchDirection)
+        .withSearchWindow(searchWindow)
         .withWalkReluctance(walkReluctance)
         .withNumberOfItineraries(numItineraries)
         .withWheelchair(wheelchair);
@@ -83,6 +91,7 @@ public class TripPlanParametersBuilder {
         numItineraries,
         modes,
         searchDirection,
+        searchWindow,
         walkReluctance,
         wheelchair);
   }

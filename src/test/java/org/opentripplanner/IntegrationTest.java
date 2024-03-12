@@ -9,6 +9,7 @@ import static org.opentripplanner.StationParameters.OSLO_S_ID;
 import static org.opentripplanner.StationParameters.OSLO_WEST;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -82,6 +83,34 @@ public class IntegrationTest {
     assertNotNull(transitLeg.from().stop().get().id());
 
     assertEquals(List.of(), leg.fareProducts());
+  }
+
+  @Test
+  public void planPlaceToPlaceWithSearchWindow() throws IOException {
+    var result =
+        client.plan(
+            TripPlanParameters.builder()
+                .withFrom(OSLO_LUFTHAVN_ID)
+                .withTo(OSLO_S_ID)
+                .withTime(LocalDateTime.now())
+                .withModes(RequestMode.TRANSIT)
+                .withNumberOfItineraries(1)
+                .withSearchWindow(Duration.ofDays(1))
+                .build());
+
+      LOG.info("Received {} itineraries", result.itineraries().size());
+      assertEquals(1, result.itineraries().size());
+
+      assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+
+      var leg = result.itineraries().get(0).legs().get(0);
+
+      var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
+      assertFalse(transitLeg.from().stop().isEmpty());
+      assertFalse(transitLeg.to().stop().isEmpty());
+      assertNotNull(transitLeg.from().stop().get().id());
+
+      assertEquals(List.of(), leg.fareProducts());
   }
 
   @Test

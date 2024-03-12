@@ -7,6 +7,7 @@ query {
         date: "%s"
         time: "%s"
         arriveBy: %s
+        %s
         walkReluctance: %s
         wheelchair: %s
     ) {
