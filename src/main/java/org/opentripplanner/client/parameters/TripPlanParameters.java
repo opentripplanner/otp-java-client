@@ -1,7 +1,9 @@
 package org.opentripplanner.client.parameters;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import org.opentripplanner.client.model.PlaceParameter;
 import org.opentripplanner.client.model.RequestMode;
@@ -14,7 +16,7 @@ public record TripPlanParameters(
     int numItineraries,
     Set<RequestMode> modes,
     SearchDirection searchDirection,
-    Long searchWindow,
+    Duration searchWindow,
     float walkReluctance,
     boolean wheelchair) {
 
@@ -25,6 +27,10 @@ public record TripPlanParameters(
     Objects.requireNonNull(modes);
     CollectionUtils.assertHasValue(modes);
     Objects.requireNonNull(searchDirection);
+  }
+
+  public Optional<Duration> getSearchWindow() {
+    return Optional.ofNullable(searchWindow());
   }
 
   public enum SearchDirection {

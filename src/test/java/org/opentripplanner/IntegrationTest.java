@@ -85,6 +85,34 @@ public class IntegrationTest {
   }
 
   @Test
+  public void planPlaceToPlaceWithSearchWindow() throws IOException {
+    var result =
+        client.plan(
+            TripPlanParameters.builder()
+                .withFrom(OSLO_LUFTHAVN_ID)
+                .withTo(OSLO_S_ID)
+                .withTime(LocalDateTime.now())
+                .withModes(RequestMode.TRANSIT)
+                .withNumberOfItineraries(1)
+                .withSearchWindow(java.time.Duration.ofDays(1))
+                .build());
+
+    LOG.info("Received {} itineraries", result.itineraries().size());
+    assertEquals(1, result.itineraries().size());
+
+    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+
+    var leg = result.itineraries().get(0).legs().get(0);
+
+    var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
+    assertFalse(transitLeg.from().stop().isEmpty());
+    assertFalse(transitLeg.to().stop().isEmpty());
+    assertNotNull(transitLeg.from().stop().get().id());
+
+    assertEquals(List.of(), leg.fareProducts());
+  }
+
+  @Test
   public void arriveByPlan() throws IOException {
 
     var result =
