@@ -1,12 +1,12 @@
 package org.opentripplanner.client.parameters;
 
+import com.google.common.base.MoreObjects;
+import jakarta.annotation.Nullable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-
-import jakarta.annotation.Nullable;
 import org.opentripplanner.client.model.PlaceParameter;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.validation.CollectionUtils;
@@ -18,8 +18,7 @@ public final class TripPlanParameters {
   private final int numItineraries;
   private final Set<RequestMode> modes;
   private final SearchDirection searchDirection;
-  @Nullable
-  private final Duration searchWindow;
+  @Nullable private final Duration searchWindow;
   private final float walkReluctance;
   private final boolean wheelchair;
 
@@ -30,17 +29,15 @@ public final class TripPlanParameters {
       int numItineraries,
       Set<RequestMode> modes,
       SearchDirection searchDirection,
-      Duration searchWindow,
+      @Nullable Duration searchWindow,
       float walkReluctance,
-      boolean wheelchair
-  ) {
-    CollectionUtils.assertHasValue(modes);
+      boolean wheelchair) {
 
     this.fromPlace = Objects.requireNonNull(fromPlace);
     this.toPlace = Objects.requireNonNull(toPlace);
     this.time = Objects.requireNonNull(time);
     this.numItineraries = numItineraries;
-    this.modes = Objects.requireNonNull(modes);
+    this.modes = Set.copyOf(CollectionUtils.assertHasValue(modes));
     this.searchDirection = Objects.requireNonNull(searchDirection);
     this.searchWindow = searchWindow;
     this.walkReluctance = walkReluctance;
@@ -97,64 +94,17 @@ public final class TripPlanParameters {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) return true;
-    if (obj == null || obj.getClass() != this.getClass()) return false;
-    var that = (TripPlanParameters) obj;
-    return Objects.equals(this.fromPlace, that.fromPlace)
-        && Objects.equals(this.toPlace, that.toPlace)
-        && Objects.equals(this.time, that.time)
-        && this.numItineraries == that.numItineraries
-        && Objects.equals(this.modes, that.modes)
-        && Objects.equals(this.searchDirection, that.searchDirection)
-        && Objects.equals(this.searchWindow, that.searchWindow)
-        && Float.floatToIntBits(this.walkReluctance) == Float.floatToIntBits(that.walkReluctance)
-        && this.wheelchair == that.wheelchair;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(
-        fromPlace,
-        toPlace,
-        time,
-        numItineraries,
-        modes,
-        searchDirection,
-        searchWindow,
-        walkReluctance,
-        wheelchair);
-  }
-
-  @Override
   public String toString() {
-    return "TripPlanParameters["
-        + "fromPlace="
-        + fromPlace
-        + ", "
-        + "toPlace="
-        + toPlace
-        + ", "
-        + "time="
-        + time
-        + ", "
-        + "numItineraries="
-        + numItineraries
-        + ", "
-        + "modes="
-        + modes
-        + ", "
-        + "searchDirection="
-        + searchDirection
-        + ", "
-        + "searchWindow="
-        + searchWindow
-        + ", "
-        + "walkReluctance="
-        + walkReluctance
-        + ", "
-        + "wheelchair="
-        + wheelchair
-        + ']';
+    return MoreObjects.toStringHelper(this)
+        .add("fromPlace", fromPlace)
+        .add("toPlace", toPlace)
+        .add("time", time)
+        .add("numItineraries", numItineraries)
+        .add("modes", modes)
+        .add("searchDirection", searchDirection)
+        .add("searchWindow", searchWindow)
+        .add("walkReluctance", walkReluctance)
+        .add("wheelchair", wheelchair)
+        .toString();
   }
 }

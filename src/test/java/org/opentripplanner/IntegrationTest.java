@@ -98,19 +98,19 @@ public class IntegrationTest {
                 .withSearchWindow(Duration.ofDays(1))
                 .build());
 
-      LOG.info("Received {} itineraries", result.itineraries().size());
-      assertEquals(1, result.itineraries().size());
+    LOG.info("Received {} itineraries", result.itineraries().size());
+    assertEquals(1, result.itineraries().size());
 
-      assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
 
-      var leg = result.itineraries().get(0).legs().get(0);
+    var leg = result.itineraries().get(0).legs().get(0);
 
-      var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
-      assertFalse(transitLeg.from().stop().isEmpty());
-      assertFalse(transitLeg.to().stop().isEmpty());
-      assertNotNull(transitLeg.from().stop().get().id());
+    var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
+    assertFalse(transitLeg.from().stop().isEmpty());
+    assertFalse(transitLeg.to().stop().isEmpty());
+    assertNotNull(transitLeg.from().stop().get().id());
 
-      assertEquals(List.of(), leg.fareProducts());
+    assertEquals(List.of(), leg.fareProducts());
   }
 
   @Test
