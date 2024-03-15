@@ -69,14 +69,10 @@ public class OtpApiClient {
             req.wheelchair());
 
     final var jsonNode = sendRequest(formattedQuery);
-    try {
-      var plan = jsonNode.at("/data/plan");
-      return mapper.treeToValue(plan, TripPlan.class);
-    } catch (IOException e) {
-      LOG.error("Could not deserialize response: {}", jsonNode.toPrettyString());
-      throw e;
-    }
+    return deserialize(jsonNode, "/data/plan", TripPlan.class);
   }
+
+
 
   /**
    * Return the list of routes.
@@ -127,9 +123,13 @@ public class OtpApiClient {
     var formattedQuery = stopQuery.formatted(gtfsId);
 
     final var jsonNode = sendRequest(formattedQuery);
+    return deserialize(jsonNode, "/data/stop", Stop.class);
+  }
+
+  private <T> T deserialize(JsonNode jsonNode, String path, Class<T> clazz) throws JsonProcessingException {
     try {
-      var stop = jsonNode.at("/data/stop");
-      return mapper.treeToValue(stop, Stop.class);
+      var plan = jsonNode.at(path);
+      return mapper.treeToValue(plan, clazz);
     } catch (IOException e) {
       LOG.error("Could not deserialize response: {}", jsonNode.toPrettyString());
       throw e;
