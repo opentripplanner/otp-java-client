@@ -18,6 +18,7 @@ import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.opentripplanner.client.model.Pattern;
 import org.opentripplanner.client.model.Route;
+import org.opentripplanner.client.model.Stop;
 import org.opentripplanner.client.model.TripPlan;
 import org.opentripplanner.client.model.VehicleRentalStation;
 import org.opentripplanner.client.parameters.TripPlanParameters;
@@ -112,6 +113,27 @@ public class OtpApiClient {
     var json = sendRequest(GraphQLQueries.patterns());
     var type = listType(Pattern.class);
     return deserializeList(json, type, "/data/patterns");
+  }
+
+  /**
+   * Returns a Stop with limited information.
+   *
+   * @link <a href="https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/stop">OTP API
+   *     docs</a>
+   */
+  public Stop stop(String gtfsId) throws IOException {
+
+    var stopQuery = GraphQLQueries.stop();
+    var formattedQuery = stopQuery.formatted(gtfsId);
+
+    final var jsonNode = sendRequest(formattedQuery);
+    try {
+      var stop = jsonNode.at("/data/stop");
+      return mapper.treeToValue(stop, Stop.class);
+    } catch (IOException e) {
+      LOG.error("Could not deserialize response: {}", jsonNode.toPrettyString());
+      throw e;
+    }
   }
 
   private <T> List<T> deserializeList(JsonNode json, CollectionType type, String path)
