@@ -115,9 +115,9 @@ public class OtpApiClient {
   }
 
   /**
-   * Returns a TripPlan, also known as a routing result.
+   * Returns a Stop with limited information.
    *
-   * @link <a href="https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/plan">OTP API
+   * @link <a href="https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/stop">OTP API
    *     docs</a>
    */
   public Stop stop(String gtfsId) throws IOException {
