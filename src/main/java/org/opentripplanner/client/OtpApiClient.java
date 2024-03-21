@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 public class OtpApiClient {
 
   private static final Logger LOG = LoggerFactory.getLogger(OtpApiClient.class);
-  private static final String DEFAULT_GRAPHQL_PATH = "/otp/routers/default/index/graphql";
+  private static final String DEFAULT_GRAPHQL_PATH = "/otp/gtfs/v1";
 
   private final CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 

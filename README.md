@@ -2,9 +2,15 @@
 
 This library provides an easy way to access OTP's GTFS GraphQL API with Java.
 
-### Compatible OTP version
+### OTP version compatibility
 
-You need at least version 2.4.0 of OpenTripPlanner to use this client.
+Not every version of this client works with every version of OTP. Check the
+following table to select the correct artifact:
+
+| OTP version | Client version |
+|-------------|----------------|
+| 2.4.0       | =< 0.0.31      |
+| 2.5.0       | => 0.1.0       |
 
 ### Installation
 
