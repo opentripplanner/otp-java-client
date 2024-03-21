@@ -45,7 +45,9 @@ query {
                     }
                 }
                 trip {
-                    gtfsId tripShortName tripHeadsign
+                    gtfsId
+                    tripShortName
+                    tripHeadsign
                 }
                 duration
                 distance

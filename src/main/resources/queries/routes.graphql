@@ -4,6 +4,7 @@ query {
         shortName
         mode
         agency {
+            gtfsId
             name
         }
     }
