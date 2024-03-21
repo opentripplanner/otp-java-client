@@ -14,6 +14,7 @@ public record Leg(
     Duration duration,
     double distance,
     Route route,
+    Trip trip,
     List<FareProductUse> fareProducts,
     OptionalDouble accessibilityScore) {
 

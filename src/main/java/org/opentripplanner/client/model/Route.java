@@ -1,9 +1,14 @@
 package org.opentripplanner.client.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Optional;
 
 public record Route(
-    Optional<String> shortName, Optional<String> longName, TransitMode mode, Agency agency) {
+    @JsonProperty("gtfsId") String id,
+    Optional<String> shortName,
+    Optional<String> longName,
+    TransitMode mode,
+    Agency agency) {
 
   /**
    * Either the short name (if it has one) or the long name.
