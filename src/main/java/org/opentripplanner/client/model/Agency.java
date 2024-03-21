@@ -1,3 +1,5 @@
 package org.opentripplanner.client.model;
 
-public record Agency(String name) {}
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record Agency(@JsonProperty("gtfsId") String id, String name) {}

@@ -36,11 +36,16 @@ query {
                 }
                 mode
                 route {
+                    gtfsId
                     shortName
                     longName
                     agency {
+                        gtfsId
                         name
                     }
+                }
+                trip {
+                    gtfsId tripShortName tripHeadsign
                 }
                 duration
                 distance
