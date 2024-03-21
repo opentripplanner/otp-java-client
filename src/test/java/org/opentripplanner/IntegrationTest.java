@@ -3,6 +3,7 @@ package org.opentripplanner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opentripplanner.StationParameters.OSLO_EAST;
 import static org.opentripplanner.StationParameters.OSLO_LUFTHAVN_ID;
 import static org.opentripplanner.StationParameters.OSLO_LUFTHAVN_QUAY;
@@ -55,6 +56,7 @@ public class IntegrationTest {
     assertFalse(transitLeg.from().stop().isEmpty());
     assertFalse(transitLeg.to().stop().isEmpty());
     assertNotNull(transitLeg.from().stop().get().id());
+    assertTrue(transitLeg.trip().headsign().isPresent());
 
     assertEquals(List.of(), leg.fareProducts());
   }

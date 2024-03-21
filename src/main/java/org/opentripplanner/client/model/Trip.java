@@ -7,7 +7,7 @@ import java.util.Optional;
 public record Trip(
     @JsonProperty("gtfsId") String id,
     @JsonProperty("tripShortName") Optional<String> shortName,
-    @JsonProperty("tripHeadSign") Optional<String> headsign) {
+    @JsonProperty("tripHeadsign") Optional<String> headsign) {
   public Trip {
     Objects.requireNonNull(id);
   }

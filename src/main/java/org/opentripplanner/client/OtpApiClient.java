@@ -72,8 +72,6 @@ public class OtpApiClient {
     return deserialize(jsonNode, "/data/plan", TripPlan.class);
   }
 
-
-
   /**
    * Return the list of routes.
    *
@@ -126,7 +124,7 @@ public class OtpApiClient {
     return deserialize(jsonNode, "/data/stop", Stop.class);
   }
 
-  private <T> T deserialize(JsonNode jsonNode, String path, Class<T> clazz) throws JsonProcessingException {
+  private <T> T deserialize(JsonNode jsonNode, String path, Class<T> clazz) throws IOException {
     try {
       var plan = jsonNode.at(path);
       return mapper.treeToValue(plan, clazz);

@@ -8,5 +8,4 @@ public record Agency(@JsonProperty("gtfsId") String id, String name) {
     Objects.requireNonNull(id);
     Objects.requireNonNull(name);
   }
-
 }
