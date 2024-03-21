@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.opentripplanner.client.OtpApiClient;
 import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.FareProductUse;
@@ -27,6 +29,7 @@ import org.opentripplanner.client.parameters.TripPlanParameters.SearchDirection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class IntegrationTest {
   public static final Logger LOG = LoggerFactory.getLogger(IntegrationTest.class);
 
