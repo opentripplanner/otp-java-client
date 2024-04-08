@@ -24,7 +24,8 @@
       "matchPackagePrefixes": [
         "org.junit.jupiter:",
         "org.slf4j:",
-        "com.fasterxml.jackson"
+        "com.fasterxml.jackson",
+        "jakarta.annotation"
       ],
       "automerge": true,
       "schedule": "after 11pm and before 5am every weekday"
