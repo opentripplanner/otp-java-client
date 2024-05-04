@@ -19,7 +19,8 @@
         "org.apache.maven.plugins:maven-source-plugin",
         "org.apache.maven.plugins:maven-compiler-plugin",
         "org.apache.maven.plugins:maven-source-plugin",
-        "org.apache.maven.plugins:maven-javadoc-plugin"
+        "org.apache.maven.plugins:maven-javadoc-plugin",
+        "com.google.guava:guava"
       ],
       "matchPackagePrefixes": [
         "org.junit.jupiter:",
