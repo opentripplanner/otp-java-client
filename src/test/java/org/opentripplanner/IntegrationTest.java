@@ -254,6 +254,57 @@ public class IntegrationTest {
   }
 
   @Test
+  public void bikeAndParkPlan() throws IOException {
+
+    var result =
+        client.plan(
+            TripPlanParameters.builder()
+                .withFrom(OSLO_WEST)
+                .withTo(OSLO_EAST)
+                .withTime(LocalDateTime.now())
+                .withModes(Set.of(RequestMode.BICYCLE_PARK, RequestMode.TRANSIT))
+                .build());
+
+    LOG.info("Received {} itineraries", result.itineraries().size());
+
+    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+  }
+
+  @Test
+  public void carPlan() throws IOException {
+
+    var result =
+        client.plan(
+            TripPlanParameters.builder()
+                .withFrom(OSLO_WEST)
+                .withTo(OSLO_EAST)
+                .withTime(LocalDateTime.now())
+                .withModes(Set.of(RequestMode.CAR))
+                .build());
+
+    LOG.info("Received {} itineraries", result.itineraries().size());
+
+    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+  }
+
+  @Test
+  public void carAndParkPlan() throws IOException {
+
+    var result =
+        client.plan(
+            TripPlanParameters.builder()
+                .withFrom(OSLO_WEST)
+                .withTo(OSLO_EAST)
+                .withTime(LocalDateTime.now())
+                .withModes(Set.of(RequestMode.CAR_PARK, RequestMode.TRANSIT))
+                .build());
+
+    LOG.info("Received {} itineraries", result.itineraries().size());
+
+    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+  }
+
+  @Test
   public void rentalStations() throws IOException {
 
     var result = client.vehicleRentalStations();
