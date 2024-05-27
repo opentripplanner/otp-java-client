@@ -9,7 +9,13 @@ query {
         arriveBy: %s
         %s
         walkReluctance: %s
+        carReluctance: %s
+        bikeReluctance: %s
+        bikeWalkingReluctance: %s
         wheelchair: %s
+        %s
+        optimize: %s
+        %s
     ) {
         itineraries {
             startTime

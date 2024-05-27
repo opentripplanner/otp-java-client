@@ -66,7 +66,13 @@ public class OtpApiClient {
             req.searchDirection().isArriveBy(),
             req.searchWindow().map(sw -> "searchWindow : %d".formatted(sw.toSeconds())).orElse(""),
             req.walkReluctance(),
-            req.wheelchair());
+            req.carReluctance(),
+            req.bikeReluctance(),
+            req.bikeWalkingReluctance(),
+            req.wheelchair(),
+            req.banned().map(banned -> "banned : %s".formatted(banned)).orElse(""),
+            req.optimize(),
+            req.triangle().map(triangle -> "triangle : %s".formatted(triangle)).orElse(""));
 
     final var jsonNode = sendRequest(formattedQuery);
     return deserialize(jsonNode, "/data/plan", TripPlan.class);
