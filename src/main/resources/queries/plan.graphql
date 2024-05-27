@@ -87,6 +87,10 @@ query {
                     }
                 }
                 accessibilityScore
+                agency {
+                    gtfsId,
+                    name
+                }
             }
         }
     }
