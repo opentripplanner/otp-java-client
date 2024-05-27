@@ -41,6 +41,9 @@ query {
                     }
                 }
                 mode
+                legGeometry {
+                    points
+                }
                 route {
                     gtfsId
                     shortName
