@@ -17,7 +17,9 @@ public record Leg(
     Trip trip,
     List<FareProductUse> fareProducts,
     OptionalDouble accessibilityScore,
-    Agency agency) {
+    Agency agency,
+    LegGeometry legGeometry
+    ) {
 
   /** Is this leg using public transport? */
   public boolean isTransit() {
