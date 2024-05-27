@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.opentripplanner.client.model.PlaceParameter;
 import org.opentripplanner.client.model.RequestMode;
+import org.opentripplanner.client.parameters.TripPlanParameters.OptimizeType;
 import org.opentripplanner.client.parameters.TripPlanParameters.SearchDirection;
 
 public class TripPlanParametersBuilder {
@@ -17,8 +18,14 @@ public class TripPlanParametersBuilder {
   private SearchDirection searchDirection = SearchDirection.DEPART_AT;
   private Duration searchWindow;
   private float walkReluctance = 1.4f;
+  private float carReluctance = 3.0f;
+  private float bikeReluctance = 2.0f;
+  private float bikeWalkingReluctance = 5.0f;
+  private OptimizeType optimize = OptimizeType.QUICK;
+  private InputTriangle triangle;
   private int numItineraries = 5;
   private boolean wheelchair = false;
+  private InputBanned banned;
 
   public TripPlanParametersBuilder withFrom(PlaceParameter from) {
     this.fromPlace = from;
@@ -60,6 +67,21 @@ public class TripPlanParametersBuilder {
     return this;
   }
 
+  public TripPlanParametersBuilder withCarReluctance(float cr) {
+    this.carReluctance = cr;
+    return this;
+  }
+
+  public TripPlanParametersBuilder withBikeReluctance(float br) {
+    this.bikeReluctance = br;
+    return this;
+  }
+
+  public TripPlanParametersBuilder withBikeWalkingReluctance(float bwr) {
+    this.bikeWalkingReluctance = bwr;
+    return this;
+  }
+
   public TripPlanParametersBuilder withNumberOfItineraries(int ni) {
     this.numItineraries = ni;
     return this;
@@ -67,6 +89,21 @@ public class TripPlanParametersBuilder {
 
   public TripPlanParametersBuilder withWheelchair(boolean wheelchair) {
     this.wheelchair = wheelchair;
+    return this;
+  }
+
+  public TripPlanParametersBuilder withBanned(InputBanned banned) {
+    this.banned = banned;
+    return this;
+  }
+
+  public TripPlanParametersBuilder withOptimize(OptimizeType optimize) {
+    this.optimize = optimize;
+    return this;
+  }
+
+  public TripPlanParametersBuilder withTriangle(InputTriangle triangle) {
+    this.triangle = triangle;
     return this;
   }
 
@@ -79,8 +116,14 @@ public class TripPlanParametersBuilder {
         .withSearchDirection(searchDirection)
         .withSearchWindow(searchWindow)
         .withWalkReluctance(walkReluctance)
+        .withCarReluctance(carReluctance)
+        .withBikeReluctance(bikeReluctance)
+        .withBikeWalkingReluctance(bikeWalkingReluctance)
         .withNumberOfItineraries(numItineraries)
-        .withWheelchair(wheelchair);
+        .withWheelchair(wheelchair)
+        .withBanned(banned)
+        .withOptimize(optimize)
+        .withTriangle(triangle);
   }
 
   public TripPlanParameters build() {
@@ -93,6 +136,12 @@ public class TripPlanParametersBuilder {
         searchDirection,
         searchWindow,
         walkReluctance,
-        wheelchair);
+        carReluctance,
+        bikeReluctance,
+        bikeWalkingReluctance,
+        wheelchair,
+        banned,
+        optimize,
+        triangle);
   }
 }

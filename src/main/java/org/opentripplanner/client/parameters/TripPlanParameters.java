@@ -20,7 +20,13 @@ public final class TripPlanParameters {
   private final SearchDirection searchDirection;
   @Nullable private final Duration searchWindow;
   private final float walkReluctance;
+  private final float carReluctance;
+  private final float bikeReluctance;
+  private final float bikeWalkingReluctance;
   private final boolean wheelchair;
+  @Nullable private final InputBanned banned;
+  private final OptimizeType optimize;
+  @Nullable private final InputTriangle triangle;
 
   public TripPlanParameters(
       PlaceParameter fromPlace,
@@ -31,8 +37,13 @@ public final class TripPlanParameters {
       SearchDirection searchDirection,
       @Nullable Duration searchWindow,
       float walkReluctance,
-      boolean wheelchair) {
-
+      float carReluctance,
+      float bikeReluctance,
+      float bikeWalkingReluctance,
+      boolean wheelchair,
+      @Nullable InputBanned banned,
+      OptimizeType optimize,
+      @Nullable InputTriangle triangle) {
     this.fromPlace = Objects.requireNonNull(fromPlace);
     this.toPlace = Objects.requireNonNull(toPlace);
     this.time = Objects.requireNonNull(time);
@@ -41,7 +52,13 @@ public final class TripPlanParameters {
     this.searchDirection = Objects.requireNonNull(searchDirection);
     this.searchWindow = searchWindow;
     this.walkReluctance = walkReluctance;
+    this.carReluctance = carReluctance;
+    this.bikeReluctance = bikeReluctance;
+    this.bikeWalkingReluctance = bikeWalkingReluctance;
     this.wheelchair = wheelchair;
+    this.banned = banned;
+    this.optimize = optimize;
+    this.triangle = triangle;
   }
 
   public Optional<Duration> searchWindow() {
@@ -55,6 +72,14 @@ public final class TripPlanParameters {
     public boolean isArriveBy() {
       return this == ARRIVE_BY;
     }
+  }
+
+  public enum OptimizeType {
+    QUICK,
+    SAFE,
+    FLAT,
+    GREENWAYS,
+    TRIANGLE,
   }
 
   public static TripPlanParametersBuilder builder() {
@@ -89,8 +114,32 @@ public final class TripPlanParameters {
     return walkReluctance;
   }
 
+  public float carReluctance() {
+    return carReluctance;
+  }
+
+  public float bikeReluctance() {
+    return bikeReluctance;
+  }
+
+  public float bikeWalkingReluctance() {
+    return bikeWalkingReluctance;
+  }
+
   public boolean wheelchair() {
     return wheelchair;
+  }
+
+  public Optional<InputBanned> banned() {
+    return Optional.ofNullable(banned);
+  }
+
+  public OptimizeType optimize() {
+    return optimize;
+  }
+
+  public Optional<InputTriangle> triangle() {
+    return Optional.ofNullable(triangle);
   }
 
   @Override
@@ -104,7 +153,13 @@ public final class TripPlanParameters {
         .add("searchDirection", searchDirection)
         .add("searchWindow", searchWindow)
         .add("walkReluctance", walkReluctance)
+        .add("carReluctance", carReluctance)
+        .add("bikeReluctance", bikeReluctance)
+        .add("bikeWalkReluctance", bikeWalkingReluctance)
         .add("wheelchair", wheelchair)
+        .add("banned", banned)
+        .add("optimize", optimize)
+        .add("triangle", triangle)
         .toString();
   }
 }
