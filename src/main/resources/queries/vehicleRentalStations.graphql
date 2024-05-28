@@ -1,8 +1,10 @@
 query {
     vehicleRentalStations{
+        stationId
         name
         lat
         lon
+        network
         realtime
         vehiclesAvailable
     }

@@ -26,18 +26,75 @@ query {
                 endTime
                 from {
                     name
+                    lon
+                    lat
+                    vertexType
                     stop {
                         gtfsId
                         name
                         code
+                        zoneId
+                        parentStation {
+                            gtfsId
+                        }
+                    }
+                    vehicleRentalStation {
+                        stationId
+                        name
+                        network
+                    }
+                    rentalVehicle {
+                        vehicleId
+                        name
+                        network
+                        vehicleType {
+                            formFactor
+                            propulsionType
+                        }
+                    }
+                    vehicleParking {
+                        vehicleParkingId
+                        name
+                        capacity {
+                            bicycleSpaces
+                            carSpaces
+                        }
                     }
                 }
                 to {
                     name
+                    lon
+                    lat
+                    vertexType
                     stop {
                         gtfsId
                         name
                         code
+                        zoneId
+                        parentStation {
+                            gtfsId
+                        }
+                    }
+                    vehicleRentalStation {
+                        stationId
+                        name
+                        network
+                    }
+                    rentalVehicle {
+                        vehicleId
+                        name
+                        network
+                        vehicleType {
+                            formFactor
+                        }
+                    }
+                    vehicleParking {
+                        vehicleParkingId
+                        name
+                        capacity {
+                            bicycleSpaces
+                            carSpaces
+                        }
                     }
                 }
                 mode
