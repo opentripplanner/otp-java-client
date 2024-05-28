@@ -106,6 +106,7 @@ query {
                     gtfsId
                     shortName
                     longName
+                    type
                     agency {
                         gtfsId
                         name

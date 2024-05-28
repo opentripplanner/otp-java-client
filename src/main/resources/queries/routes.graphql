@@ -3,6 +3,7 @@ query {
         longName
         shortName
         mode
+        type
         agency {
             gtfsId
             name
