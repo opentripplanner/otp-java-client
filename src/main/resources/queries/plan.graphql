@@ -98,6 +98,7 @@ query {
                     }
                 }
                 mode
+                headsign
                 legGeometry {
                     points
                 }
@@ -117,10 +118,20 @@ query {
                 }
                 duration
                 distance
+                rentedBike
                 intermediatePlaces {
                     name
                     departureTime
                     arrivalTime
+                    stop {
+                        gtfsId
+                        name
+                        code
+                        zoneId
+                        parentStation {
+                            gtfsId
+                        }
+                    }
                 }
                 fareProducts {
                     id
