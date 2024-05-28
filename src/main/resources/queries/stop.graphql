@@ -3,5 +3,9 @@ query {
         name
         gtfsId
         code
+        zoneId
+        parentStation {
+            gtfsId
+        }
     }
 }

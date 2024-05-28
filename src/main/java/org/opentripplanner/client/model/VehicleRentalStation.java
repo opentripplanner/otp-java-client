@@ -1,3 +1,6 @@
 package org.opentripplanner.client.model;
 
-public record VehicleRentalStation(String name, float lat, float lon) {}
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record VehicleRentalStation(
+    @JsonProperty("stationId") String id, String name, float lat, float lon, String network) {}
