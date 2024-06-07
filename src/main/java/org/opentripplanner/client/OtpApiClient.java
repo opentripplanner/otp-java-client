@@ -16,6 +16,7 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.opentripplanner.client.model.Agency;
 import org.opentripplanner.client.model.Pattern;
 import org.opentripplanner.client.model.Route;
 import org.opentripplanner.client.model.Stop;
@@ -107,6 +108,18 @@ public class OtpApiClient {
     var json = sendRequest(GraphQLQueries.patterns());
     var type = listType(Pattern.class);
     return deserializeList(json, type, "/data/patterns");
+  }
+
+  /**
+   * Return the list of agencies.
+   *
+   * @link <a href="https://docs.opentripplanner.org/api/dev-2.x/graphql-gtfs/queries/agencies">OTP
+   *     API docs</a>
+   */
+  public List<Agency> agencies() throws IOException {
+    var json = sendRequest(GraphQLQueries.agencies());
+    var type = listType(Agency.class);
+    return deserializeList(json, type, "/data/agencies");
   }
 
   /**
