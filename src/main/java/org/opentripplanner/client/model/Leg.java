@@ -21,7 +21,7 @@ public record Leg(
     List<FareProductUse> fareProducts,
     OptionalDouble accessibilityScore,
     Agency agency,
-    LegGeometry legGeometry,
+    @JsonProperty("legGeometry") LegGeometry geometry,
     @JsonProperty("rentedBike") boolean rentedVehicle,
     Optional<List<IntermediatePlace>> intermediatePlaces) {
 

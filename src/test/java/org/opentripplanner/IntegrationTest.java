@@ -61,6 +61,10 @@ public class IntegrationTest {
     assertNotNull(transitLeg.from().stop().get().id());
     assertTrue(transitLeg.trip().headsign().isPresent());
 
+    assertNotNull(transitLeg.geometry().toGoogleEncoding());
+    assertNotNull(transitLeg.geometry().toLinestring());
+    assertNotNull(transitLeg.geometry().toPositions());
+
     assertEquals(List.of(), leg.fareProducts());
   }
 
