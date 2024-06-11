@@ -20,25 +20,85 @@ query {
                 endTime
                 from {
                     name
+                    lon
+                    lat
                     stop {
                         gtfsId
                         name
                         code
+                        zoneId
+                        parentStation {
+                            gtfsId
+                        }
+                    }
+                    vehicleRentalStation {
+                        stationId
+                        name
+                        network
+                    }
+                    rentalVehicle {
+                        vehicleId
+                        name
+                        network
+                        vehicleType {
+                            formFactor
+                            propulsionType
+                        }
+                    }
+                    vehicleParking {
+                        vehicleParkingId
+                        name
+                        capacity {
+                            bicycleSpaces
+                            carSpaces
+                        }
                     }
                 }
                 to {
                     name
+                    lon
+                    lat
                     stop {
                         gtfsId
                         name
                         code
+                        zoneId
+                        parentStation {
+                            gtfsId
+                        }
+                    }
+                    vehicleRentalStation {
+                        stationId
+                        name
+                        network
+                    }
+                    rentalVehicle {
+                        vehicleId
+                        name
+                        network
+                        vehicleType {
+                            formFactor
+                        }
+                    }
+                    vehicleParking {
+                        vehicleParkingId
+                        name
+                        capacity {
+                            bicycleSpaces
+                            carSpaces
+                        }
                     }
                 }
                 mode
+                headsign
+                legGeometry {
+                    points
+                }
                 route {
                     gtfsId
                     shortName
                     longName
+                    type
                     agency {
                         gtfsId
                         name
@@ -51,10 +111,20 @@ query {
                 }
                 duration
                 distance
+                rentedBike
                 intermediatePlaces {
                     name
                     departureTime
                     arrivalTime
+                    stop {
+                        gtfsId
+                        name
+                        code
+                        zoneId
+                        parentStation {
+                            gtfsId
+                        }
+                    }
                 }
                 fareProducts {
                     id
@@ -81,6 +151,10 @@ query {
                     }
                 }
                 accessibilityScore
+                agency {
+                    gtfsId,
+                    name
+                }
             }
         }
     }

@@ -7,6 +7,7 @@ public record Route(
     @JsonProperty("gtfsId") String id,
     Optional<String> shortName,
     Optional<String> longName,
+    @JsonProperty("type") int modeCode,
     TransitMode mode,
     Agency agency) {
 
