@@ -19,7 +19,7 @@ public final class LegGeometry {
   }
 
   /** Return the as a list of points. */
-  public List<Position> toPositions() {
+  List<Position> toPositions() {
     return PolylineUtils.decode(googleEncoded, 5);
   }
 

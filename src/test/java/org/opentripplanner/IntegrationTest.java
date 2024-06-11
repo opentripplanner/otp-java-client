@@ -63,7 +63,6 @@ public class IntegrationTest {
 
     assertNotNull(transitLeg.geometry().toGoogleEncoding());
     assertNotNull(transitLeg.geometry().toLinestring());
-    assertNotNull(transitLeg.geometry().toPositions());
 
     assertEquals(List.of(), leg.fareProducts());
   }

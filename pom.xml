@@ -103,6 +103,12 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.google.truth</groupId>
+      <artifactId>truth</artifactId>
+      <version>1.4.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <distributionManagement>
