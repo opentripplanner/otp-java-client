@@ -197,6 +197,22 @@ public class IntegrationTest {
   }
 
   @Test
+  public void agencies() throws IOException {
+
+    var result = client.agencies();
+
+    LOG.info("Received {} agencies", result.size());
+
+    assertFalse(result.isEmpty());
+
+    result.forEach(
+        agency -> {
+          assertNotNull(agency.name());
+          assertNotNull(agency.id());
+        });
+  }
+
+  @Test
   public void stop() throws IOException {
 
     var result = client.stop(OSLO_LUFTHAVN_QUAY);

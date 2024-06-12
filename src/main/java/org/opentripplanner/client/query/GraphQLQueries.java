@@ -21,6 +21,10 @@ public class GraphQLQueries {
     return loadQuery("patterns");
   }
 
+  public static String agencies() {
+    return loadQuery("agencies");
+  }
+
   public static String stop() {
     return loadQuery("stop");
   }
