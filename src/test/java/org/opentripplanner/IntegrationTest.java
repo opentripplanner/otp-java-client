@@ -16,15 +16,19 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.opentripplanner.client.OtpApiClient;
 import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.FareProductUse;
 import org.opentripplanner.client.model.Leg;
 import org.opentripplanner.client.model.RequestMode;
+import org.opentripplanner.client.model.TripPlan;
 import org.opentripplanner.client.parameters.InputBanned;
 import org.opentripplanner.client.parameters.InputTriangle;
 import org.opentripplanner.client.parameters.TripPlanParameters;
@@ -127,7 +131,7 @@ public class IntegrationTest {
   }
 
   @Test
-  public void planPlaceToPlaceWithBaned() throws IOException {
+  public void planPlaceToPlaceWithBanned() throws IOException {
 
     final String BANNED_AGENCY = "RB:FLT:Authority:FLT";
     final String BANNED_ROUTE = "RB:NSB:Line:L12";
@@ -150,30 +154,16 @@ public class IntegrationTest {
 
     LOG.info("Received {} itineraries", result.itineraries().size());
 
-    assertFalse(
-        result.itineraries().stream()
-            .anyMatch(
-                itinerary ->
-                    itinerary.legs().stream()
-                        .anyMatch(
-                            leg ->
-                                leg.agency() != null && leg.agency().id().equals(BANNED_AGENCY))));
+    assertFalse(checkTransitLegCondition(result, leg -> leg.agency().id().equals(BANNED_AGENCY)));
 
-    assertFalse(
-        result.itineraries().stream()
-            .anyMatch(
-                itinerary ->
-                    itinerary.legs().stream()
-                        .anyMatch(
-                            leg -> leg.route() != null && leg.route().id().equals(BANNED_ROUTE))));
+    assertFalse(checkTransitLegCondition(result, leg -> leg.route().id().equals(BANNED_ROUTE)));
 
-    assertFalse(
-        result.itineraries().stream()
-            .anyMatch(
-                itinerary ->
-                    itinerary.legs().stream()
-                        .anyMatch(
-                            leg -> leg.trip() != null && leg.trip().id().equals(BANNED_TRIP))));
+    assertFalse(checkTransitLegCondition(result, leg -> leg.trip().id().equals(BANNED_TRIP)));
+  }
+
+  private static boolean checkTransitLegCondition(TripPlan result, Predicate<Leg> condition) {
+    return result.itineraries().stream()
+        .anyMatch(itinerary -> itinerary.transitLegs().stream().anyMatch(condition));
   }
 
   @Test
@@ -201,16 +191,15 @@ public class IntegrationTest {
             .withOptimize(TripPlanParameters.OptimizeType.TRIANGLE);
 
     builder.withTriangle(safeWayTriangle);
-    var saveResult = client.plan(builder.build());
+    var safeResult = client.plan(builder.build());
 
     builder.withTriangle(fastWayTriangle);
     var fastResult = client.plan(builder.build());
 
-    LOG.info("Received {} save itineraries", saveResult.itineraries().size());
+    LOG.info("Received {} safe itineraries", safeResult.itineraries().size());
     LOG.info("Received {} fast itineraries", fastResult.itineraries().size());
 
-
-    Leg saveLeg = saveResult.itineraries().get(0).legs().get(0);
+    Leg saveLeg = safeResult.itineraries().get(0).legs().get(0);
     Leg fastLeg = fastResult.itineraries().get(0).legs().get(0);
 
     assertNotNull(saveLeg.startTime());
@@ -236,25 +225,17 @@ public class IntegrationTest {
     assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
   }
 
-  @Test
-  public void bikePlan() throws IOException {
-
-    var result =
-        client.plan(
-            TripPlanParameters.builder()
-                .withFrom(OSLO_WEST)
-                .withTo(OSLO_EAST)
-                .withTime(LocalDateTime.now())
-                .withModes(Set.of(RequestMode.BICYCLE))
-                .build());
-
-    LOG.info("Received {} itineraries", result.itineraries().size());
-
-    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+  public static List<Set<RequestMode>> cases() {
+    return List.of(
+        Set.of(RequestMode.BICYCLE),
+        Set.of(RequestMode.BICYCLE_PARK, RequestMode.TRANSIT),
+        Set.of(RequestMode.CAR),
+        Set.of(RequestMode.CAR_PARK, RequestMode.TRANSIT));
   }
 
-  @Test
-  public void bikeAndParkPlan() throws IOException {
+  @ParameterizedTest
+  @MethodSource("cases")
+  public void modes(Set<RequestMode> modes) throws IOException {
 
     var result =
         client.plan(
@@ -262,41 +243,7 @@ public class IntegrationTest {
                 .withFrom(OSLO_WEST)
                 .withTo(OSLO_EAST)
                 .withTime(LocalDateTime.now())
-                .withModes(Set.of(RequestMode.BICYCLE_PARK, RequestMode.TRANSIT))
-                .build());
-
-    LOG.info("Received {} itineraries", result.itineraries().size());
-
-    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
-  }
-
-  @Test
-  public void carPlan() throws IOException {
-
-    var result =
-        client.plan(
-            TripPlanParameters.builder()
-                .withFrom(OSLO_WEST)
-                .withTo(OSLO_EAST)
-                .withTime(LocalDateTime.now())
-                .withModes(Set.of(RequestMode.CAR))
-                .build());
-
-    LOG.info("Received {} itineraries", result.itineraries().size());
-
-    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
-  }
-
-  @Test
-  public void carAndParkPlan() throws IOException {
-
-    var result =
-        client.plan(
-            TripPlanParameters.builder()
-                .withFrom(OSLO_WEST)
-                .withTo(OSLO_EAST)
-                .withTime(LocalDateTime.now())
-                .withModes(Set.of(RequestMode.CAR_PARK, RequestMode.TRANSIT))
+                .withModes(modes)
                 .build());
 
     LOG.info("Received {} itineraries", result.itineraries().size());
