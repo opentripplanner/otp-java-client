@@ -65,10 +65,17 @@ public class IntegrationTest {
 
     var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
     assertFalse(transitLeg.from().stop().isEmpty());
+    assertNotNull(transitLeg.from().coordinate());
+    assertNotNull(transitLeg.from().point());
     assertFalse(transitLeg.to().stop().isEmpty());
+    assertNotNull(transitLeg.to().coordinate());
+    assertNotNull(transitLeg.to().point());
     assertNotNull(transitLeg.from().stop().get().id());
     assertTrue(transitLeg.trip().headsign().isPresent());
-
+    assertNotNull(transitLeg.agency());
+    assertNotNull(transitLeg.intermediatePlaces().get().get(0).name());
+    assertNotNull(transitLeg.intermediatePlaces().get().get(0).departureTime());
+    assertNotNull(transitLeg.intermediatePlaces().get().get(0).arrivalTime());
     assertNotNull(transitLeg.geometry().toGoogleEncoding());
     assertNotNull(transitLeg.geometry().toLinestring());
 
