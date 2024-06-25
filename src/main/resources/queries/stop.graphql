@@ -2,6 +2,8 @@ query {
     stop(id: "%s") {
         name
         gtfsId
+        lon
+        lat
         code
         zoneId
         parentStation {

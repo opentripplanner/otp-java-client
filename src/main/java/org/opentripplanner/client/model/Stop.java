@@ -7,9 +7,12 @@ import java.util.Optional;
 public record Stop(
     String name,
     @JsonProperty("gtfsId") String id,
+    float lon,
+    float lat,
     Optional<String> code,
     Optional<String> zoneId,
-    ParentStation parentStation) {
+    ParentStation parentStation)
+    implements Place {
   public Stop {
     Objects.requireNonNull(name);
     Objects.requireNonNull(id);

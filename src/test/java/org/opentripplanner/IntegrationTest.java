@@ -2,6 +2,7 @@ package org.opentripplanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opentripplanner.StationParameters.OSLO_EAST;
@@ -28,7 +29,9 @@ import org.opentripplanner.client.model.Coordinate;
 import org.opentripplanner.client.model.FareProductUse;
 import org.opentripplanner.client.model.Leg;
 import org.opentripplanner.client.model.RequestMode;
+import org.opentripplanner.client.model.Stop;
 import org.opentripplanner.client.model.TripPlan;
+import org.opentripplanner.client.model.VehicleRentalStation;
 import org.opentripplanner.client.parameters.InputBanned;
 import org.opentripplanner.client.parameters.InputTriangle;
 import org.opentripplanner.client.parameters.TripPlanParameters;
@@ -64,13 +67,15 @@ public class IntegrationTest {
     var leg = result.itineraries().get(0).legs().get(0);
 
     var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
-    assertFalse(transitLeg.from().stop().isEmpty());
+    assertInstanceOf(Stop.class, transitLeg.from());
     assertNotNull(transitLeg.from().coordinate());
     assertNotNull(transitLeg.from().point());
-    assertFalse(transitLeg.to().stop().isEmpty());
+    assertInstanceOf(Stop.class, transitLeg.to());
     assertNotNull(transitLeg.to().coordinate());
     assertNotNull(transitLeg.to().point());
-    assertNotNull(transitLeg.from().stop().get().id());
+    assertNotNull(((Stop) transitLeg.from()).id());
+    assertNotNull(((Stop) transitLeg.from()).name());
+    assertNotNull(((Stop) transitLeg.from()).parentStation().id());
     assertTrue(transitLeg.trip().headsign().isPresent());
     assertNotNull(transitLeg.agency());
     assertNotNull(transitLeg.intermediatePlaces().get().get(0).name());
@@ -102,10 +107,9 @@ public class IntegrationTest {
     var leg = result.itineraries().get(0).legs().get(0);
 
     var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
-    assertFalse(transitLeg.from().stop().isEmpty());
-    assertFalse(transitLeg.to().stop().isEmpty());
-    assertNotNull(transitLeg.from().stop().get().id());
-
+    assertInstanceOf(Stop.class, transitLeg.from());
+    assertInstanceOf(Stop.class, transitLeg.to());
+    assertNotNull(((Stop) transitLeg.from()).id());
     assertEquals(List.of(), leg.fareProducts());
   }
 
@@ -130,9 +134,9 @@ public class IntegrationTest {
     var leg = result.itineraries().get(0).legs().get(0);
 
     var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
-    assertFalse(transitLeg.from().stop().isEmpty());
-    assertFalse(transitLeg.to().stop().isEmpty());
-    assertNotNull(transitLeg.from().stop().get().id());
+    assertInstanceOf(Stop.class, transitLeg.from());
+    assertInstanceOf(Stop.class, transitLeg.to());
+    assertNotNull(((Stop) transitLeg.from()).id());
 
     assertEquals(List.of(), leg.fareProducts());
   }
@@ -237,7 +241,9 @@ public class IntegrationTest {
         Set.of(RequestMode.BICYCLE),
         Set.of(RequestMode.BICYCLE_PARK, RequestMode.TRANSIT),
         Set.of(RequestMode.CAR),
-        Set.of(RequestMode.CAR_PARK, RequestMode.TRANSIT));
+        Set.of(RequestMode.CAR_PARK, RequestMode.TRANSIT),
+        Set.of(RequestMode.SCOOTER_RENT),
+        Set.of(RequestMode.SCOOTER_RENT, RequestMode.TRANSIT));
   }
 
   @ParameterizedTest
@@ -266,6 +272,15 @@ public class IntegrationTest {
     LOG.info("Received {} rental stations", result.size());
 
     assertFalse(result.isEmpty());
+
+    VehicleRentalStation station = result.get(0);
+
+    assertTrue(station.lat() != 0.0);
+    assertTrue(station.lon() != 0.0);
+    assertNotNull(station.coordinate());
+    assertNotNull(station.point());
+    assertNotNull(station.name());
+    assertNotNull(station.network());
   }
 
   @Test
@@ -323,6 +338,11 @@ public class IntegrationTest {
     assertNotNull(result);
     assertNotNull(result.name());
     assertNotNull(result.id());
+    assertTrue(result.lat() != 0.0);
+    assertTrue(result.lon() != 0.0);
+    assertNotNull(result.coordinate());
+    assertNotNull(result.point());
+    assertNotNull(result.parentStation().id());
   }
 
   @Disabled
