@@ -325,6 +325,20 @@ public class IntegrationTest {
     assertNotNull(result.id());
   }
 
+  @Test
+  public void stops() throws IOException {
+    var result = client.stops("Oslo");
+
+    LOG.info("Received stops");
+
+    assertNotNull(result);
+    assertFalse(result.isEmpty());
+
+    var stop = result.get(0);
+
+    assertNotNull(stop.id());
+  }
+
   @Disabled
   @Test
   public void seattleFares() throws IOException {
