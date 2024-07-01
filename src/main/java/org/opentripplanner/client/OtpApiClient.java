@@ -143,6 +143,14 @@ public class OtpApiClient {
     return deserialize(jsonNode, "/data/stop", Stop.class);
   }
 
+  public List<Stop> stops(String nameMask) throws IOException {
+    var stopQuery = GraphQLQueries.stops();
+    var formattedQuery = stopQuery.formatted(nameMask);
+
+    final var jsonNode = sendRequest(formattedQuery);
+    return deserializeList(jsonNode, listType(Stop.class), "/data/stops");
+  }
+
   private <T> T deserialize(JsonNode jsonNode, String path, Class<T> clazz) throws IOException {
     try {
       var plan = jsonNode.at(path);

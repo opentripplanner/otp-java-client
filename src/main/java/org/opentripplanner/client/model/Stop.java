@@ -8,6 +8,7 @@ public record Stop(
     String name,
     @JsonProperty("gtfsId") String id,
     Optional<String> code,
+    Optional<VehicleMode> vehicleMode,
     Optional<String> zoneId,
     ParentStation parentStation) {
   public Stop {
