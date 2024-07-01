@@ -9,12 +9,8 @@ public enum VehicleMode {
     COACH,
     FERRY,
     FLEX,
-    @Deprecated
-    FLEXIBLE,
     FUNICULAR,
     GONDOLA,
-    @Deprecated
-    LEG_SWITCH,
     RAIL,
     SCOOTER,
     SUBWAY,
