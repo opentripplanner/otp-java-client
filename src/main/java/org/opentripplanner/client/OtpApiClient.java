@@ -143,18 +143,12 @@ public class OtpApiClient {
     return deserialize(jsonNode, "/data/stop", Stop.class);
   }
 
-  public List<Stop> stops(String nameMask) {
+  public List<Stop> stops(String nameMask) throws IOException {
     var stopQuery = GraphQLQueries.stops();
     var formattedQuery = stopQuery.formatted(nameMask);
 
-    try {
-      final var jsonNode = sendRequest(formattedQuery);
-      var type = listType(Stop.class);
-      return deserializeList(jsonNode, type, "/data/stops");
-    } catch (IOException e) {
-      LOG.error("Could not fetch stops with name mask '{}'", nameMask, e);
-      return List.of();
-    }
+    final var jsonNode = sendRequest(formattedQuery);
+    return deserializeList(jsonNode, listType(Stop.class), "/data/stops");
   }
 
   private <T> T deserialize(JsonNode jsonNode, String path, Class<T> clazz) throws IOException {

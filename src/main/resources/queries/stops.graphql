@@ -6,7 +6,9 @@ query {
         vehicleMode
         zoneId
         parentStation {
-            gtfsId name code
+            gtfsId
+            name
+            code
         }
     }
 }
