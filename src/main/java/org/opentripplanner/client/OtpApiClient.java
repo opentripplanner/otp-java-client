@@ -143,7 +143,10 @@ public class OtpApiClient {
     return deserialize(jsonNode, "/data/stop", Stop.class);
   }
 
-  public List<Stop> stops(String nameMask) throws IOException {
+  /**
+   * Use full text search to query for stops.
+   */
+  public List<Stop> stopSearch(String nameMask) throws IOException {
     var stopQuery = GraphQLQueries.stops();
     var formattedQuery = stopQuery.formatted(nameMask);
 

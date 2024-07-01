@@ -327,7 +327,7 @@ public class IntegrationTest {
 
   @Test
   public void stops() throws IOException {
-    var result = client.stops("Oslo");
+    var result = client.stopSearch("Oslo");
 
     LOG.info("Received stops");
 
