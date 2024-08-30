@@ -11,6 +11,7 @@
       "matchPackageNames": [
         "org.apache.httpcomponents.client5:httpclient5",
         "ch.qos.logback:logback-classic",
+        "org.locationtech.jts:jts-core",
         // maven plugins
         "com.diffplug.spotless:spotless-maven-plugin",
         "org.apache.maven.plugins:maven-surefire-plugin",
