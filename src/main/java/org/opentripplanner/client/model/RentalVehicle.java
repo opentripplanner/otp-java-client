@@ -5,6 +5,9 @@ import java.util.Optional;
 
 public record RentalVehicle(
     @JsonProperty("vehicleId") String id,
+    float lon,
+    float lat,
     Optional<String> name,
     String network,
-    Optional<RentalVehicleType> vehicleType) {}
+    Optional<RentalVehicleType> vehicleType)
+    implements Place {}

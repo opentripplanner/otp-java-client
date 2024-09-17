@@ -1,15 +1,17 @@
 package org.opentripplanner.client.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import org.opentripplanner.client.serialization.PlaceDeserializer;
 
 public record Leg(
-    Place from,
-    Place to,
+    @JsonDeserialize(using = PlaceDeserializer.class) Place from,
+    @JsonDeserialize(using = PlaceDeserializer.class) Place to,
     OffsetDateTime startTime,
     OffsetDateTime endTime,
     LegMode mode,
