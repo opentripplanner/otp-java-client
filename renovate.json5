@@ -11,6 +11,7 @@
   "packageRules": [
     {
       "description": "automatically merge test, logging and build dependencies",
+      "groupName": "Test, build and logging dependencies",
       "matchPackageNames": [
         "org.apache.httpcomponents.client5:httpclient5",
         "ch.qos.logback:logback-classic",
@@ -34,7 +35,7 @@
         "jakarta.annotation"
       ],
       "automerge": true,
-      "schedule": "after 11pm and before 5am every weekday"
+      "schedule": "monthly"
     }
   ],
   "timezone": "Europe/Berlin"
