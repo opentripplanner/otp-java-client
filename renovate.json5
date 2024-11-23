@@ -5,6 +5,9 @@
   ],
   "prConcurrentLimit": 3,
   "rebaseWhen": "conflicted",
+  "labels": [
+    "Dependencies"
+  ],
   "packageRules": [
     {
       "description": "automatically merge test, logging and build dependencies",
