@@ -12,6 +12,7 @@ public record Leg(
     Place to,
     OffsetDateTime startTime,
     OffsetDateTime endTime,
+    Boolean realTime,
     LegMode mode,
     Duration duration,
     double distance,
