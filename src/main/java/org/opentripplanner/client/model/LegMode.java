@@ -15,7 +15,14 @@ public enum LegMode {
   CARPOOL,
   BICYCLE,
   SCOOTER,
-  CAR;
+  CAR,
+  TAXI,
+  CABLE_CAR,
+  AIRPLANE,
+  FUNICULAR,
+  FLEX,
+  GONDOLA,
+  TROLLEYBUS;
 
   private static final Set<LegMode> NON_TRANSIT_MODES = EnumSet.of(CAR, SCOOTER, BICYCLE, WALK);
 
