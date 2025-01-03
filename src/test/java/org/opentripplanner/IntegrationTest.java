@@ -163,7 +163,7 @@ public class IntegrationTest {
 
     assertFalse(checkTransitLegCondition(result, leg -> leg.agency().id().equals(BANNED_AGENCY)));
 
-    //assertFalse(checkTransitLegCondition(result, leg -> leg.route().id().equals(BANNED_ROUTE)));
+    assertFalse(checkTransitLegCondition(result, leg -> leg.route().id().equals(BANNED_ROUTE)));
 
     assertFalse(checkTransitLegCondition(result, leg -> leg.trip().id().equals(BANNED_TRIP)));
   }

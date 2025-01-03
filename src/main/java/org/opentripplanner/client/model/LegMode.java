@@ -7,6 +7,7 @@ public enum LegMode {
   WALK,
   RAIL,
   BUS,
+  COACH,
   SUBWAY,
   FERRY,
   TRAM,
