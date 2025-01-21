@@ -16,7 +16,8 @@ public enum RequestMode {
   BICYCLE_RENT("BICYCLE", "RENT"),
   FLEX_DIRECT("FLEX", "DIRECT"),
   FLEX_ACCESS("FLEX", "ACCESS"),
-  FLEX_EGRESS("FLEX", "EGRESS");
+  FLEX_EGRESS("FLEX", "EGRESS"),
+  CAR_RENT("CAR", "RENT");
 
   public final String mode;
   public final String qualifier;
