@@ -19,10 +19,10 @@ public final class TripPlanParameters {
   private final Set<RequestMode> modes;
   private final SearchDirection searchDirection;
   @Nullable private final Duration searchWindow;
-  private final float walkReluctance;
-  private final float carReluctance;
-  private final float bikeReluctance;
-  private final float bikeWalkingReluctance;
+  @Nullable private final Float walkReluctance;
+  @Nullable private final Float carReluctance;
+  @Nullable private final Float bikeReluctance;
+  @Nullable private final Float bikeWalkingReluctance;
   private final boolean wheelchair;
   @Nullable private final InputBanned banned;
   private final OptimizeType optimize;
@@ -36,10 +36,10 @@ public final class TripPlanParameters {
       Set<RequestMode> modes,
       SearchDirection searchDirection,
       @Nullable Duration searchWindow,
-      float walkReluctance,
-      float carReluctance,
-      float bikeReluctance,
-      float bikeWalkingReluctance,
+      @Nullable Float walkReluctance,
+      @Nullable Float carReluctance,
+      @Nullable Float bikeReluctance,
+      @Nullable Float bikeWalkingReluctance,
       boolean wheelchair,
       @Nullable InputBanned banned,
       OptimizeType optimize,
@@ -110,20 +110,20 @@ public final class TripPlanParameters {
     return searchDirection;
   }
 
-  public float walkReluctance() {
-    return walkReluctance;
+  public Optional<Float> walkReluctance() {
+    return Optional.ofNullable(walkReluctance);
   }
 
-  public float carReluctance() {
-    return carReluctance;
+  public Optional<Float> carReluctance() {
+    return Optional.ofNullable(carReluctance);
   }
 
-  public float bikeReluctance() {
-    return bikeReluctance;
+  public Optional<Float> bikeReluctance() {
+    return Optional.ofNullable(bikeReluctance);
   }
 
-  public float bikeWalkingReluctance() {
-    return bikeWalkingReluctance;
+  public Optional<Float> bikeWalkingReluctance() {
+    return Optional.ofNullable(bikeWalkingReluctance);
   }
 
   public boolean wheelchair() {

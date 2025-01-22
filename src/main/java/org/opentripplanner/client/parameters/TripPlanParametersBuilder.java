@@ -17,10 +17,10 @@ public class TripPlanParametersBuilder {
   private Set<RequestMode> modes;
   private SearchDirection searchDirection = SearchDirection.DEPART_AT;
   private Duration searchWindow;
-  private float walkReluctance = 1.4f;
-  private float carReluctance = 3.0f;
-  private float bikeReluctance = 2.0f;
-  private float bikeWalkingReluctance = 5.0f;
+  private Float walkReluctance;
+  private Float carReluctance;
+  private Float bikeReluctance;
+  private Float bikeWalkingReluctance;
   private OptimizeType optimize = OptimizeType.QUICK;
   private InputTriangle triangle;
   private int numItineraries = 5;
