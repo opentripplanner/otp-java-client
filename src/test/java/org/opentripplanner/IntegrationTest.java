@@ -227,14 +227,17 @@ public class IntegrationTest {
     assertEquals(Optional.empty(), builder.build().walkReluctance());
     assertEquals(Optional.empty(), builder.build().bikeReluctance());
     assertEquals(Optional.empty(), builder.build().carReluctance());
+    assertEquals(Optional.empty(), builder.build().bikeWalkingReluctance());
 
     // Plan with high walk reluctance - should prefer transit
     builder.withWalkReluctance(5.0f);
     builder.withBikeReluctance(4.0f);
     builder.withCarReluctance(3.0f);
+    builder.withBikeWalkingReluctance(2.0f);
     assertEquals(Optional.of(5.0f), builder.build().walkReluctance());
     assertEquals(Optional.of(4.0f), builder.build().bikeReluctance());
     assertEquals(Optional.of(3.0f), builder.build().carReluctance());
+    assertEquals(Optional.of(2.0f), builder.build().bikeWalkingReluctance());
   }
 
   @Test
