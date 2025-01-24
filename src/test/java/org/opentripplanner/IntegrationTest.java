@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import org.junit.jupiter.api.Disabled;
@@ -212,6 +213,31 @@ public class IntegrationTest {
     assertNotNull(saveLeg.startTime());
     assertNotNull(fastLeg.startTime());
     assertTrue(fastLeg.duration().getSeconds() < saveLeg.duration().getSeconds());
+  }
+
+  @Test
+  public void planWithReluctance() throws IOException {
+    TripPlanParametersBuilder builder =
+        TripPlanParameters.builder()
+            .withFrom(OSLO_WEST)
+            .withTo(OSLO_EAST)
+            .withTime(LocalDateTime.now())
+            .withModes(Set.of(RequestMode.WALK, RequestMode.TRANSIT));
+
+    assertEquals(Optional.empty(), builder.build().walkReluctance());
+    assertEquals(Optional.empty(), builder.build().bikeReluctance());
+    assertEquals(Optional.empty(), builder.build().carReluctance());
+    assertEquals(Optional.empty(), builder.build().bikeWalkingReluctance());
+
+    // Plan with high walk reluctance - should prefer transit
+    builder.withWalkReluctance(5.0f);
+    builder.withBikeReluctance(4.0f);
+    builder.withCarReluctance(3.0f);
+    builder.withBikeWalkingReluctance(2.0f);
+    assertEquals(Optional.of(5.0f), builder.build().walkReluctance());
+    assertEquals(Optional.of(4.0f), builder.build().bikeReluctance());
+    assertEquals(Optional.of(3.0f), builder.build().carReluctance());
+    assertEquals(Optional.of(2.0f), builder.build().bikeWalkingReluctance());
   }
 
   @Test
