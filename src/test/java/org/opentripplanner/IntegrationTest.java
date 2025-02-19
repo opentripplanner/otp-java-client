@@ -66,7 +66,7 @@ public class IntegrationTest {
 
     var transitLeg =
         result.transitItineraries().stream()
-            .filter(i -> i.legs().stream().anyMatch(l -> !l.intermediatePlaces().isEmpty()))
+            .filter(i -> i.legs().stream().anyMatch(l -> l.intermediatePlaces().isPresent()))
             .findFirst()
             .get()
             .transitLegs()
