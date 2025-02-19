@@ -33,6 +33,10 @@ public class GraphQLQueries {
     return loadQuery("stops");
   }
 
+  public static String alerts() {
+    return loadQuery("alerts");
+  }
+
   private static String loadQuery(String name) {
     var is =
         GraphQLQueries.class

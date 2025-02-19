@@ -1,0 +1,9 @@
+query {
+    alerts {
+        alertHeaderText
+        alertDescriptionText
+        alertSeverityLevel
+        alertCause
+        alertSeverityLevel
+     }
+}

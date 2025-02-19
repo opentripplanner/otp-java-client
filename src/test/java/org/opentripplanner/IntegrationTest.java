@@ -64,7 +64,13 @@ public class IntegrationTest {
 
     var leg = result.itineraries().get(0).legs().get(0);
 
-    var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
+    var transitLeg =
+        result.transitItineraries().stream()
+            .filter(i -> i.legs().stream().anyMatch(l -> !l.intermediatePlaces().isEmpty()))
+            .findFirst()
+            .get()
+            .transitLegs()
+            .get(0);
     assertFalse(transitLeg.from().stop().isEmpty());
     assertNotNull(transitLeg.from().coordinate());
     assertNotNull(transitLeg.from().point());
@@ -363,6 +369,16 @@ public class IntegrationTest {
     var stop = result.get(0);
 
     assertNotNull(stop.id());
+  }
+
+  @Test
+  public void alerts() throws IOException {
+    var result = client.alerts();
+
+    LOG.info("Received {} alerts", result.size());
+
+    assertNotNull(result);
+    assertFalse(result.isEmpty());
   }
 
   @Disabled
