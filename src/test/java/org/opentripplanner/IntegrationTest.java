@@ -54,7 +54,7 @@ public class IntegrationTest {
                 .withFrom(OSLO_WEST)
                 .withTo(OSLO_EAST)
                 .withTime(LocalDateTime.now())
-                .withModes(RequestMode.TRANSIT)
+                .withModes(RequestMode.BUS)
                 .withNumberOfItineraries(3)
                 .build());
 
