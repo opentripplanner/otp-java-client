@@ -365,6 +365,16 @@ public class IntegrationTest {
     assertNotNull(stop.id());
   }
 
+  @Test
+  public void alerts() throws IOException {
+    var result = client.alerts();
+
+    LOG.info("Received {} alerts", result.size());
+
+    assertNotNull(result);
+    assertFalse(result.isEmpty());
+  }
+
   @Disabled
   @Test
   public void seattleFares() throws IOException {

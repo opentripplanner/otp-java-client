@@ -17,6 +17,7 @@ import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.opentripplanner.client.model.Agency;
+import org.opentripplanner.client.model.Alert;
 import org.opentripplanner.client.model.Pattern;
 import org.opentripplanner.client.model.Route;
 import org.opentripplanner.client.model.Stop;
@@ -150,6 +151,13 @@ public class OtpApiClient {
 
     final var jsonNode = sendRequest(formattedQuery);
     return deserializeList(jsonNode, listType(Stop.class), "/data/stops");
+  }
+
+  /** Get all alerts. */
+  public List<Alert> alerts() throws IOException {
+    var query = GraphQLQueries.alerts();
+    final var jsonNode = sendRequest(query);
+    return deserializeList(jsonNode, listType(Alert.class), "/data/alerts");
   }
 
   private <T> T deserialize(JsonNode jsonNode, String path, Class<T> clazz) throws IOException {
