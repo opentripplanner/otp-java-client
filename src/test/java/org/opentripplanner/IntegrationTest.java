@@ -247,6 +247,22 @@ public class IntegrationTest {
   }
 
   @Test
+  public void planWithWalkSpeed() throws IOException {
+    TripPlanParametersBuilder builder =
+        TripPlanParameters.builder()
+            .withFrom(OSLO_WEST)
+            .withTo(OSLO_EAST)
+            .withTime(LocalDateTime.now())
+            .withModes(Set.of(RequestMode.WALK, RequestMode.TRANSIT));
+
+    assertEquals(Optional.empty(), builder.build().walkSpeed());
+
+    // Plan with high walk reluctance - should prefer transit
+    builder.withWalkSpeed(2.5f);
+    assertEquals(Optional.of(2.5f), builder.build().walkSpeed());
+  }
+
+  @Test
   public void arriveByPlan() throws IOException {
 
     var result =
