@@ -129,7 +129,9 @@ public final class TripPlanParameters {
     return Optional.ofNullable(bikeWalkingReluctance);
   }
 
-  public Optional<Float> walkSpeed() { return Optional.ofNullable(walkSpeed); }
+  public Optional<Float> walkSpeed() {
+    return Optional.ofNullable(walkSpeed);
+  }
 
   public boolean wheelchair() {
     return wheelchair;
