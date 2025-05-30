@@ -64,6 +64,9 @@ public class IntegrationTest {
 
     var leg = result.itineraries().get(0).legs().get(0);
 
+    // First leg should not interline with previous leg (since there is no previous leg)
+    assertFalse(leg.interlineWithPreviousLeg());
+
     var transitLeg =
         result.transitItineraries().stream()
             .filter(i -> i.legs().stream().anyMatch(l -> l.intermediatePlaces().isPresent()))
@@ -107,6 +110,9 @@ public class IntegrationTest {
     assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
 
     var leg = result.itineraries().get(0).legs().get(0);
+
+    // Test interlineWithPreviousLeg for first leg
+    assertFalse(leg.interlineWithPreviousLeg());
 
     var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
     assertFalse(transitLeg.from().stop().isEmpty());
