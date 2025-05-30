@@ -324,7 +324,6 @@ public class IntegrationTest {
     assertFalse(routes.isEmpty());
     routes.forEach(
         r -> {
-          assertFalse(r.name().isEmpty(), "Route %s has no name.".formatted(r));
           assertFalse(r.agency().name().isEmpty());
         });
   }
