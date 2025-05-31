@@ -23,6 +23,7 @@ public final class TripPlanParameters {
   @Nullable private final Float carReluctance;
   @Nullable private final Float bikeReluctance;
   @Nullable private final Float bikeWalkingReluctance;
+  @Nullable private final Float walkSpeed;
   private final boolean wheelchair;
   @Nullable private final InputBanned banned;
   private final OptimizeType optimize;
@@ -40,6 +41,7 @@ public final class TripPlanParameters {
       @Nullable Float carReluctance,
       @Nullable Float bikeReluctance,
       @Nullable Float bikeWalkingReluctance,
+      @Nullable Float walkSpeed,
       boolean wheelchair,
       @Nullable InputBanned banned,
       OptimizeType optimize,
@@ -55,6 +57,7 @@ public final class TripPlanParameters {
     this.carReluctance = carReluctance;
     this.bikeReluctance = bikeReluctance;
     this.bikeWalkingReluctance = bikeWalkingReluctance;
+    this.walkSpeed = walkSpeed;
     this.wheelchair = wheelchair;
     this.banned = banned;
     this.optimize = optimize;
@@ -124,6 +127,10 @@ public final class TripPlanParameters {
 
   public Optional<Float> bikeWalkingReluctance() {
     return Optional.ofNullable(bikeWalkingReluctance);
+  }
+
+  public Optional<Float> walkSpeed() {
+    return Optional.ofNullable(walkSpeed);
   }
 
   public boolean wheelchair() {

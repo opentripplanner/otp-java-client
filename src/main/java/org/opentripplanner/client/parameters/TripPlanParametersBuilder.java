@@ -21,6 +21,7 @@ public class TripPlanParametersBuilder {
   private Float carReluctance;
   private Float bikeReluctance;
   private Float bikeWalkingReluctance;
+  private Float walkSpeed;
   private OptimizeType optimize = OptimizeType.QUICK;
   private InputTriangle triangle;
   private int numItineraries = 5;
@@ -82,6 +83,11 @@ public class TripPlanParametersBuilder {
     return this;
   }
 
+  public TripPlanParametersBuilder withWalkSpeed(float ws) {
+    this.walkSpeed = ws;
+    return this;
+  }
+
   public TripPlanParametersBuilder withNumberOfItineraries(int ni) {
     this.numItineraries = ni;
     return this;
@@ -139,6 +145,7 @@ public class TripPlanParametersBuilder {
         carReluctance,
         bikeReluctance,
         bikeWalkingReluctance,
+        walkSpeed,
         wheelchair,
         banned,
         optimize,

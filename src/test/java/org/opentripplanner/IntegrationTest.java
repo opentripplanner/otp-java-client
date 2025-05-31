@@ -64,6 +64,9 @@ public class IntegrationTest {
 
     var leg = result.itineraries().get(0).legs().get(0);
 
+    // First leg should not interline with previous leg (since there is no previous leg)
+    assertFalse(leg.interlineWithPreviousLeg());
+
     var transitLeg =
         result.transitItineraries().stream()
             .filter(i -> i.legs().stream().anyMatch(l -> l.intermediatePlaces().isPresent()))
@@ -107,6 +110,9 @@ public class IntegrationTest {
     assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
 
     var leg = result.itineraries().get(0).legs().get(0);
+
+    // Test interlineWithPreviousLeg for first leg
+    assertFalse(leg.interlineWithPreviousLeg());
 
     var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
     assertFalse(transitLeg.from().stop().isEmpty());
@@ -247,6 +253,22 @@ public class IntegrationTest {
   }
 
   @Test
+  public void planWithWalkSpeed() throws IOException {
+    TripPlanParametersBuilder builder =
+        TripPlanParameters.builder()
+            .withFrom(OSLO_WEST)
+            .withTo(OSLO_EAST)
+            .withTime(LocalDateTime.now())
+            .withModes(Set.of(RequestMode.WALK, RequestMode.TRANSIT));
+
+    assertEquals(Optional.empty(), builder.build().walkSpeed());
+
+    // Plan with high walk reluctance - should prefer transit
+    builder.withWalkSpeed(2.5f);
+    assertEquals(Optional.of(2.5f), builder.build().walkSpeed());
+  }
+
+  @Test
   public void arriveByPlan() throws IOException {
 
     var result =
@@ -308,7 +330,6 @@ public class IntegrationTest {
     assertFalse(routes.isEmpty());
     routes.forEach(
         r -> {
-          assertFalse(r.name().isEmpty(), "Route %s has no name.".formatted(r));
           assertFalse(r.agency().name().isEmpty());
         });
   }

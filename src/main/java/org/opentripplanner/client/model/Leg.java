@@ -13,6 +13,7 @@ public record Leg(
     OffsetDateTime startTime,
     OffsetDateTime endTime,
     Boolean realTime,
+    boolean interlineWithPreviousLeg,
     LegMode mode,
     Duration duration,
     double distance,

@@ -96,6 +96,7 @@ query {
                         }
                     }
                 }
+                interlineWithPreviousLeg
                 mode
                 headsign
                 legGeometry {
