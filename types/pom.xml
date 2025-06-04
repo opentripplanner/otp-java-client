@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.opentripplanner</groupId>
+    <artifactId>client-root</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>api-types</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.github.kobylynskyi</groupId>
+      <artifactId>graphql-java-codegen</artifactId>
+      <version>5.10.0</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+    </dependency>
+
+  </dependencies>
+  <build>
+
+    <plugins>
+
+      <plugin>
+        <groupId>io.github.kobylynskyi</groupId>
+        <artifactId>graphql-codegen-maven-plugin</artifactId>
+        <version>5.10.0</version>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <graphqlSchemas>
+                <includePattern>schema.graphqls</includePattern>
+              </graphqlSchemas>
+              <outputDir>${project.build.directory}/generated-sources/types/</outputDir>
+              <modelPackageName>org.opentripplanner.api.types</modelPackageName>
+              <customAnnotationsMapping>
+                <Character>
+                  <annotation1>@com.fasterxml.jackson.annotation.JsonTypeInfo(use =
+                    com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME, property = "__typename")
+                  </annotation1>
+                  <annotation2>
+                    @com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver(io.github.kobylynskyi.order.external.starwars.CharacterTypeResolver.class)
+                  </annotation2>
+                </Character>
+              </customAnnotationsMapping>
+              <customTypesMapping>
+                <Ratio>java.lang.Double</Ratio>
+                <Long>java.lang.Long</Long>
+              </customTypesMapping>
+              <generateClient>true</generateClient>
+              <generateApis>false</generateApis>
+              <generateBuilder>true</generateBuilder>
+              <generateImmutableModels>true</generateImmutableModels>
+              <generateToString>true</generateToString>
+              <generateParameterizedFieldsResolvers>false</generateParameterizedFieldsResolvers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

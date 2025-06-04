@@ -176,7 +176,8 @@ public class IntegrationTest {
 
     assertFalse(checkTransitLegCondition(result, leg -> leg.agency().id().equals(BANNED_AGENCY)));
 
-    assertFalse(checkTransitLegCondition(result, leg -> leg.route().id().equals(BANNED_ROUTE)));
+    assertFalse(
+        checkTransitLegCondition(result, leg -> leg.route().getGtfsId().equals(BANNED_ROUTE)));
 
     assertFalse(checkTransitLegCondition(result, leg -> leg.trip().id().equals(BANNED_TRIP)));
   }
@@ -328,10 +329,7 @@ public class IntegrationTest {
     LOG.info("Received {} routes", routes.size());
 
     assertFalse(routes.isEmpty());
-    routes.forEach(
-        r -> {
-          assertFalse(r.agency().name().isEmpty());
-        });
+    routes.forEach(r -> assertFalse(r.getAgency().getName().isEmpty()));
   }
 
   @Test

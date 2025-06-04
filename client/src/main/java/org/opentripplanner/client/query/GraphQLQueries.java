@@ -13,10 +13,6 @@ public class GraphQLQueries {
     return loadQuery("plan");
   }
 
-  public static String routes() {
-    return loadQuery("routes");
-  }
-
   public static String patterns() {
     return loadQuery("patterns");
   }
