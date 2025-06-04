@@ -38,10 +38,6 @@
     </license>
   </licenses>
 
-  <scm>
-    <url>https://github.com/opentripplanner/otp-java-client</url>
-  </scm>
-
   <developers>
     <developer>
       <name>Leonard Ehrenfried</name>
