@@ -9,10 +9,6 @@ public class GraphQLQueries {
     return loadQuery("vehicleRentalStations");
   }
 
-  public static String plan() {
-    return loadQuery("plan");
-  }
-
   public static String patterns() {
     return loadQuery("patterns");
   }

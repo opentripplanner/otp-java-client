@@ -1,5 +1,9 @@
 package org.opentripplanner.client.model;
 
+import org.opentripplanner.api.types.Mode;
+import org.opentripplanner.api.types.Qualifier;
+import org.opentripplanner.api.types.TransportMode;
+
 public enum RequestMode {
   TRANSIT("TRANSIT"),
   WALK("WALK"),
@@ -29,5 +33,13 @@ public enum RequestMode {
   RequestMode(String mode, String qualifier) {
     this.mode = mode;
     this.qualifier = qualifier;
+  }
+
+  public TransportMode toTransportMode() {
+    var builder = TransportMode.builder().setMode(Mode.valueOf(mode));
+    if (qualifier != null) {
+      builder.setQualifier(Qualifier.valueOf(qualifier));
+    }
+    return builder.build();
   }
 }
