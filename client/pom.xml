@@ -65,8 +65,7 @@
     <dependency>
       <groupId>org.opentripplanner</groupId>
       <artifactId>types</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-      <scope>compile</scope>
+      <version>${project.version}</version>
     </dependency>
 
   </dependencies>
