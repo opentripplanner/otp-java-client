@@ -10,7 +10,7 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>types</artifactId>
+  <artifactId>api-types</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <dependencies>

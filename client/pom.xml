@@ -64,7 +64,7 @@
     </dependency>
     <dependency>
       <groupId>org.opentripplanner</groupId>
-      <artifactId>types</artifactId>
+      <artifactId>api-types</artifactId>
       <version>${project.version}</version>
     </dependency>
 
