@@ -63,6 +63,7 @@
               <generateClient>true</generateClient>
               <generateApis>false</generateApis>
               <generateBuilder>true</generateBuilder>
+              <generateImmutableModels>true</generateImmutableModels>
               <generateToString>true</generateToString>
               <generateParameterizedFieldsResolvers>false</generateParameterizedFieldsResolvers>
             </configuration>

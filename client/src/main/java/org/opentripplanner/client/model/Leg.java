@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import org.opentripplanner.api.types.Route;
 
 public record Leg(
     Place from,

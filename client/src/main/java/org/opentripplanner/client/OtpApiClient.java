@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.kobylynskyi.graphql.codegen.model.graphql.GraphQLRequest;
 import java.io.IOException;
 import java.net.URI;
 import java.time.ZoneId;
@@ -16,10 +17,13 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.opentripplanner.api.types.AgencyResponseProjection;
+import org.opentripplanner.api.types.Route;
+import org.opentripplanner.api.types.RouteResponseProjection;
+import org.opentripplanner.api.types.RoutesQueryRequest;
 import org.opentripplanner.client.model.Agency;
 import org.opentripplanner.client.model.Alert;
 import org.opentripplanner.client.model.Pattern;
-import org.opentripplanner.client.model.Route;
 import org.opentripplanner.client.model.Stop;
 import org.opentripplanner.client.model.TripPlan;
 import org.opentripplanner.client.model.VehicleRentalStation;
@@ -76,7 +80,7 @@ public class OtpApiClient {
             req.optimize(),
             req.triangle().map(triangle -> "triangle : %s".formatted(triangle)).orElse(""));
 
-    final var jsonNode = sendRequest(formattedQuery);
+    final var jsonNode = sendWrappedRequest(formattedQuery);
     return deserialize(jsonNode, "/data/plan", TripPlan.class);
   }
 
@@ -87,9 +91,22 @@ public class OtpApiClient {
    *     API docs</a>
    */
   public List<Route> routes() throws IOException {
-    var json = sendRequest(GraphQLQueries.routes());
-    var type = listType(Route.class);
-    return deserializeList(json, type, "/data/routes");
+    var req = new RoutesQueryRequest();
+
+    var agencyProjection = new AgencyResponseProjection().gtfsId().name();
+    var routeProjection =
+        new RouteResponseProjection()
+            .id()
+            .gtfsId()
+            .longName()
+            .shortName()
+            .bikesAllowed()
+            .agency(agencyProjection)
+            .typename();
+    var graphQLRequest = new GraphQLRequest(req, routeProjection);
+
+    var result = sendRequest(graphQLRequest.toHttpJsonBody());
+    return deserializeList(result, listType(Route.class), "/data/routes");
   }
 
   /**
@@ -100,7 +117,7 @@ public class OtpApiClient {
    *     API docs</a>
    */
   public List<VehicleRentalStation> vehicleRentalStations() throws IOException {
-    var json = sendRequest(GraphQLQueries.vehicleRentalStations());
+    var json = sendWrappedRequest(GraphQLQueries.vehicleRentalStations());
     var type = listType(VehicleRentalStation.class);
     return deserializeList(json, type, "/data/vehicleRentalStations");
   }
@@ -112,7 +129,7 @@ public class OtpApiClient {
    *     API docs</a>
    */
   public List<Pattern> patterns() throws IOException {
-    var json = sendRequest(GraphQLQueries.patterns());
+    var json = sendWrappedRequest(GraphQLQueries.patterns());
     var type = listType(Pattern.class);
     return deserializeList(json, type, "/data/patterns");
   }
@@ -124,7 +141,7 @@ public class OtpApiClient {
    *     API docs</a>
    */
   public List<Agency> agencies() throws IOException {
-    var json = sendRequest(GraphQLQueries.agencies());
+    var json = sendWrappedRequest(GraphQLQueries.agencies());
     var type = listType(Agency.class);
     return deserializeList(json, type, "/data/agencies");
   }
@@ -140,7 +157,7 @@ public class OtpApiClient {
     var stopQuery = GraphQLQueries.stop();
     var formattedQuery = stopQuery.formatted(gtfsId);
 
-    final var jsonNode = sendRequest(formattedQuery);
+    final var jsonNode = sendWrappedRequest(formattedQuery);
     return deserialize(jsonNode, "/data/stop", Stop.class);
   }
 
@@ -149,14 +166,14 @@ public class OtpApiClient {
     var stopQuery = GraphQLQueries.stops();
     var formattedQuery = stopQuery.formatted(nameMask);
 
-    final var jsonNode = sendRequest(formattedQuery);
+    final var jsonNode = sendWrappedRequest(formattedQuery);
     return deserializeList(jsonNode, listType(Stop.class), "/data/stops");
   }
 
   /** Get all alerts. */
   public List<Alert> alerts() throws IOException {
     var query = GraphQLQueries.alerts();
-    final var jsonNode = sendRequest(query);
+    final var jsonNode = sendWrappedRequest(query);
     return deserializeList(jsonNode, listType(Alert.class), "/data/alerts");
   }
 
@@ -182,13 +199,8 @@ public class OtpApiClient {
   private JsonNode sendRequest(String formattedQuery) throws IOException {
     LOG.debug("Sending GraphQL query to {}: {}", graphQlUri, formattedQuery);
 
-    var body = mapper.createObjectNode();
-    body.put("query", formattedQuery);
-
-    var bodyString = mapper.writeValueAsString(body);
-
     HttpPost httpPost = new HttpPost(graphQlUri);
-    var stringEntity = new StringEntity(bodyString, ContentType.APPLICATION_JSON);
+    var stringEntity = new StringEntity(formattedQuery, ContentType.APPLICATION_JSON);
     httpPost.setEntity(stringEntity);
     var response = httpClient.execute(httpPost);
     if (response.getCode() != 200) {
@@ -199,5 +211,13 @@ public class OtpApiClient {
 
     LOG.trace("Received the following JSON: {}", jsonNode.toPrettyString());
     return jsonNode;
+  }
+
+  @Deprecated
+  private JsonNode sendWrappedRequest(String formattedQuery) throws IOException {
+    var body = mapper.createObjectNode();
+    body.put("query", formattedQuery);
+    var bodyString = mapper.writeValueAsString(body);
+    return sendRequest(bodyString);
   }
 }
