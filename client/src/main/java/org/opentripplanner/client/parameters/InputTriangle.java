@@ -1,11 +1,11 @@
 package org.opentripplanner.client.parameters;
 
 public class InputTriangle {
-  float safetyFactor;
-  float slopeFactor;
-  float timeFactor;
+  double safetyFactor;
+  double slopeFactor;
+  double timeFactor;
 
-  public InputTriangle(float safetyFactor, float slopeFactor, float timeFactor) {
+  public InputTriangle(double safetyFactor, double slopeFactor, double timeFactor) {
     this.safetyFactor = safetyFactor;
     this.slopeFactor = slopeFactor;
     this.timeFactor = timeFactor;
@@ -15,12 +15,7 @@ public class InputTriangle {
     return new InputTriangleBuilder();
   }
 
-  @Override
-  public String toString() {
-    String safetyFactorString = String.format("safetyFactor: %f", safetyFactor);
-    String slopeFactorString = String.format("slopeFactor: %f", slopeFactor);
-    String timeFactorString = String.format("timeFactor: %f", timeFactor);
-
-    return String.format("{%s %s %s}", safetyFactorString, slopeFactorString, timeFactorString);
+  public org.opentripplanner.api.types.InputTriangle toGenegerated() {
+    return new org.opentripplanner.api.types.InputTriangle(safetyFactor, slopeFactor, timeFactor);
   }
 }

@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.opentripplanner.api.types.OptimizeType;
 import org.opentripplanner.client.model.PlaceParameter;
 import org.opentripplanner.client.model.RequestMode;
-import org.opentripplanner.client.parameters.TripPlanParameters.OptimizeType;
 import org.opentripplanner.client.parameters.TripPlanParameters.SearchDirection;
 
 public class TripPlanParametersBuilder {
@@ -17,11 +17,11 @@ public class TripPlanParametersBuilder {
   private Set<RequestMode> modes;
   private SearchDirection searchDirection = SearchDirection.DEPART_AT;
   private Duration searchWindow;
-  private Float walkReluctance;
-  private Float carReluctance;
-  private Float bikeReluctance;
-  private Float bikeWalkingReluctance;
-  private Float walkSpeed;
+  private Double walkReluctance;
+  private Double carReluctance;
+  private Double bikeReluctance;
+  private Double bikeWalkingReluctance;
+  private Double walkSpeed;
   private OptimizeType optimize = OptimizeType.QUICK;
   private InputTriangle triangle;
   private int numItineraries = 5;
@@ -63,27 +63,27 @@ public class TripPlanParametersBuilder {
     return this;
   }
 
-  public TripPlanParametersBuilder withWalkReluctance(float wr) {
+  public TripPlanParametersBuilder withWalkReluctance(double wr) {
     this.walkReluctance = wr;
     return this;
   }
 
-  public TripPlanParametersBuilder withCarReluctance(float cr) {
+  public TripPlanParametersBuilder withCarReluctance(double cr) {
     this.carReluctance = cr;
     return this;
   }
 
-  public TripPlanParametersBuilder withBikeReluctance(float br) {
+  public TripPlanParametersBuilder withBikeReluctance(double br) {
     this.bikeReluctance = br;
     return this;
   }
 
-  public TripPlanParametersBuilder withBikeWalkingReluctance(float bwr) {
+  public TripPlanParametersBuilder withBikeWalkingReluctance(double bwr) {
     this.bikeWalkingReluctance = bwr;
     return this;
   }
 
-  public TripPlanParametersBuilder withWalkSpeed(float ws) {
+  public TripPlanParametersBuilder withWalkSpeed(double ws) {
     this.walkSpeed = ws;
     return this;
   }

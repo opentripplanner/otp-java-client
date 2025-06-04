@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import org.opentripplanner.api.types.OptimizeType;
 import org.opentripplanner.client.model.PlaceParameter;
 import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.validation.CollectionUtils;
@@ -19,11 +20,11 @@ public final class TripPlanParameters {
   private final Set<RequestMode> modes;
   private final SearchDirection searchDirection;
   @Nullable private final Duration searchWindow;
-  @Nullable private final Float walkReluctance;
-  @Nullable private final Float carReluctance;
-  @Nullable private final Float bikeReluctance;
-  @Nullable private final Float bikeWalkingReluctance;
-  @Nullable private final Float walkSpeed;
+  @Nullable private final Double walkReluctance;
+  @Nullable private final Double carReluctance;
+  @Nullable private final Double bikeReluctance;
+  @Nullable private final Double bikeWalkingReluctance;
+  @Nullable private final Double walkSpeed;
   private final boolean wheelchair;
   @Nullable private final InputBanned banned;
   private final OptimizeType optimize;
@@ -37,11 +38,11 @@ public final class TripPlanParameters {
       Set<RequestMode> modes,
       SearchDirection searchDirection,
       @Nullable Duration searchWindow,
-      @Nullable Float walkReluctance,
-      @Nullable Float carReluctance,
-      @Nullable Float bikeReluctance,
-      @Nullable Float bikeWalkingReluctance,
-      @Nullable Float walkSpeed,
+      @Nullable Double walkReluctance,
+      @Nullable Double carReluctance,
+      @Nullable Double bikeReluctance,
+      @Nullable Double bikeWalkingReluctance,
+      @Nullable Double walkSpeed,
       boolean wheelchair,
       @Nullable InputBanned banned,
       OptimizeType optimize,
@@ -77,14 +78,6 @@ public final class TripPlanParameters {
     }
   }
 
-  public enum OptimizeType {
-    QUICK,
-    SAFE,
-    FLAT,
-    GREENWAYS,
-    TRIANGLE,
-  }
-
   public static TripPlanParametersBuilder builder() {
     return new TripPlanParametersBuilder();
   }
@@ -113,23 +106,23 @@ public final class TripPlanParameters {
     return searchDirection;
   }
 
-  public Optional<Float> walkReluctance() {
+  public Optional<Double> walkReluctance() {
     return Optional.ofNullable(walkReluctance);
   }
 
-  public Optional<Float> carReluctance() {
+  public Optional<Double> carReluctance() {
     return Optional.ofNullable(carReluctance);
   }
 
-  public Optional<Float> bikeReluctance() {
+  public Optional<Double> bikeReluctance() {
     return Optional.ofNullable(bikeReluctance);
   }
 
-  public Optional<Float> bikeWalkingReluctance() {
+  public Optional<Double> bikeWalkingReluctance() {
     return Optional.ofNullable(bikeWalkingReluctance);
   }
 
-  public Optional<Float> walkSpeed() {
+  public Optional<Double> walkSpeed() {
     return Optional.ofNullable(walkSpeed);
   }
 
