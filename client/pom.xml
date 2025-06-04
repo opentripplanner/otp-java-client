@@ -8,6 +8,9 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
+  <name>OTP GTFS GraphQL API client</name>
+  <description>A full client for interacting with the GTFS GraphQL API</description>
+
   <artifactId>otp-client</artifactId>
   <version>1.0.1-SNAPSHOT</version>
 

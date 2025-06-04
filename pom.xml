@@ -169,9 +169,6 @@
         <configuration>
           <publishingServerId>central-lenni</publishingServerId>
           <autoPublish>true</autoPublish>
-          <excludeArtifacts>
-            <artifact>client-root</artifact>
-          </excludeArtifacts>
         </configuration>
       </plugin>
     </plugins>

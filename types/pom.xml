@@ -8,6 +8,10 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
+
+  <name>Generated types for the OTP GTFS GraphQL API</name>
+  <description>Generated types for the OTP GTFS GraphQL API</description>
+
   <artifactId>api-types</artifactId>
   <version>1.0.1-SNAPSHOT</version>
 
