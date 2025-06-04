@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.opentripplanner</groupId>
     <artifactId>client-root</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -13,7 +13,7 @@
   <description>Generated types for the OTP GTFS GraphQL API</description>
 
   <artifactId>api-types</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1-SNAPSHOT</version>
 
   <dependencies>
     <dependency>
