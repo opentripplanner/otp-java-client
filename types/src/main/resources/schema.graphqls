@@ -1,5 +1,5 @@
 schema {
-  query: QueryType
+  query: Query
 }
 
 """
@@ -1165,7 +1165,7 @@ type PositionBetweenStops {
   previousPosition: Int
 }
 
-type QueryType {
+type Query {
   "Get all agencies"
   agencies: [Agency]
   "Get a single agency based on agency ID, i.e. value of field `gtfsId` (ID format is `FeedId:StopId`)"
@@ -1881,8 +1881,6 @@ type QueryType {
     "Western bound of the bounding box"
     minimumLongitude: CoordinateValue!
   ): [RentalPlace!]!
-  "Needed until https://github.com/facebook/relay/issues/112 is resolved"
-  viewer: QueryType
 }
 
 "Real-time estimates for a vehicle at a certain place."
