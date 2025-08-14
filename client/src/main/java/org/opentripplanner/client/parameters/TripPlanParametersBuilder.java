@@ -63,7 +63,7 @@ public class TripPlanParametersBuilder {
     return this;
   }
 
-  public TripPlanParametersBuilder withWalkReluctance(double wr) {
+  public TripPlanParametersBuilder withWalkReluctance(Double wr) {
     this.walkReluctance = wr;
     return this;
   }
