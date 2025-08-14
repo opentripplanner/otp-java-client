@@ -246,9 +246,9 @@ public class IntegrationTest {
 
     // Plan with high walk reluctance - should prefer transit
     builder.withWalkReluctance(5.0d);
-    builder.withBikeReluctance(4.0f);
-    builder.withCarReluctance(3.0f);
-    builder.withBikeWalkingReluctance(2.0f);
+    builder.withBikeReluctance(4.0d);
+    builder.withCarReluctance(3.0d);
+    builder.withBikeWalkingReluctance(2.0d);
     assertEquals(Optional.of(5.0), builder.build().walkReluctance());
     assertEquals(Optional.of(4.0), builder.build().bikeReluctance());
     assertEquals(Optional.of(3.0), builder.build().carReluctance());
