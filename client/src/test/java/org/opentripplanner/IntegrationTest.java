@@ -231,7 +231,7 @@ public class IntegrationTest {
   }
 
   @Test
-  public void planWithReluctance() throws IOException {
+  public void planWithReluctance() {
     TripPlanParametersBuilder builder =
         TripPlanParameters.builder()
             .withFrom(OSLO_WEST)
@@ -245,7 +245,7 @@ public class IntegrationTest {
     assertEquals(Optional.empty(), builder.build().bikeWalkingReluctance());
 
     // Plan with high walk reluctance - should prefer transit
-    builder.withWalkReluctance(5.0f);
+    builder.withWalkReluctance(5.0d);
     builder.withBikeReluctance(4.0f);
     builder.withCarReluctance(3.0f);
     builder.withBikeWalkingReluctance(2.0f);
