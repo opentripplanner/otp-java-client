@@ -59,6 +59,7 @@ public class OtpApiClient {
           .longName()
           .shortName()
           .bikesAllowed()
+          .mode()
           .agency(AGENCY_PROJECTION)
           .typename();
   private static final Logger LOG = LoggerFactory.getLogger(OtpApiClient.class);
