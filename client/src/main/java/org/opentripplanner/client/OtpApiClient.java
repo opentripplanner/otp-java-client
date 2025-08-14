@@ -63,12 +63,10 @@ public class OtpApiClient {
           .typename();
   private static final Logger LOG = LoggerFactory.getLogger(OtpApiClient.class);
   private static final String DEFAULT_GRAPHQL_PATH = "/otp/gtfs/v1";
+  public static final StopResponseProjection STOP_PROJECTION =
+      new StopResponseProjection().gtfsId().name().code();
   public static final PlaceResponseProjection PLACE_PROJECTION =
-      new PlaceResponseProjection()
-          .name()
-          .departureTime()
-          .arrivalTime()
-          .stop(new StopResponseProjection().gtfsId().name());
+      new PlaceResponseProjection().name().departureTime().arrivalTime().stop(STOP_PROJECTION);
 
   private final CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
