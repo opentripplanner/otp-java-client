@@ -68,22 +68,22 @@ public class TripPlanParametersBuilder {
     return this;
   }
 
-  public TripPlanParametersBuilder withCarReluctance(double cr) {
+  public TripPlanParametersBuilder withCarReluctance(Double cr) {
     this.carReluctance = cr;
     return this;
   }
 
-  public TripPlanParametersBuilder withBikeReluctance(double br) {
+  public TripPlanParametersBuilder withBikeReluctance(Double br) {
     this.bikeReluctance = br;
     return this;
   }
 
-  public TripPlanParametersBuilder withBikeWalkingReluctance(double bwr) {
+  public TripPlanParametersBuilder withBikeWalkingReluctance(Double bwr) {
     this.bikeWalkingReluctance = bwr;
     return this;
   }
 
-  public TripPlanParametersBuilder withWalkSpeed(double ws) {
+  public TripPlanParametersBuilder withWalkSpeed(Double ws) {
     this.walkSpeed = ws;
     return this;
   }
