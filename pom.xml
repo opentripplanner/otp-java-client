@@ -88,6 +88,7 @@
           <java>
             <!-- apply a specific flavor of google-java-format and reflow long strings -->
             <googleJavaFormat />
+            <lineEndings>PRESERVE</lineEndings>
           </java>
         </configuration>
         <executions>
