@@ -27,8 +27,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-    <junit.version>5.13.4</junit.version>
-    <jackson.version>2.19.2</jackson.version>
+    <junit.version>5.14.1</junit.version>
+    <jackson.version>2.20.1</jackson.version>
   </properties>
   <licenses>
     <license>
@@ -64,7 +64,7 @@
     <dependency>
       <groupId>com.google.truth</groupId>
       <artifactId>truth</artifactId>
-      <version>1.4.4</version>
+      <version>1.4.5</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -103,7 +103,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -130,7 +130,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.11.2</version>
+        <version>3.12.0</version>
         <configuration>
           <doclint>none</doclint>
         </configuration>
