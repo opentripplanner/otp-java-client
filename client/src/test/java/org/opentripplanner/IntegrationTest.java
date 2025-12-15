@@ -70,11 +70,11 @@ public class IntegrationTest {
 
     var transitLeg =
         result.transitItineraries().stream()
-            .filter(i -> i.legs().stream().anyMatch(l -> l.intermediatePlaces().isPresent()))
+            .flatMap(i -> i.transitLegs().stream())
+            .filter(l -> l.intermediatePlaces().isPresent())
             .findFirst()
-            .get()
-            .transitLegs()
-            .get(0);
+            .get();
+
     assertFalse(transitLeg.from().stop().isEmpty());
     assertNotNull(transitLeg.from().coordinate());
     assertNotNull(transitLeg.from().point());
