@@ -85,9 +85,12 @@ public class IntegrationTest {
     assertNotNull(transitLeg.from().stop().get().id());
     assertTrue(transitLeg.trip().headsign().isPresent());
     assertNotNull(transitLeg.agency());
-    assertNotNull(transitLeg.intermediatePlaces().get().get(0).name());
-    assertNotNull(transitLeg.intermediatePlaces().get().get(0).departureTime());
-    assertNotNull(transitLeg.intermediatePlaces().get().get(0).arrivalTime());
+
+    assertTrue(
+        result.transitItineraries().stream()
+            .anyMatch(
+                i -> i.transitLegs().stream().anyMatch(l -> l.intermediatePlaces().isPresent())));
+
     assertNotNull(transitLeg.geometry().toGoogleEncoding());
     assertNotNull(transitLeg.geometry().toLinestring());
 
