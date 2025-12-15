@@ -168,7 +168,7 @@
         <version>0.9.0</version>
         <extensions>true</extensions>
         <configuration>
-          <publishingServerId>central-lenni</publishingServerId>
+          <publishingServerId>central</publishingServerId>
           <autoPublish>true</autoPublish>
         </configuration>
       </plugin>
