@@ -67,7 +67,13 @@ public class OtpApiClient {
   public static final StopResponseProjection STOP_PROJECTION =
       new StopResponseProjection().gtfsId().name().code();
   public static final PlaceResponseProjection PLACE_PROJECTION =
-      new PlaceResponseProjection().name().departureTime().arrivalTime().stop(STOP_PROJECTION);
+      new PlaceResponseProjection()
+          .name()
+          .departureTime()
+          .arrivalTime()
+          .stop(STOP_PROJECTION)
+          .lat()
+          .lon();
 
   private final CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
