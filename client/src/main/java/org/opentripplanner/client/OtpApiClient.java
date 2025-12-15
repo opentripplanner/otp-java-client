@@ -103,6 +103,7 @@ public class OtpApiClient {
     // TODO: implement banning
     r.setOptimize(req.optimize());
     r.setTriangle(req.triangle().map(InputTriangle::toGenegerated).orElse(null));
+    r.setPageCursor(req.pageCursor().orElse(null));
 
     final LegResponseProjection legProjection =
         new LegResponseProjection()
@@ -135,7 +136,9 @@ public class OtpApiClient {
                 new ItineraryResponseProjection()
                     .accessibilityScore()
                     .duration()
-                    .legs(legProjection));
+                    .legs(legProjection))
+            .nextPageCursor()
+            .previousPageCursor();
 
     var graphQLRequest = new GraphQLRequest(r, tripPlanProjection);
 

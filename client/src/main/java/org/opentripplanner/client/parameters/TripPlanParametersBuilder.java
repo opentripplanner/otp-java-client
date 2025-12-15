@@ -27,6 +27,7 @@ public class TripPlanParametersBuilder {
   private int numItineraries = 5;
   private boolean wheelchair = false;
   private InputBanned banned;
+  private String pageCursor;
 
   public TripPlanParametersBuilder withFrom(PlaceParameter from) {
     this.fromPlace = from;
@@ -113,6 +114,11 @@ public class TripPlanParametersBuilder {
     return this;
   }
 
+  public TripPlanParametersBuilder withPageCursor(String pageCursor) {
+    this.pageCursor = pageCursor;
+    return this;
+  }
+
   public TripPlanParametersBuilder copy() {
     return TripPlanParameters.builder()
         .withFrom(fromPlace)
@@ -149,6 +155,7 @@ public class TripPlanParametersBuilder {
         wheelchair,
         banned,
         optimize,
-        triangle);
+        triangle,
+        pageCursor);
   }
 }

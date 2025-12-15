@@ -29,6 +29,7 @@ public final class TripPlanParameters {
   @Nullable private final InputBanned banned;
   private final OptimizeType optimize;
   @Nullable private final InputTriangle triangle;
+  @Nullable private final String pageCursor;
 
   public TripPlanParameters(
       PlaceParameter fromPlace,
@@ -46,7 +47,8 @@ public final class TripPlanParameters {
       boolean wheelchair,
       @Nullable InputBanned banned,
       OptimizeType optimize,
-      @Nullable InputTriangle triangle) {
+      @Nullable InputTriangle triangle,
+      @Nullable String pageCursor) {
     this.fromPlace = Objects.requireNonNull(fromPlace);
     this.toPlace = Objects.requireNonNull(toPlace);
     this.time = Objects.requireNonNull(time);
@@ -63,6 +65,7 @@ public final class TripPlanParameters {
     this.banned = banned;
     this.optimize = optimize;
     this.triangle = triangle;
+    this.pageCursor = pageCursor;
   }
 
   public Optional<Duration> searchWindow() {
@@ -140,6 +143,10 @@ public final class TripPlanParameters {
 
   public Optional<InputTriangle> triangle() {
     return Optional.ofNullable(triangle);
+  }
+
+  public Optional<String> pageCursor() {
+    return Optional.ofNullable(pageCursor);
   }
 
   @Override

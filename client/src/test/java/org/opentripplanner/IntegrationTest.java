@@ -2,6 +2,7 @@ package org.opentripplanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opentripplanner.StationParameters.OSLO_EAST;
@@ -314,6 +315,42 @@ public class IntegrationTest {
 
     assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
   }
+
+  @Test
+  public void pageCursor() throws IOException {
+      var params = TripPlanParameters.builder()
+              .withFrom(OSLO_WEST)
+              .withTo(OSLO_EAST)
+              .withModes(RequestMode.TRANSIT, RequestMode.WALK)
+              .withTime(LocalDateTime.now());
+
+      var initialResult = client.plan(params.build());
+      LOG.info("Initial page has {} results", initialResult.itineraries().size());
+      assertFalse(initialResult.itineraries().isEmpty());
+
+      var nextResult = client.plan(params.withPageCursor(initialResult.nextPageCursor()).build());
+      LOG.info("Next page has {} results", nextResult.itineraries().size());
+      assertFalse(nextResult.itineraries().isEmpty());
+
+      var prevResult = client.plan(params.withPageCursor(initialResult.previousPageCursor()).build());
+      LOG.info("Prev page has {} results", prevResult.itineraries().size());
+      assertFalse(prevResult.itineraries().isEmpty());
+  }
+
+    @Test
+    public void nullPageCursor() throws IOException {
+        var params = TripPlanParameters.builder()
+                .withFrom(OSLO_WEST)
+                .withTo(new Coordinate(0, 0))
+                .withModes(RequestMode.TRANSIT)
+                .withTime(LocalDateTime.now());
+
+        var result = client.plan(params.build());
+        LOG.info("Result {}", result);
+        assertTrue(result.itineraries().isEmpty());
+        assertNull(result.nextPageCursor());
+        assertNull(result.previousPageCursor());
+    }
 
   @Test
   public void rentalStations() throws IOException {
