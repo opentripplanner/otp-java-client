@@ -1,6 +1,9 @@
 package org.opentripplanner.client.model;
 
-public record Coordinate(double lat, double lon) implements PlaceParameter {
+public record Coordinate(double lat, double lon, String name) implements PlaceParameter {
+  public Coordinate(double lat, double lon) {
+    this(lat, lon, String.format("%s,%s", lat, lon));
+  }
 
   @Override
   public String toString() {
@@ -9,6 +12,6 @@ public record Coordinate(double lat, double lon) implements PlaceParameter {
 
   @Override
   public String toPlaceString() {
-    return String.format("%s,%s::%s,%s", lat, lon, lat, lon);
+    return String.format("%s::%s,%s", name, lat, lon);
   }
 }
