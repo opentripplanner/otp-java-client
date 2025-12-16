@@ -1,6 +1,7 @@
 package org.opentripplanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -69,6 +70,9 @@ public class IntegrationTest {
     // First leg should not interline with previous leg (since there is no previous leg)
     assertFalse(leg.interlineWithPreviousLeg());
 
+    assertEquals(OSLO_WEST.lat(), leg.from().lat(), 0.01);
+    assertEquals(OSLO_WEST.lon(), leg.from().lon(), 0.01);
+
     var transitLeg =
         result.transitItineraries().stream()
             .flatMap(i -> i.transitLegs().stream())
@@ -77,11 +81,11 @@ public class IntegrationTest {
             .get();
 
     assertFalse(transitLeg.from().stop().isEmpty());
-    assertNotNull(transitLeg.from().coordinate());
-    assertNotNull(transitLeg.from().point());
+    assertNotEquals(0, transitLeg.from().coordinate().getX());
+    assertNotEquals(0, transitLeg.from().point().getX());
     assertFalse(transitLeg.to().stop().isEmpty());
-    assertNotNull(transitLeg.to().coordinate());
-    assertNotNull(transitLeg.to().point());
+    assertNotEquals(0, transitLeg.to().coordinate().getY());
+    assertNotEquals(0, transitLeg.to().point().getY());
     assertNotNull(transitLeg.from().stop().get().id());
     assertTrue(transitLeg.trip().headsign().isPresent());
     assertNotNull(transitLeg.agency());
