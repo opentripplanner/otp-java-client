@@ -132,6 +132,24 @@ public class IntegrationTest {
   }
 
   @Test
+  public void planNamedCoordinate() throws IOException {
+    var result =
+            client.plan(
+                    TripPlanParameters.builder()
+                            .withFrom(new Coordinate(OSLO_EAST.lat(), OSLO_EAST.lon(), "Oslo East"))
+                            .withTo(OSLO_WEST)
+                            .withTime(LocalDateTime.now())
+                            .withModes(RequestMode.TRANSIT)
+                            .withNumberOfItineraries(3)
+                            .build());
+
+    assertFalse(result.itineraries().isEmpty());
+    var firstLeg = result.itineraries().get(0).legs().get(0);
+
+    assertEquals("Oslo East", firstLeg.from().name());
+  }
+
+  @Test
   public void planPlaceToPlaceWithSearchWindow() throws IOException {
     var result =
         client.plan(
