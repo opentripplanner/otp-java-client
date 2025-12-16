@@ -4,6 +4,10 @@ on:
   - push
   - pull_request
 
+env:
+  # maven default arguments to make the log quieter and colourful
+  MAVEN_ARGS: "--no-transfer-progress -Dstyle.color=always"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,4 +21,4 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn --batch-mode test
+        run: mvn spotless:check test
