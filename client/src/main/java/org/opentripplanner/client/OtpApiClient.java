@@ -382,7 +382,6 @@ public class OtpApiClient {
       return this;
     }
 
-
     /**
      * Build and return a new {@link OtpApiClient} instance.
      *
