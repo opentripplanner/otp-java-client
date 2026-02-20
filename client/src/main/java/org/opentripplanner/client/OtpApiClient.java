@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
@@ -75,14 +76,27 @@ public class OtpApiClient {
           .lat()
           .lon();
 
-  private final CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-
+  private final CloseableHttpClient httpClient;
   private final URI graphQlUri;
   private final ObjectMapper mapper;
 
+  /**
+   * Create a new client instance. For additional customization options, use the Builder API.
+   *
+   * @param timezone the time zone to use
+   * @param baseUrl the base URL, which will be concatenated with the default GraphQL path
+   */
   public OtpApiClient(ZoneId timezone, String baseUrl) {
-    this.mapper = ObjectMappers.withTimezone(timezone);
-    this.graphQlUri = URI.create(baseUrl + DEFAULT_GRAPHQL_PATH);
+    this((BuilderImpl) OtpApiClient.builder().baseUri(baseUrl).timeZone(timezone));
+  }
+
+  private OtpApiClient(final BuilderImpl b) {
+    final var uri = Objects.requireNonNull(b.uri);
+    final var client =
+        Objects.requireNonNullElseGet(b.httpClient, () -> HttpClientBuilder.create().build());
+    this.mapper = ObjectMappers.withTimezone(b.zoneId);
+    this.graphQlUri = URI.create(uri);
+    this.httpClient = client;
   }
 
   /**
@@ -281,5 +295,101 @@ public class OtpApiClient {
     body.put("query", formattedQuery);
     var bodyString = mapper.writeValueAsString(body);
     return sendRequest(bodyString);
+  }
+
+  /**
+   * Create and return a builder for constructing a customized client.
+   *
+   * @return a new BuilderWithoutUri instance
+   */
+  public static BuilderNeedsUri builder() {
+    return new BuilderImpl();
+  }
+
+  public sealed interface BuilderNeedsUri permits BuilderImpl {
+    BuilderNeedsTimeZone graphQLUri(final String uri);
+
+    BuilderNeedsTimeZone baseUri(final String uri);
+  }
+
+  public sealed interface BuilderNeedsTimeZone permits BuilderImpl {
+    Builder timeZone(final ZoneId zoneId);
+  }
+
+  public sealed interface Builder permits BuilderImpl {
+    Builder httpClient(final CloseableHttpClient httpClient);
+
+    OtpApiClient build();
+  }
+
+  public static final class BuilderImpl implements BuilderNeedsUri, BuilderNeedsTimeZone, Builder {
+    private ZoneId zoneId;
+    private String uri;
+    private CloseableHttpClient httpClient;
+
+    private BuilderImpl() {}
+
+    /**
+     * Set the full endpoint URI for the GraphQL API.
+     *
+     * @param uri the full URI to use
+     * @return this builder instance
+     */
+    @Override
+    public BuilderNeedsTimeZone graphQLUri(final String uri) {
+      Objects.requireNonNull(uri, "uri must not be null");
+      this.uri = uri;
+      return this;
+    }
+
+    /**
+     * Set a base URI. This differs from {@link #graphQLUri(String)} in that the base URI will be
+     * concatenated with the default GraphQL path before use.
+     *
+     * @param baseUri the base URI to use
+     * @return this builder instance
+     */
+    @Override
+    public BuilderNeedsTimeZone baseUri(final String baseUri) {
+      Objects.requireNonNull(baseUri, "baseUri must not be null");
+      this.uri = baseUri + DEFAULT_GRAPHQL_PATH;
+      return this;
+    }
+
+    /**
+     * Set the time zone used by the client.
+     *
+     * @param zoneId the time zone to use
+     * @return this builder instance
+     */
+    @Override
+    public Builder timeZone(final ZoneId zoneId) {
+      Objects.requireNonNull(zoneId, "zoneId must not be null");
+      this.zoneId = zoneId;
+      return this;
+    }
+
+    /**
+     * Specify the HTTP client used to make requests. This client may include default configuration
+     * such as headers or timeouts.
+     *
+     * @param httpClient the HTTP client to use, or null to reset to the default
+     * @return this builder instance
+     */
+    @Override
+    public Builder httpClient(final CloseableHttpClient httpClient) {
+      this.httpClient = httpClient;
+      return this;
+    }
+
+    /**
+     * Build and return a new {@link OtpApiClient} instance.
+     *
+     * @return a new OtpApiClient
+     */
+    @Override
+    public OtpApiClient build() {
+      return new OtpApiClient(this);
+    }
   }
 }
