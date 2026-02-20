@@ -49,6 +49,15 @@ var result = client.plan(
     );
 ```
 
+To create a more customized client, for example to specify the API path or some default Headers in the HTTP client, you can also use the builder API of the client:
+```java
+OtpApiClient client = OtpApiClient.builder()
+        .graphQLUri("https://example.com/custom/path")
+        .timeZone(ZoneId.of("Europe/Berlin"))
+        .httpClient(customHttpClient)
+        .build();
+```
+
 For more examples take a look at [`IntegrationTest.java`](https://github.com/opentripplanner/otp-java-client/blob/main/client/src/test/java/org/opentripplanner/IntegrationTest.java).
 
 ### Releasing

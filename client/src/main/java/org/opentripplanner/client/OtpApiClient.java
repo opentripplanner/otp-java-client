@@ -91,11 +91,10 @@ public class OtpApiClient {
   }
 
   private OtpApiClient(final BuilderImpl b) {
-    final var zoneId = Objects.requireNonNullElse(b.zoneId, ZoneId.systemDefault());
     final var uri = Objects.requireNonNull(b.uri);
     final var client =
         Objects.requireNonNullElseGet(b.httpClient, () -> HttpClientBuilder.create().build());
-    this.mapper = ObjectMappers.withTimezone(zoneId);
+    this.mapper = ObjectMappers.withTimezone(b.zoneId);
     this.graphQlUri = URI.create(uri);
     this.httpClient = client;
   }
@@ -303,25 +302,27 @@ public class OtpApiClient {
    *
    * @return a new BuilderWithoutUri instance
    */
-  public static BuilderWithoutUri builder() {
+  public static BuilderNeedsUri builder() {
     return new BuilderImpl();
   }
 
-  public sealed interface BuilderWithoutUri permits BuilderImpl {
-    Builder graphQLUri(final String uri);
+  public sealed interface BuilderNeedsUri permits BuilderImpl {
+    BuilderNeedsTimeZone graphQLUri(final String uri);
 
-    Builder baseUri(final String uri);
+    BuilderNeedsTimeZone baseUri(final String uri);
+  }
+
+  public sealed interface BuilderNeedsTimeZone permits BuilderImpl {
+    Builder timeZone(final ZoneId zoneId);
   }
 
   public sealed interface Builder permits BuilderImpl {
     Builder httpClient(final CloseableHttpClient httpClient);
 
-    Builder timeZone(final ZoneId zoneId);
-
     OtpApiClient build();
   }
 
-  public static final class BuilderImpl implements BuilderWithoutUri, Builder {
+  public static final class BuilderImpl implements BuilderNeedsUri, BuilderNeedsTimeZone, Builder {
     private ZoneId zoneId;
     private String uri;
     private CloseableHttpClient httpClient;
@@ -335,7 +336,8 @@ public class OtpApiClient {
      * @return this builder instance
      */
     @Override
-    public Builder graphQLUri(final String uri) {
+    public BuilderNeedsTimeZone graphQLUri(final String uri) {
+      Objects.requireNonNull(uri, "uri must not be null");
       this.uri = uri;
       return this;
     }
@@ -348,21 +350,9 @@ public class OtpApiClient {
      * @return this builder instance
      */
     @Override
-    public Builder baseUri(final String baseUri) {
+    public BuilderNeedsTimeZone baseUri(final String baseUri) {
+      Objects.requireNonNull(baseUri, "baseUri must not be null");
       this.uri = baseUri + DEFAULT_GRAPHQL_PATH;
-      return this;
-    }
-
-    /**
-     * Specify the HTTP client used to make requests. This client may include default configuration
-     * such as headers or timeouts.
-     *
-     * @param httpClient the HTTP client to use
-     * @return this builder instance
-     */
-    @Override
-    public Builder httpClient(final CloseableHttpClient httpClient) {
-      this.httpClient = httpClient;
       return this;
     }
 
@@ -374,9 +364,24 @@ public class OtpApiClient {
      */
     @Override
     public Builder timeZone(final ZoneId zoneId) {
+      Objects.requireNonNull(zoneId, "zoneId must not be null");
       this.zoneId = zoneId;
       return this;
     }
+
+    /**
+     * Specify the HTTP client used to make requests. This client may include default configuration
+     * such as headers or timeouts.
+     *
+     * @param httpClient the HTTP client to use, or null to reset to the default
+     * @return this builder instance
+     */
+    @Override
+    public Builder httpClient(final CloseableHttpClient httpClient) {
+      this.httpClient = httpClient;
+      return this;
+    }
+
 
     /**
      * Build and return a new {@link OtpApiClient} instance.
