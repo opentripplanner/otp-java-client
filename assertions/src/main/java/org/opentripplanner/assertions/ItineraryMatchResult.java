@@ -1,4 +1,4 @@
-package org.opentripplanner.client.assertion;
+package org.opentripplanner.assertions;
 
 import java.util.List;
 import org.opentripplanner.client.model.Leg;

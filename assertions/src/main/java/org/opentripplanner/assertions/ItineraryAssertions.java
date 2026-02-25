@@ -1,4 +1,4 @@
-package org.opentripplanner.client.assertion;
+package org.opentripplanner.assertions;
 
 import java.time.Duration;
 import java.util.ArrayList;

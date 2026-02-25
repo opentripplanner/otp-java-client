@@ -1,4 +1,4 @@
-package org.opentripplanner.client.assertion;
+package org.opentripplanner.assertions;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
