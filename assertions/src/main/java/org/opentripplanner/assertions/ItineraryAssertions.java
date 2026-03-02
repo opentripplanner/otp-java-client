@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.opentripplanner.api.types.Route;
 import org.opentripplanner.client.model.Itinerary;
@@ -23,6 +24,10 @@ public class ItineraryAssertions {
   private List<LegCriterion> currentLegCriteria;
   private boolean strictTransitMatching = false;
 
+  private void addCurrentLegCriterion(String message, Predicate<Leg> predicate) {
+    currentLegCriteria.add(new LegCriterion(message, predicate));
+  }
+
   /**
    * Adds a new distinct leg criterion set and moves the current leg pointer to it.
    *
@@ -35,116 +40,54 @@ public class ItineraryAssertions {
   }
 
   public ItineraryAssertions withRouteLongName(String... longNames) {
-    var message = "route '%s'".formatted(Arrays.toString(longNames));
-    currentLegCriteria.add(
-        new LegCriterion(
-            message,
-            state -> {
-              Leg leg = state.getLeg();
-              String longName = routeLongName(leg.route());
-              boolean matches =
-                  leg.isTransit()
-                      && longName != null
-                      && Arrays.asList(longNames).contains(longName);
-              if (matches) {
-                state.addMatch(message);
-              } else {
-                state.addFailure(message);
-              }
-            }));
+    addCurrentLegCriterion(
+        "route '%s'".formatted(Arrays.toString(longNames)),
+        leg -> {
+          String longName = routeLongName(leg.route());
+          return leg.isTransit() && longName != null && Arrays.asList(longNames).contains(longName);
+        });
     return this;
   }
 
   public ItineraryAssertions withMaxDuration(Duration duration) {
-    var message = "duration '%s'".formatted(duration);
-    currentLegCriteria.add(
-        new LegCriterion(
-            message,
-            state -> {
-              Leg leg = state.getLeg();
-              boolean matches = leg.isTransit() && leg.duration().compareTo(duration) < 1;
-              if (matches) {
-                state.addMatch(message);
-              } else {
-                state.addFailure(message);
-              }
-            }));
+    addCurrentLegCriterion(
+        "duration '%s'".formatted(duration),
+        leg -> leg.isTransit() && leg.duration().compareTo(duration) < 1);
     return this;
   }
 
   public ItineraryAssertions withRouteShortName(String... shortNames) {
-    var message = "route '%s'".formatted(Arrays.toString(shortNames));
-    currentLegCriteria.add(
-        new LegCriterion(
-            message,
-            state -> {
-              Leg leg = state.getLeg();
-              String shortName = routeShortName(leg.route());
-              boolean matches =
-                  leg.isTransit()
-                      && shortName != null
-                      && Arrays.asList(shortNames).contains(shortName);
-              if (matches) {
-                state.addMatch(message);
-              } else {
-                state.addFailure(message);
-              }
-            }));
+    addCurrentLegCriterion(
+        "route '%s'".formatted(Arrays.toString(shortNames)),
+        leg -> {
+          String shortName = routeShortName(leg.route());
+          return leg.isTransit()
+              && shortName != null
+              && Arrays.asList(shortNames).contains(shortName);
+        });
     return this;
   }
 
   public ItineraryAssertions withFarePrice(float price, String riderCategoryId, String mediumId) {
-    var message = "fare $%.2f".formatted(price);
-    currentLegCriteria.add(
-        new LegCriterion(
-            message,
-            state -> {
-              Leg leg = state.getLeg();
-              boolean matches =
-                  leg.fareProducts().stream()
-                      .filter(fp -> fp.product().riderCategory().isPresent())
-                      .filter(fp -> fp.product().medium().isPresent())
-                      .filter(fp -> fp.product().riderCategory().get().id().equals(riderCategoryId))
-                      .filter(fp -> fp.product().medium().get().id().equals(mediumId))
-                      .anyMatch(fp -> fp.product().price().amount().floatValue() == price);
-              if (matches) {
-                state.addMatch(message);
-              } else {
-                state.addFailure(message);
-              }
-            }));
+    addCurrentLegCriterion(
+        "fare $%.2f".formatted(price),
+        leg ->
+            leg.fareProducts().stream()
+                .filter(fp -> fp.product().riderCategory().isPresent())
+                .filter(fp -> fp.product().medium().isPresent())
+                .filter(fp -> fp.product().riderCategory().get().id().equals(riderCategoryId))
+                .filter(fp -> fp.product().medium().get().id().equals(mediumId))
+                .anyMatch(fp -> fp.product().price().amount().floatValue() == price));
     return this;
   }
 
   public ItineraryAssertions interlinedWithPreviousLeg() {
-    currentLegCriteria.add(
-        new LegCriterion(
-            "interlined with previous leg",
-            state -> {
-              Leg leg = state.getLeg();
-              if (leg.interlineWithPreviousLeg()) {
-                state.addMatch("interlined with previous leg");
-              } else {
-                state.addFailure("interlined with previous leg");
-              }
-            }));
+    addCurrentLegCriterion("interlined with previous leg", Leg::interlineWithPreviousLeg);
     return this;
   }
 
   public ItineraryAssertions withMode(String mode) {
-    var message = "mode %s".formatted(mode);
-    currentLegCriteria.add(
-        new LegCriterion(
-            message,
-            state -> {
-              Leg leg = state.getLeg();
-              boolean matches = leg.mode().toString().equals(mode);
-              if (matches) {
-                state.addMatch(message);
-              } else {
-                state.addFailure(message);
-              }
-            }));
+    addCurrentLegCriterion("mode %s".formatted(mode), leg -> leg.mode().toString().equals(mode));
     return this;
   }
 
@@ -238,7 +181,15 @@ public class ItineraryAssertions {
       for (int i = 0; i < remainingLegs.size(); i++) {
         Leg leg = remainingLegs.get(i);
         LegMatchingState state = new LegMatchingState(leg);
-        criteriaSet.forEach(criterion -> criterion.test().accept(state));
+        criteriaSet.forEach(
+            criterion -> {
+              var pass = criterion.test().test(leg);
+              if (pass) {
+                state.addMatch(criterion.message());
+              } else {
+                state.addFailure(criterion.message());
+              }
+            });
 
         if (state.isFullMatch()) {
           remainingLegs.remove(i);
