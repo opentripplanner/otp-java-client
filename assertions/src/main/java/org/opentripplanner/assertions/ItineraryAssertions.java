@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.opentripplanner.api.types.Route;
 import org.opentripplanner.client.model.Itinerary;
 import org.opentripplanner.client.model.Leg;
 import org.opentripplanner.client.model.TripPlan;
@@ -43,7 +42,7 @@ public class ItineraryAssertions {
     addCurrentLegCriterion(
         "route '%s'".formatted(Arrays.toString(longNames)),
         leg -> {
-          String longName = routeLongName(leg.route());
+          String longName = leg.route().getLongName();
           return leg.isTransit() && longName != null && Arrays.asList(longNames).contains(longName);
         });
     return this;
@@ -60,7 +59,7 @@ public class ItineraryAssertions {
     addCurrentLegCriterion(
         "route '%s'".formatted(Arrays.toString(shortNames)),
         leg -> {
-          String shortName = routeShortName(leg.route());
+          String shortName = leg.route().getShortName();
           return leg.isTransit()
               && shortName != null
               && Arrays.asList(shortNames).contains(shortName);
@@ -145,7 +144,8 @@ public class ItineraryAssertions {
       failuresSection.append("  Actual itinerary:%n");
       for (int legIndex = 0; legIndex < itinerary.legs().size(); legIndex++) {
         Leg leg = itinerary.legs().get(legIndex);
-        failuresSection.append("    Leg %d: %s".formatted(legIndex + 1, formatLegDescription(leg)));
+        failuresSection.append(
+            "    Leg %d: %s".formatted(legIndex + 1, leg.formatLegDescription()));
       }
       failuresSection.append("%n");
     }
@@ -216,7 +216,7 @@ public class ItineraryAssertions {
         extraLegs.addAll(additionalTransitLegs);
         String extraLegNames =
             additionalTransitLegs.stream()
-                .map(leg -> routeDisplayName(leg.route(), leg.mode().toString()))
+                .map(Leg::routeDisplayName)
                 .collect(Collectors.joining(" "));
 
         errors.add(
@@ -232,47 +232,11 @@ public class ItineraryAssertions {
     return new ItineraryMatchResult(completeMatches, partialMatches, extraLegs, errors);
   }
 
-  private String formatLegDescription(Leg leg) {
-    if (leg.isTransit()) {
-      String routeName = routeDisplayName(leg.route(), leg.mode().toString());
-      String interlinedText = leg.interlineWithPreviousLeg() ? " (interlined)" : "";
-      return "TRANSIT - Route: %s%s, From: %s, To: %s%n"
-          .formatted(routeName, interlinedText, leg.from().name(), leg.to().name());
-    }
-
-    return "%s - From: %s, To: %s, Distance: %.0fm%n"
-        .formatted(
-            leg.mode().toString().toUpperCase(),
-            leg.from().name(),
-            leg.to().name(),
-            leg.distance());
-  }
-
   private String describeCriteria(List<LegCriterion> criteriaSet) {
     StringBuilder message = new StringBuilder();
     for (LegCriterion criterion : criteriaSet) {
       message.append(criterion.message()).append("\n");
     }
     return message.toString();
-  }
-
-  private static String routeDisplayName(Route route, String fallback) {
-    String shortName = routeShortName(route);
-    if (shortName != null) {
-      return shortName;
-    }
-    String longName = routeLongName(route);
-    if (longName != null) {
-      return longName;
-    }
-    return fallback;
-  }
-
-  private static String routeShortName(Route route) {
-    return route == null ? null : route.getShortName();
-  }
-
-  private static String routeLongName(Route route) {
-    return route == null ? null : route.getLongName();
   }
 }
