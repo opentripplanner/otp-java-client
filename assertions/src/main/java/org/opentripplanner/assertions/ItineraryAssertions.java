@@ -1,5 +1,7 @@
 package org.opentripplanner.assertions;
 
+import static org.opentripplanner.assertions.LegCriterion.describeCriteria;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,8 +11,6 @@ import java.util.stream.Collectors;
 import org.opentripplanner.client.model.Itinerary;
 import org.opentripplanner.client.model.Leg;
 import org.opentripplanner.client.model.TripPlan;
-
-import static org.opentripplanner.assertions.LegCriterion.describeCriteria;
 
 /**
  * A fluent API for testing OTP itineraries against specific criteria.
