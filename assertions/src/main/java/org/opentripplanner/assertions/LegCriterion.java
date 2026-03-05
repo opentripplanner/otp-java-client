@@ -11,11 +11,11 @@ import org.opentripplanner.client.model.Leg;
  * @param test A consumer that applies checks and updates the matching state
  */
 public record LegCriterion(String message, Predicate<Leg> test) {
-    public static String describeCriteria(List<LegCriterion> criterionList) {
-        StringBuilder message = new StringBuilder();
-        for (LegCriterion criterion : criterionList) {
-            message.append(criterion.message()).append("\n");
-        }
-        return message.toString();
+  public static String describeCriteria(List<LegCriterion> criterionList) {
+    StringBuilder message = new StringBuilder();
+    for (LegCriterion criterion : criterionList) {
+      message.append(criterion.message()).append("\n");
     }
+    return message.toString();
+  }
 }
