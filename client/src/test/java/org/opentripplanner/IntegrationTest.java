@@ -63,9 +63,9 @@ public class IntegrationTest {
 
     LOG.info("Received {} itineraries", result.itineraries().size());
 
-    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+    assertNotNull(result.itineraries().getFirst().legs().getFirst().startTime());
 
-    var leg = result.itineraries().get(0).legs().get(0);
+    var leg = result.itineraries().getFirst().legs().getFirst();
 
     // First leg should not interline with previous leg (since there is no previous leg)
     assertFalse(leg.interlineWithPreviousLeg());
@@ -116,14 +116,14 @@ public class IntegrationTest {
 
     LOG.info("Received {} itineraries", result.itineraries().size());
 
-    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+    assertNotNull(result.itineraries().getFirst().legs().getFirst().startTime());
 
-    var leg = result.itineraries().get(0).legs().get(0);
+    var leg = result.itineraries().getFirst().legs().getFirst();
 
     // Test interlineWithPreviousLeg for first leg
     assertFalse(leg.interlineWithPreviousLeg());
 
-    var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
+    var transitLeg = result.transitItineraries().getFirst().transitLegs().getFirst();
     assertFalse(transitLeg.from().stop().isEmpty());
     assertFalse(transitLeg.to().stop().isEmpty());
     assertNotNull(transitLeg.from().stop().get().id());
@@ -144,7 +144,7 @@ public class IntegrationTest {
                 .build());
 
     assertFalse(result.itineraries().isEmpty());
-    var firstLeg = result.itineraries().get(0).legs().get(0);
+    var firstLeg = result.itineraries().getFirst().legs().getFirst();
 
     assertEquals("Oslo East", firstLeg.from().name());
   }
@@ -165,11 +165,11 @@ public class IntegrationTest {
     LOG.info("Received {} itineraries", result.itineraries().size());
     assertEquals(1, result.itineraries().size());
 
-    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+    assertNotNull(result.itineraries().getFirst().legs().getFirst().startTime());
 
-    var leg = result.itineraries().get(0).legs().get(0);
+    var leg = result.itineraries().getFirst().legs().getFirst();
 
-    var transitLeg = result.transitItineraries().get(0).transitLegs().get(0);
+    var transitLeg = result.transitItineraries().getFirst().transitLegs().getFirst();
     assertFalse(transitLeg.from().stop().isEmpty());
     assertFalse(transitLeg.to().stop().isEmpty());
     assertNotNull(transitLeg.from().stop().get().id());
@@ -248,8 +248,8 @@ public class IntegrationTest {
     LOG.info("Received {} safe itineraries", safeResult.itineraries().size());
     LOG.info("Received {} fast itineraries", fastResult.itineraries().size());
 
-    Leg saveLeg = safeResult.itineraries().get(0).legs().get(0);
-    Leg fastLeg = fastResult.itineraries().get(0).legs().get(0);
+    Leg saveLeg = safeResult.itineraries().getFirst().legs().getFirst();
+    Leg fastLeg = fastResult.itineraries().getFirst().legs().getFirst();
 
     assertNotNull(saveLeg.startTime());
     assertNotNull(fastLeg.startTime());
@@ -312,7 +312,7 @@ public class IntegrationTest {
 
     LOG.info("Received {} itineraries", result.itineraries().size());
 
-    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+    assertNotNull(result.itineraries().getFirst().legs().getFirst().startTime());
   }
 
   public static List<Set<RequestMode>> cases() {
@@ -338,7 +338,7 @@ public class IntegrationTest {
 
     LOG.info("Received {} itineraries", result.itineraries().size());
 
-    assertNotNull(result.itineraries().get(0).legs().get(0).startTime());
+    assertNotNull(result.itineraries().getFirst().legs().getFirst().startTime());
   }
 
   @Test
@@ -451,7 +451,7 @@ public class IntegrationTest {
     assertNotNull(result);
     assertFalse(result.isEmpty());
 
-    var stop = result.get(0);
+    var stop = result.getFirst();
 
     assertNotNull(stop.id());
   }
