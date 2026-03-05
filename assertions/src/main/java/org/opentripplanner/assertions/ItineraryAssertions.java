@@ -10,6 +10,8 @@ import org.opentripplanner.client.model.Itinerary;
 import org.opentripplanner.client.model.Leg;
 import org.opentripplanner.client.model.TripPlan;
 
+import static org.opentripplanner.assertions.LegCriterion.describeCriteria;
+
 /**
  * A fluent API for testing OTP itineraries against specific criteria.
  *
@@ -230,13 +232,5 @@ public class ItineraryAssertions {
     }
 
     return new ItineraryMatchResult(completeMatches, partialMatches, extraLegs, errors);
-  }
-
-  private String describeCriteria(List<LegCriterion> criteriaSet) {
-    StringBuilder message = new StringBuilder();
-    for (LegCriterion criterion : criteriaSet) {
-      message.append(criterion.message()).append("\n");
-    }
-    return message.toString();
   }
 }
