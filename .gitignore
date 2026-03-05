@@ -5,3 +5,4 @@ graph.obj
 *.jar
 zHV_aktuell*
 .git-versioned-pom.xml
+.DS_Store

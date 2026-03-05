@@ -32,6 +32,17 @@ It's deployed to Maven Central so add it to your project like this:
 </dependency>
 ```
 
+If you want itinerary assertion helpers for tests, add the assertions module too:
+
+```xml
+<dependency>
+   <groupId>org.opentripplanner</groupId>
+   <artifactId>otp-client-assertions</artifactId>
+   <version>${LATEST_VERSION}</version>
+   <scope>test</scope>
+</dependency>
+```
+
 ### Usage
 
 ```java
