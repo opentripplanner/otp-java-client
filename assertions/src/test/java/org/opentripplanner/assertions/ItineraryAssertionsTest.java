@@ -46,6 +46,24 @@ class ItineraryAssertionsTest {
   }
 
   @Test
+  void nonTransitLegsAreIgnored() {
+    TripPlan plan =
+        tripPlan(
+            itinerary(
+                walkLeg(Duration.ofMinutes(10)),
+                transitLeg("10", "Route 10", LegMode.BUS, Duration.ofMinutes(20), List.of()),
+                walkLeg(Duration.ofMinutes(10))));
+
+    assertDoesNotThrow(
+        () ->
+            new ItineraryAssertions()
+                .withStrictTransitMatching()
+                .hasLeg()
+                .withRouteShortName("10")
+                .assertMatches(plan));
+  }
+
+  @Test
   void multiLegMatchSuccess() {
     TripPlan plan =
         tripPlan(
@@ -153,6 +171,28 @@ class ItineraryAssertionsTest {
 
   private static Itinerary itinerary(Leg... legs) {
     return new Itinerary(List.of(legs), OptionalDouble.empty());
+  }
+
+  private static Leg walkLeg(Duration duration) {
+    return new Leg(
+        place("Walk From"),
+        place("Walk To"),
+        START,
+        START.plus(duration),
+        false,
+        false,
+        LegMode.WALK,
+        duration,
+        1000,
+        Optional.empty(),
+        null,
+        null,
+        List.of(),
+        OptionalDouble.empty(),
+        null,
+        new LegGeometry(GEOMETRY),
+        false,
+        Optional.empty());
   }
 
   private static Leg transitLeg(
