@@ -162,7 +162,8 @@ public class ItineraryAssertions {
    * <p>If strict transit matching is enabled, all transit legs must match some requirement.
    */
   private ItineraryMatchResult matchesAllLegs(Itinerary itinerary) {
-    List<Leg> remainingLegs = new ArrayList<>(itinerary.legs());
+    List<Leg> remainingLegs =
+        itinerary.legs().stream().filter(Leg::isTransit).collect(Collectors.toList());
     List<String> errors = new ArrayList<>();
     List<LegMatchingState> completeMatches = new ArrayList<>();
     List<LegMatchingState> partialMatches = new ArrayList<>();
