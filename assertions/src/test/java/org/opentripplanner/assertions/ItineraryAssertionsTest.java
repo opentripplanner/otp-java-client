@@ -131,8 +131,8 @@ class ItineraryAssertionsTest {
 
   @Test
   void withFarePriceHandlesPositiveAndNegativeMatches() {
-    List<FareProductUse> fares = List.of(fare("orca:regular", "orca:cash"),
-            fare(2.75f, "orca:regular", "orca:cash"));
+    List<FareProductUse> fares =
+        List.of(fare("orca:regular", "orca:cash"), fare(2.75f, "orca:regular", "orca:cash"));
     TripPlan plan =
         tripPlan(itinerary(transitLeg("E", "E Line", LegMode.BUS, Duration.ofMinutes(12), fares)));
 
@@ -239,14 +239,15 @@ class ItineraryAssertionsTest {
 
   private static FareProductUse fare(String riderCategoryId, String mediumId) {
     return new FareProductUse(
-            "fare-" + riderCategoryId + "-" + mediumId,
-            new FareProductUse.FareProduct(
-                    "product-" + riderCategoryId + "-" + mediumId,
-                    "Test fare",
-                    null,
-                    Optional.of(new FareProductUse.FareProduct.RiderCategory(riderCategoryId, "Rider")),
-                    Optional.of(new FareProductUse.FareProduct.FareMedium(mediumId, "Medium"))));
+        "fare-" + riderCategoryId + "-" + mediumId,
+        new FareProductUse.FareProduct(
+            "product-" + riderCategoryId + "-" + mediumId,
+            "Test fare",
+            null,
+            Optional.of(new FareProductUse.FareProduct.RiderCategory(riderCategoryId, "Rider")),
+            Optional.of(new FareProductUse.FareProduct.FareMedium(mediumId, "Medium"))));
   }
+
   private static FareProductUse fare(Float amount, String riderCategoryId, String mediumId) {
     return new FareProductUse(
         "fare-" + riderCategoryId + "-" + mediumId,
