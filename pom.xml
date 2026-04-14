@@ -29,7 +29,7 @@
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
     <junit.version>6.0.3</junit.version>
-    <jackson.version>2.21.1</jackson.version>
+    <jackson.version>2.21.2</jackson.version>
   </properties>
   <licenses>
     <license>
@@ -83,7 +83,7 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.4.0</version>
         <configuration>
           <!-- define a language-specific format -->
           <java>
