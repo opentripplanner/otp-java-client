@@ -78,6 +78,7 @@ public class ItineraryAssertions {
                 .filter(fp -> fp.product().medium().isPresent())
                 .filter(fp -> fp.product().riderCategory().get().id().equals(riderCategoryId))
                 .filter(fp -> fp.product().medium().get().id().equals(mediumId))
+                .filter(fp -> fp.product().price() != null)
                 .anyMatch(fp -> fp.product().price().amount().floatValue() == price));
     return this;
   }
