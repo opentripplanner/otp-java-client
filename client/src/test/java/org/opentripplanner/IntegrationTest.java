@@ -46,7 +46,7 @@ public class IntegrationTest {
   public static final Logger LOG = LoggerFactory.getLogger(IntegrationTest.class);
 
   public static OtpApiClient client =
-      new OtpApiClient(ZoneId.of("Europe/Oslo"), "https://otp2debug.dev.entur.org/");
+      new OtpApiClient(ZoneId.of("Europe/Oslo"), "https://otp2debug.staging.entur.org/");
 
   @Test
   public void plan() throws IOException {
