@@ -21,6 +21,7 @@ import org.opentripplanner.client.model.LegGeometry;
 import org.opentripplanner.client.model.LegMode;
 import org.opentripplanner.client.model.Money;
 import org.opentripplanner.client.model.Place;
+import org.opentripplanner.client.model.Stop;
 import org.opentripplanner.client.model.Trip;
 import org.opentripplanner.client.model.TripPlan;
 
@@ -79,6 +80,150 @@ class ItineraryAssertionsTest {
                 .hasLeg()
                 .withRouteShortName("1")
                 .assertMatches(plan));
+  }
+
+  @Test
+  void exactTransitLegsMustMatchInOrder() {
+    TripPlan plan =
+        tripPlan(
+            itinerary(
+                walkLeg(Duration.ofMinutes(5)),
+                transitLeg("10", "Route 10", LegMode.BUS, Duration.ofMinutes(20), List.of()),
+                transitLeg("1", "Line 1", LegMode.TRAM, Duration.ofMinutes(15), List.of()),
+                walkLeg(Duration.ofMinutes(5))));
+
+    assertDoesNotThrow(
+        () ->
+            new ItineraryAssertions()
+                .withStrictTransitMatching()
+                .hasLeg()
+                .withRouteShortName("10")
+                .hasLeg()
+                .withRouteShortName("1")
+                .assertMatches(plan));
+
+    ItineraryAssertionError error =
+        assertThrows(
+            ItineraryAssertionError.class,
+            () ->
+                new ItineraryAssertions()
+                    .withStrictTransitMatching()
+                    .hasLeg()
+                    .withRouteShortName("1")
+                    .hasLeg()
+                    .withRouteShortName("10")
+                    .assertMatches(plan));
+
+    assertThat(error.getMessage()).contains("Transit leg at position 1 does not match");
+    assertThat(error.isStrictTransitMatching()).isTrue();
+  }
+
+  @Test
+  void nonStrictTransitLegsRemainUnordered() {
+    TripPlan plan =
+        tripPlan(
+            itinerary(
+                transitLeg("10", "Route 10", LegMode.BUS, Duration.ofMinutes(20), List.of()),
+                transitLeg("1", "Line 1", LegMode.TRAM, Duration.ofMinutes(15), List.of())));
+
+    assertDoesNotThrow(
+        () ->
+            new ItineraryAssertions()
+                .hasLeg()
+                .withRouteShortName("1")
+                .hasLeg()
+                .withRouteShortName("10")
+                .assertMatches(plan));
+  }
+
+  @Test
+  void matchesBoardingAndAlightingStopsByCodeOrGtfsId() {
+    Leg leg =
+        transitLeg(
+            "10",
+            "Route 10",
+            LegMode.BUS,
+            Duration.ofMinutes(20),
+            List.of(),
+            place("Board", "feed:board", "BOARD"),
+            place("Alight", "feed:alight", "ALIGHT"),
+            false);
+    TripPlan plan = tripPlan(itinerary(leg));
+
+    assertDoesNotThrow(
+        () ->
+            new ItineraryAssertions()
+                .hasLeg()
+                .withBoardingStopCode("BOARD")
+                .withBoardingStopGtfsId("feed:board")
+                .withAlightingStopCode("ALIGHT")
+                .withAlightingStopGtfsId("feed:alight")
+                .assertMatches(plan));
+
+    ItineraryAssertionError error =
+        assertThrows(
+            ItineraryAssertionError.class,
+            () ->
+                new ItineraryAssertions()
+                    .hasLeg()
+                    .withBoardingStopCode("ALIGHT")
+                    .withAlightingStopGtfsId("feed:board")
+                    .assertMatches(plan));
+
+    assertThat(error.getMessage()).contains("boarding stop code '[ALIGHT]'");
+    assertThat(error.getMessage()).contains("alighting stop GTFS ID '[feed:board]'");
+  }
+
+  @Test
+  void exactMatchingChecksInterliningAtTheExpectedTransition() {
+    TripPlan plan =
+        tripPlan(
+            itinerary(
+                transitLeg(
+                    "10",
+                    "Route 10",
+                    LegMode.BUS,
+                    Duration.ofMinutes(10),
+                    List.of(),
+                    place("A"),
+                    place("B"),
+                    false),
+                transitLeg(
+                    "10",
+                    "Route 10",
+                    LegMode.BUS,
+                    Duration.ofMinutes(10),
+                    List.of(),
+                    place("B"),
+                    place("C"),
+                    true)));
+
+    assertDoesNotThrow(
+        () ->
+            new ItineraryAssertions()
+                .withStrictTransitMatching()
+                .hasLeg()
+                .withRouteShortName("10")
+                .hasLeg()
+                .withRouteShortName("10")
+                .interlinedWithPreviousLeg()
+                .assertMatches(plan));
+
+    ItineraryAssertionError error =
+        assertThrows(
+            ItineraryAssertionError.class,
+            () ->
+                new ItineraryAssertions()
+                    .withStrictTransitMatching()
+                    .hasLeg()
+                    .withRouteShortName("10")
+                    .interlinedWithPreviousLeg()
+                    .hasLeg()
+                    .withRouteShortName("10")
+                    .assertMatches(plan));
+
+    assertThat(error.getMessage()).contains("Transit leg at position 1 does not match");
+    assertThat(error.getMessage()).contains("interlined with previous leg");
   }
 
   @Test
@@ -160,7 +305,7 @@ class ItineraryAssertionsTest {
                     .withFarePrice(3.00f, "orca:regular", "orca:cash")
                     .assertMatches(plan));
 
-    String expectedFareCriterion = "fare 3.00 (rider category orca:regular, medium orca:cash)";
+    String expectedFareCriterion = "fare $3.00 (rider category orca:regular, medium orca:cash)";
     assertThat(error.getExpectedLegs())
         .containsExactly(List.of("route '[E]'", expectedFareCriterion));
     assertThat(error.getFailedResults()).hasSize(1);
@@ -207,6 +352,27 @@ class ItineraryAssertionsTest {
       Duration duration,
       List<FareProductUse> fareProducts) {
     String idToken = routeShortName != null ? routeShortName : routeLongName;
+    return transitLeg(
+        routeShortName,
+        routeLongName,
+        mode,
+        duration,
+        fareProducts,
+        place("From " + idToken),
+        place("To " + idToken),
+        false);
+  }
+
+  private static Leg transitLeg(
+      String routeShortName,
+      String routeLongName,
+      LegMode mode,
+      Duration duration,
+      List<FareProductUse> fareProducts,
+      Place from,
+      Place to,
+      boolean interlineWithPreviousLeg) {
+    String idToken = routeShortName != null ? routeShortName : routeLongName;
     Route route =
         Route.builder()
             .setId("route-" + idToken)
@@ -216,12 +382,12 @@ class ItineraryAssertionsTest {
             .build();
 
     return new Leg(
-        place("From " + idToken),
-        place("To " + idToken),
+        from,
+        to,
         START,
         START.plus(duration),
         false,
-        false,
+        interlineWithPreviousLeg,
         mode,
         duration,
         1000,
@@ -239,6 +405,25 @@ class ItineraryAssertionsTest {
   private static Place place(String name) {
     return new Place(
         name, 10.0f, 10.0f, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+  }
+
+  private static Place place(String name, String stopGtfsId, String stopCode) {
+    Stop stop =
+        new Stop(
+            name,
+            stopGtfsId,
+            Optional.ofNullable(stopCode),
+            Optional.empty(),
+            Optional.empty(),
+            null);
+    return new Place(
+        name,
+        10.0f,
+        10.0f,
+        Optional.of(stop),
+        Optional.empty(),
+        Optional.empty(),
+        Optional.empty());
   }
 
   private static FareProductUse fare(String riderCategoryId, String mediumId) {

@@ -6,10 +6,12 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.opentripplanner.client.model.Itinerary;
 import org.opentripplanner.client.model.Leg;
+import org.opentripplanner.client.model.Place;
 import org.opentripplanner.client.model.TripPlan;
 
 /**
@@ -69,9 +71,49 @@ public class ItineraryAssertions {
     return this;
   }
 
+  /** Requires the transit leg to board at a stop with one of the supplied stop codes. */
+  public ItineraryAssertions withBoardingStopCode(String... stopCodes) {
+    addCurrentLegCriterion(
+        "boarding stop code '%s'".formatted(Arrays.toString(stopCodes)),
+        leg ->
+            leg.isTransit()
+                && stopCode(leg.from()).map(Arrays.asList(stopCodes)::contains).orElse(false));
+    return this;
+  }
+
+  /** Requires the transit leg to board at a stop with one of the supplied GTFS IDs. */
+  public ItineraryAssertions withBoardingStopGtfsId(String... stopGtfsIds) {
+    addCurrentLegCriterion(
+        "boarding stop GTFS ID '%s'".formatted(Arrays.toString(stopGtfsIds)),
+        leg ->
+            leg.isTransit()
+                && stopGtfsId(leg.from()).map(Arrays.asList(stopGtfsIds)::contains).orElse(false));
+    return this;
+  }
+
+  /** Requires the transit leg to alight at a stop with one of the supplied stop codes. */
+  public ItineraryAssertions withAlightingStopCode(String... stopCodes) {
+    addCurrentLegCriterion(
+        "alighting stop code '%s'".formatted(Arrays.toString(stopCodes)),
+        leg ->
+            leg.isTransit()
+                && stopCode(leg.to()).map(Arrays.asList(stopCodes)::contains).orElse(false));
+    return this;
+  }
+
+  /** Requires the transit leg to alight at a stop with one of the supplied GTFS IDs. */
+  public ItineraryAssertions withAlightingStopGtfsId(String... stopGtfsIds) {
+    addCurrentLegCriterion(
+        "alighting stop GTFS ID '%s'".formatted(Arrays.toString(stopGtfsIds)),
+        leg ->
+            leg.isTransit()
+                && stopGtfsId(leg.to()).map(Arrays.asList(stopGtfsIds)::contains).orElse(false));
+    return this;
+  }
+
   public ItineraryAssertions withFarePrice(float price, String riderCategoryId, String mediumId) {
     addCurrentLegCriterion(
-        "fare %.2f (rider category %s, medium %s)".formatted(price, riderCategoryId, mediumId),
+        "fare $%.2f (rider category %s, medium %s)".formatted(price, riderCategoryId, mediumId),
         leg ->
             leg.fareProducts().stream()
                 .filter(fp -> fp.product().riderCategory().isPresent())
@@ -83,6 +125,7 @@ public class ItineraryAssertions {
     return this;
   }
 
+  /** Requires this leg to be a stay-on-board continuation of the previous transit leg. */
   public ItineraryAssertions interlinedWithPreviousLeg() {
     addCurrentLegCriterion("interlined with previous leg", Leg::interlineWithPreviousLeg);
     return this;
@@ -94,7 +137,8 @@ public class ItineraryAssertions {
   }
 
   /**
-   * Enables strict transit matching, requiring no unmatched transit legs in the chosen itinerary.
+   * Enables strict transit matching. Each expected leg must match the transit leg at the same
+   * position, and there must be no additional or missing transit legs.
    */
   public ItineraryAssertions withStrictTransitMatching() {
     this.strictTransitMatching = true;
@@ -103,6 +147,8 @@ public class ItineraryAssertions {
 
   /** Asserts that at least one itinerary in the given trip plan matches all configured criteria. */
   public void assertMatches(TripPlan tripPlan) {
+    validateCriteria();
+
     List<ItineraryMatchResult> failedResults = new ArrayList<>();
 
     for (Itinerary itinerary : tripPlan.itineraries()) {
@@ -164,43 +210,28 @@ public class ItineraryAssertions {
         tripPlan);
   }
 
-  /**
-   * Checks each requirement to ensure some leg on the itinerary matches.
-   *
-   * <p>If strict transit matching is enabled, all transit legs must match some requirement.
-   */
+  /** Checks an itinerary using exact positional or unordered matching, as configured. */
   private ItineraryMatchResult matchesAllLegs(Itinerary itinerary) {
-    List<Leg> remainingLegs =
-        itinerary.legs().stream().filter(Leg::isTransit).collect(Collectors.toList());
+    List<Leg> transitLegs = itinerary.legs().stream().filter(Leg::isTransit).toList();
+
+    return strictTransitMatching
+        ? matchesExactOrderedLegs(transitLegs)
+        : matchesRequiredLegs(transitLegs);
+  }
+
+  private ItineraryMatchResult matchesRequiredLegs(List<Leg> transitLegs) {
+    List<Leg> remainingLegs = new ArrayList<>(transitLegs);
     List<String> errors = new ArrayList<>();
     List<LegMatchingState> completeMatches = new ArrayList<>();
     List<LegMatchingState> partialMatches = new ArrayList<>();
-
-    if (distinctLegCriteria.isEmpty()) {
-      throw new IllegalArgumentException("No leg criteria specified");
-    }
 
     for (var criteriaIndex = 0; criteriaIndex < distinctLegCriteria.size(); criteriaIndex++) {
       List<LegCriterion> criteriaSet = distinctLegCriteria.get(criteriaIndex);
       boolean foundMatch = false;
 
-      if (criteriaSet.isEmpty()) {
-        throw new IllegalArgumentException(
-            "No leg criteria specified for criteria set " + (criteriaIndex + 1));
-      }
-
       for (int i = 0; i < remainingLegs.size(); i++) {
         Leg leg = remainingLegs.get(i);
-        LegMatchingState state = new LegMatchingState(leg);
-        criteriaSet.forEach(
-            criterion -> {
-              var pass = criterion.test().test(leg);
-              if (pass) {
-                state.addMatch(criterion.message());
-              } else {
-                state.addFailure(criterion.message());
-              }
-            });
+        LegMatchingState state = matchLeg(leg, criteriaSet);
 
         if (state.isFullMatch()) {
           remainingLegs.remove(i);
@@ -219,21 +250,51 @@ public class ItineraryAssertions {
       }
     }
 
-    List<Leg> extraLegs = new ArrayList<>();
-    if (strictTransitMatching && errors.isEmpty()) {
-      List<Leg> additionalTransitLegs = remainingLegs.stream().filter(Leg::isTransit).toList();
+    if (errors.isEmpty()) {
+      return ItineraryMatchResult.success(completeMatches);
+    }
 
-      if (!additionalTransitLegs.isEmpty()) {
-        extraLegs.addAll(additionalTransitLegs);
-        String extraLegNames =
-            additionalTransitLegs.stream()
-                .map(Leg::routeDisplayName)
-                .collect(Collectors.joining(" "));
+    return new ItineraryMatchResult(completeMatches, partialMatches, List.of(), errors);
+  }
 
+  private ItineraryMatchResult matchesExactOrderedLegs(List<Leg> transitLegs) {
+    List<String> errors = new ArrayList<>();
+    List<LegMatchingState> completeMatches = new ArrayList<>();
+    List<LegMatchingState> partialMatches = new ArrayList<>();
+
+    for (int criteriaIndex = 0; criteriaIndex < distinctLegCriteria.size(); criteriaIndex++) {
+      List<LegCriterion> criteriaSet = distinctLegCriteria.get(criteriaIndex);
+
+      if (criteriaIndex >= transitLegs.size()) {
         errors.add(
-            "Itinerary contains additional transit legs when strict matching is enabled: %s"
-                .formatted(extraLegNames));
+            "No transit leg at position %d matching criteria: %s"
+                .formatted(criteriaIndex + 1, describeCriteria(criteriaSet).trim()));
+        continue;
       }
+
+      LegMatchingState state = matchLeg(transitLegs.get(criteriaIndex), criteriaSet);
+      if (state.isFullMatch()) {
+        completeMatches.add(state);
+      } else {
+        if (state.hasAnyMatch()) {
+          partialMatches.add(state);
+        }
+        errors.add(
+            "Transit leg at position %d does not match criteria: %s"
+                .formatted(criteriaIndex + 1, describeCriteria(criteriaSet).trim()));
+      }
+    }
+
+    List<Leg> extraLegs =
+        transitLegs.size() > distinctLegCriteria.size()
+            ? List.copyOf(transitLegs.subList(distinctLegCriteria.size(), transitLegs.size()))
+            : List.of();
+    if (!extraLegs.isEmpty()) {
+      String extraLegNames =
+          extraLegs.stream().map(Leg::routeDisplayName).collect(Collectors.joining(" "));
+      errors.add(
+          "Itinerary contains additional transit legs when strict matching is enabled: %s"
+              .formatted(extraLegNames));
     }
 
     if (errors.isEmpty()) {
@@ -241,5 +302,38 @@ public class ItineraryAssertions {
     }
 
     return new ItineraryMatchResult(completeMatches, partialMatches, extraLegs, errors);
+  }
+
+  private LegMatchingState matchLeg(Leg leg, List<LegCriterion> criteriaSet) {
+    LegMatchingState state = new LegMatchingState(leg);
+    criteriaSet.forEach(
+        criterion -> {
+          if (criterion.test().test(leg)) {
+            state.addMatch(criterion.message());
+          } else {
+            state.addFailure(criterion.message());
+          }
+        });
+    return state;
+  }
+
+  private void validateCriteria() {
+    if (distinctLegCriteria.isEmpty()) {
+      throw new IllegalArgumentException("No leg criteria specified");
+    }
+
+    for (int i = 0; i < distinctLegCriteria.size(); i++) {
+      if (distinctLegCriteria.get(i).isEmpty()) {
+        throw new IllegalArgumentException("No leg criteria specified for criteria set " + (i + 1));
+      }
+    }
+  }
+
+  private static Optional<String> stopCode(Place place) {
+    return place.stop().flatMap(stop -> stop.code());
+  }
+
+  private static Optional<String> stopGtfsId(Place place) {
+    return place.stop().map(stop -> stop.id());
   }
 }

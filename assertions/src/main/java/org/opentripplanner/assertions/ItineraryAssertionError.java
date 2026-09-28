@@ -35,7 +35,7 @@ public class ItineraryAssertionError extends AssertionError {
     return strictTransitMatching;
   }
 
-  /** The response used by the failed assertion, or null for the legacy constructor. */
+  /** The response used by the failed assertion */
   public TripPlan getTripPlan() {
     return tripPlan;
   }
