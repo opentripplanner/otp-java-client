@@ -286,6 +286,11 @@ public class OtpApiClient {
     var jsonNode = mapper.readTree(response.getEntity().getContent());
 
     LOG.trace("Received the following JSON: {}", jsonNode.toPrettyString());
+    var errors = jsonNode.path("errors");
+    if (errors.isArray() && !errors.isEmpty()) {
+      throw new IOException(
+          "GraphQL request to '%s' failed: %s".formatted(graphQlUri, errors.toString()));
+    }
     return jsonNode;
   }
 
