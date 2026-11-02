@@ -12,11 +12,7 @@ following table to select the correct artifact:
 | 2.4.0       | =< 0.0.31      |
 | 2.5.0       | 0.1.0 - 0.1.13 |
 | 2.7.0       | => 1.0.0       |
-
-### Backwards compatibility
-
-Until version 2.0.0 this library will not be strictly following semantic versioning as a lot 
-of changes are planned.
+| 2.10.0      | 3.0.0          |
 
 ### Installation
 
