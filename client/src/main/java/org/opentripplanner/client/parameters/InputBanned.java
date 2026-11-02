@@ -31,21 +31,22 @@ public class InputBanned {
     return new InputBannedBuilder();
   }
 
+  public org.opentripplanner.api.types.InputBanned toGenerated() {
+    return org.opentripplanner.api.types.InputBanned.builder()
+        .setRoutes(join(routes))
+        .setAgencies(join(agencies))
+        .setTrips(join(trips))
+        .setStops(join(stops))
+        .setStopsHard(join(stopsHard))
+        .build();
+  }
+
+  private static String join(Set<String> ids) {
+    return ids.isEmpty() ? null : String.join(",", ids);
+  }
+
   @Override
   public String toString() {
-    String routesString =
-        routes.isEmpty() ? "" : String.format("routes: \"%s\"", String.join(",", routes));
-    String agenciesString =
-        agencies.isEmpty() ? "" : String.format("agencies: \"%s\"", String.join(",", agencies));
-    String tripsString =
-        trips.isEmpty() ? "" : String.format("trips: \"%s\"", String.join(",", trips));
-    String stopsString =
-        stops.isEmpty() ? "" : String.format("stops: \"%s\"", String.join(",", stops));
-    String stopsHardString =
-        stopsHard.isEmpty() ? "" : String.format("stopsHard: \"%s\"", String.join(",", stopsHard));
-
-    return String.format(
-        "{%s %s %s %s %s}",
-        routesString, agenciesString, tripsString, stopsString, stopsHardString);
+    return toGenerated().toString();
   }
 }

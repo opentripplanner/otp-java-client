@@ -42,6 +42,7 @@ import org.opentripplanner.client.model.RequestMode;
 import org.opentripplanner.client.model.Stop;
 import org.opentripplanner.client.model.TripPlan;
 import org.opentripplanner.client.model.VehicleRentalStation;
+import org.opentripplanner.client.parameters.InputBanned;
 import org.opentripplanner.client.parameters.InputTriangle;
 import org.opentripplanner.client.parameters.TripPlanParameters;
 import org.opentripplanner.client.query.GraphQLQueries;
@@ -119,8 +120,9 @@ public class OtpApiClient {
     r.setCarReluctance(req.carReluctance().orElse(null));
     r.setBikeReluctance(req.bikeReluctance().orElse(null));
     r.setBikeWalkingReluctance(req.bikeWalkingReluctance().orElse(null));
+    r.setWalkSpeed(req.walkSpeed().orElse(null));
     r.setWheelchair(req.wheelchair());
-    // TODO: implement banning
+    r.setBanned(req.banned().map(InputBanned::toGenerated).orElse(null));
     r.setOptimize(req.optimize());
     r.setTriangle(req.triangle().map(InputTriangle::toGenegerated).orElse(null));
     r.setPageCursor(req.pageCursor().orElse(null));

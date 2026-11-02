@@ -37,11 +37,11 @@ public record Leg(
     if (this.isTransit()) {
       String routeName = routeDisplayName();
       String interlinedText = this.interlineWithPreviousLeg() ? " (interlined)" : "";
-      return "TRANSIT - Route: %s%s, From: %s, To: %s%n"
+      return "TRANSIT - Route: %s%s, From: %s, To: %s"
           .formatted(routeName, interlinedText, this.from().name(), this.to().name());
     }
 
-    return "%s - From: %s, To: %s, Distance: %.0fm%n"
+    return "%s - From: %s, To: %s, Distance: %.0fm"
         .formatted(
             this.mode().toString().toUpperCase(),
             this.from().name(),
