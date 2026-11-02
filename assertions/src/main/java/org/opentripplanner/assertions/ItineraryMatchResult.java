@@ -1,33 +1,37 @@
 package org.opentripplanner.assertions;
 
 import java.util.List;
+import org.opentripplanner.client.model.Itinerary;
 import org.opentripplanner.client.model.Leg;
 
 /**
  * Result of matching one itinerary against all configured leg criteria.
  *
- * @param successfulMatches Legs fully matching each required criterion set
- * @param partialMatches Legs matching some but not all criteria
+ * @param itineraryIndex Zero-based index in the original trip plan
+ * @param itinerary The evaluated itinerary, with a snapshot of its leg list
+ * @param legResults One outcome per expected leg, in expectation order
  * @param extraMatches Transit legs unmatched in strict matching mode
- * @param errors Matching errors
+ * @param errors Itinerary-level errors, such as exceeding the maximum duration
  */
 public record ItineraryMatchResult(
-    List<LegMatchingState> successfulMatches,
-    List<LegMatchingState> partialMatches,
+    int itineraryIndex,
+    Itinerary itinerary,
+    List<LegRequirementResult> legResults,
     List<Leg> extraMatches,
     List<String> errors) {
-  public static ItineraryMatchResult success(List<LegMatchingState> successfulMatches) {
-    return new ItineraryMatchResult(successfulMatches, List.of(), List.of(), List.of());
+  public ItineraryMatchResult {
+    itinerary = new Itinerary(List.copyOf(itinerary.legs()), itinerary.accessibilityScore());
+    legResults = List.copyOf(legResults);
+    extraMatches = List.copyOf(extraMatches);
+    errors = List.copyOf(errors);
   }
 
   /**
    * @return Whether this result represents a successful match.
    */
   public boolean isSuccess() {
-    return !successfulMatches.isEmpty() && extraMatches.isEmpty() && partialMatches().isEmpty();
-  }
-
-  public List<LegMatchingState> getPartialMatches() {
-    return partialMatches();
+    return errors.isEmpty()
+        && extraMatches.isEmpty()
+        && legResults.stream().allMatch(LegRequirementResult::isSuccess);
   }
 }
